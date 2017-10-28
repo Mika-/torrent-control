@@ -14,7 +14,7 @@
     "page": "view/options.html"
   },
   "permissions": [
-    "storage",
+    "storage"
   ],
   "background": {
     "scripts": ["index.js"]
