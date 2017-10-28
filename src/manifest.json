@@ -9,7 +9,12 @@
     "48": "icon/default-48.png",
     "64": "icon/default-64.png"
   },
+  "options_ui": {
+    "browser_style": true,
+    "page": "view/options.html"
+  },
   "permissions": [
+    "storage",
   ],
   "background": {
     "scripts": ["index.js"]
