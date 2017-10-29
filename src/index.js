@@ -1,14 +1,19 @@
 var options;
 
-loadOptions().then((options) => {
-    options = options;
+loadOptions().then((newOptions) => {
+    options = newOptions;
 
     createContextMenu();
 });
 
 const addTorrent = (url) => {
+    const serverOptions = options.servers[0];
+    const connection = getClient(serverOptions);
+
     fetchTorrent(url).then((torrent) => {
-        console.log(torrent);
+        connection.logIn().then(() => {
+            console.log('login ok');
+        });
     }).catch((error) => console.error(error));
 }
 
