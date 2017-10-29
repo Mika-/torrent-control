@@ -3,6 +3,8 @@ class qBittorrentApi {
     constructor(serverOptions) {
         this.options = serverOptions;
         this.cookie = null;
+
+        this._attachListeners();
     }
 
     logIn() {
@@ -29,6 +31,45 @@ class qBittorrentApi {
 
     logOut() {
         this.cookie = null;
+    }
+
+
+    _attachListeners() {
+        const {hostname} = this.options;
+        let sessionCookie = this.cookie;
+
+        browser.webRequest.onHeadersReceived.addListener((details) => {
+                const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
+
+                if (cookie)
+                    sessionCookie = cookie.value;
+            },
+            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            ['responseHeaders']
+        );
+
+        browser.webRequest.onBeforeSendHeaders.addListener((details) => {
+                let requestHeaders = details.requestHeaders;
+
+                requestHeaders.push({
+                    name: 'Origin',
+                    value: hostname
+                });
+
+                if (sessionCookie) {
+                    requestHeaders.push({
+                        name: 'Cookie',
+                        value: sessionCookie
+                    });
+                }
+
+                return {
+                    requestHeaders: requestHeaders
+                };
+            },
+            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            ['blocking', 'requestHeaders']
+        );
     }
 
 }
