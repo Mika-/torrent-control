@@ -15,7 +15,8 @@
   },
   "permissions": [
     "menus",
-    "storage"
+    "storage",
+    "<all_urls>"
   ],
   "background": {
     "scripts": [
