@@ -12,7 +12,7 @@ const addTorrent = (url) => {
 
     fetchTorrent(url).then((torrent) => {
         connection.logIn().then(() => {
-            console.log('login ok');
+            connection.addTorrent(torrent);
         });
     }).catch((error) => console.error(error));
 }

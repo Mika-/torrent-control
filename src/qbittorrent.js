@@ -33,6 +33,26 @@ class qBittorrentApi {
         this.cookie = null;
     }
 
+    addTorrent(torrent) {
+        const {hostname} = this.options
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('torrents', torrent, 'temp.torrent');
+
+            fetch(hostname + 'command/upload', {
+                method: 'POST',
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    resolve();
+                else
+                    reject('Failed to add torrent (' + response.status + ' ' + response.statusText + ')');
+            })
+            .catch((error) => reject(error));
+        });
+    }
 
     _attachListeners() {
         const {hostname} = this.options;
