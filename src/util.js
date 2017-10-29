@@ -3,7 +3,7 @@ const clientApis = {
 };
 
 const loadOptions = () => {
-    return browser.storage.sync.get({
+    return browser.storage.local.get({
         servers: [
             {
                 name: 'Default',
@@ -17,5 +17,5 @@ const loadOptions = () => {
 }
 
 const saveOptions = (options) => {
-    return browser.storage.sync.set(options);
+    return browser.storage.local.set(options);
 }
