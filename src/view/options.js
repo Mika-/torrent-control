@@ -1,4 +1,4 @@
-function saveOptions(e) {
+function persistOptions(e) {
     e.preventDefault();
 
     var servers = [];
@@ -11,25 +11,16 @@ function saveOptions(e) {
         password: document.querySelector('#password').value
     });
 
-    browser.storage.sync.set({
+    saveOptions({
         servers: servers
-    }, () => window.close());
+    });
 }
 
 function restoreOptions() {
 
-    browser.storage.sync.get({
-        servers: [
-            {
-                name: 'Default',
-                application: 'qbittorrent',
-                server: '',
-                username: '',
-                password: ''
-            }
-        ]
-    }, (items) => {
-        var server = items.servers[0];
+    loadOptions().then((options) => {
+        const server = options.servers[0];
+
         document.querySelector('#application').value = server.application;
         document.querySelector('#hostname').value = server.hostname;
         document.querySelector('#username').value = server.username;
@@ -39,4 +30,4 @@ function restoreOptions() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('#save-options').addEventListener('submit', saveOptions);
+document.querySelector('#save-options').addEventListener('click', persistOptions);
