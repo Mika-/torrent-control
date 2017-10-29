@@ -6,7 +6,7 @@ class qBittorrentApi {
     }
 
     logIn() {
-        const {hostname, username, password} = this.options
+        const {hostname, username, password} = this.options;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -15,11 +15,15 @@ class qBittorrentApi {
 
             fetch(hostname + 'login', {
                 method: 'POST',
-                body: form,
-                headers: new Headers({
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                })
-            }).then(() => resolve()).catch(() => reject());
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    resolve();
+                else
+                    reject('Failed to login (' + response.status + ' ' + response.statusText + ')');
+            })
+            .catch((error) => reject(error));
         });
     }
 
