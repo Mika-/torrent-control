@@ -15,6 +15,7 @@
   },
   "permissions": [
     "menus",
+    "notifications",
     "storage",
     "webRequest",
     "webRequestBlocking",

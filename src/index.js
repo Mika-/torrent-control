@@ -12,9 +12,9 @@ const addTorrent = (url) => {
 
     fetchTorrent(url).then((torrent) => {
         connection.logIn().then(() => {
-            connection.addTorrent(torrent);
+            connection.addTorrent(torrent).then(() => notification('Torrent added'));
         });
-    }).catch((error) => console.error(error));
+    }).catch((error) => notification(error));
 }
 
 const fetchTorrent = (url) => {
@@ -47,5 +47,14 @@ const createContextMenu = () => {
     browser.menus.onClicked.addListener((info, tab) => {
         if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl);
+    });
+}
+
+const notification = (message) => {
+    browser.notifications.create({
+        type: 'basic',
+        iconUrl: browser.extension.getURL('icon/default-48.png'),
+        title: 'Torrent Control',
+        message: message
     });
 }
