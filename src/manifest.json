@@ -14,9 +14,13 @@
     "page": "view/options.html"
   },
   "permissions": [
+    "menus",
     "storage"
   ],
   "background": {
-    "scripts": ["index.js"]
+    "scripts": [
+      "util.js",
+      "index.js"
+    ]
   }
 }
