@@ -1,0 +1,50 @@
+{
+  "addTorrentAction": {
+    "message": "Add torrent",
+    "description": "Context menu action"
+  },
+  "saveAction": {
+    "message": "Save",
+    "description": "Save action"
+  },
+  "serverConfigurationTitle": {
+    "message": "Server configuration",
+    "description": "Server configuration title"
+  },
+  "bittorrentClientOption": {
+    "message": "Bittorrent client",
+    "description": "Bittorrent client option"
+  },
+  "serverAddressOption": {
+    "message": "Server address",
+    "description": "Server address option"
+  },
+  "usernameOption": {
+    "message": "Username",
+    "description": "Username option"
+  },
+  "passwordOption": {
+    "message": "Password",
+    "description": "Password option"
+  },
+  "torrentAddedNotification": {
+    "message": "Torrent added",
+    "description": "Torrent added notification."
+  },
+  "loginError": {
+    "message": "Wrong username or password",
+    "description": "Login error."
+  },
+  "torrentAddError": {
+    "message": "Failed to add torrent",
+    "description": "Add error."
+  },
+  "torrentFetchError": {
+    "message": "Failed to fetch torrent",
+    "description": "Fetch error."
+  },
+  "torrentParseError": {
+    "message": "Failed to read torrent",
+    "description": "Parse error."
+  }
+}
