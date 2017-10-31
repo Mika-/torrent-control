@@ -18,6 +18,10 @@ function persistOptions(e) {
 
 function restoreOptions() {
 
+    document.querySelectorAll('[data-i18n]').forEach((element) => {
+        element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
+    });
+
     loadOptions().then((options) => {
         const server = options.servers[0];
 
