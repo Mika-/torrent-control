@@ -23,7 +23,7 @@ class qBittorrentApi {
                 if (response.ok)
                     resolve();
                 else
-                    reject('Failed to login (' + response.status + ' ' + response.statusText + ')');
+                    reject(browser.i18n.getMessage('loginError'));
             })
             .catch((error) => reject(error));
         });
@@ -48,7 +48,7 @@ class qBittorrentApi {
                 if (response.ok)
                     resolve();
                 else
-                    reject('Failed to add torrent (' + response.status + ' ' + response.statusText + ')');
+                    reject(browser.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });

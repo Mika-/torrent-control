@@ -13,7 +13,7 @@ const addTorrent = (url) => {
     fetchTorrent(url).then((torrent) => {
         connection.logIn().then(() => {
             connection.addTorrent(torrent).then(() => {
-                notification('Torrent added');
+                notification(browser.i18n.getMessage('torrentAddedNotification'));
                 connection.logOut();
             });
         });
@@ -30,12 +30,12 @@ const fetchTorrent = (url) => {
             if (response.ok)
                 return response.blob();
             else
-                reject('Failed to fetch torrent');
+                reject(browser.i18n.getMessage('torrentFetchError'));
         }).then((buffer) => {
             if (buffer.type === 'application/x-bittorrent')
                 resolve(buffer);
             else
-                reject('Failed to read torrent');
+                reject(browser.i18n.getMessage('torrentParseError'));
         });
     });
 }
@@ -43,7 +43,7 @@ const fetchTorrent = (url) => {
 const createContextMenu = () => {
     browser.menus.create({
       id: 'add-torrent',
-      title: 'Add torrent',
+      title: browser.i18n.getMessage('addTorrentAction'),
       contexts: ['link']
     });
 
