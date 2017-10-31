@@ -1,3 +1,10 @@
+const clientList = [
+    {
+        id: 'qbittorrent',
+        name: 'qBittorrent'
+    }
+];
+
 const getClient = (serverOptions) => {
     switch(serverOptions.application) {
         case 'qbittorrent':

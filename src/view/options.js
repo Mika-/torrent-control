@@ -22,6 +22,13 @@ function restoreOptions() {
         element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
     });
 
+    clientList.forEach((client) => {
+        let element = document.createElement('option');
+        element.setAttribute('value', client.id);
+        element.textContent = client.name;
+        document.querySelector('#application').appendChild(element);
+    });
+
     loadOptions().then((options) => {
         const server = options.servers[0];
 
