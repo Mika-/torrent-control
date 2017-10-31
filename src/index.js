@@ -1,5 +1,9 @@
 var options;
 
+browser.storage.onChanged.addListener((changes) => {
+    Object.keys(changes).forEach((key) => options[key] = changes[key].newValue);
+});
+
 loadOptions().then((newOptions) => {
     options = newOptions;
 
