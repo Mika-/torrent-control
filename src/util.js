@@ -31,3 +31,7 @@ const loadOptions = () => {
 const saveOptions = (options) => {
     return browser.storage.local.set(options);
 }
+
+const isMagnetUrl = (url) => {
+    return !!url.match(/^magnet:/);
+}

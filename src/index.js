@@ -14,14 +14,23 @@ const addTorrent = (url) => {
     const serverOptions = options.servers[0];
     const connection = getClient(serverOptions);
 
-    fetchTorrent(url).then((torrent) => {
+    if (isMagnetUrl(url)) {
         connection.logIn().then(() => {
-            connection.addTorrent(torrent).then(() => {
+            connection.addTorrentUrl(url).then(() => {
                 notification(browser.i18n.getMessage('torrentAddedNotification'));
                 connection.logOut();
             });
         });
-    }).catch((error) => notification(error));
+    } else {
+        fetchTorrent(url).then((torrent) => {
+            connection.logIn().then(() => {
+                connection.addTorrent(torrent).then(() => {
+                    notification(browser.i18n.getMessage('torrentAddedNotification'));
+                    connection.logOut();
+                });
+            });
+        }).catch((error) => notification(error));
+    }
 }
 
 const fetchTorrent = (url) => {

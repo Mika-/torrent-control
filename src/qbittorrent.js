@@ -54,6 +54,27 @@ class qBittorrentApi {
         });
     }
 
+    addTorrentUrl(url) {
+        const {hostname} = this.options
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('urls', url);
+
+            fetch(hostname + 'command/download', {
+                method: 'POST',
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    resolve();
+                else
+                    reject(browser.i18n.getMessage('torrentAddError'));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
     _attachListeners() {
         const {hostname} = this.options;
         let sessionCookie = this.cookie;
