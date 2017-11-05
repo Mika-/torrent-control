@@ -14,9 +14,19 @@ function persistOptions(e) {
     saveOptions({
         servers: servers
     });
+
+    document.querySelector('#save-options').classList.add('disabled');
 }
 
 function restoreOptions() {
+
+    const saveButton = document.querySelector('#save-options');
+
+    document.querySelectorAll('input, select').forEach((element) => {
+        element.addEventListener('input', () => {
+            saveButton.classList.remove('disabled');
+        }, { passive: true });
+    });
 
     document.querySelectorAll('[data-i18n]').forEach((element) => {
         element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
