@@ -23,7 +23,7 @@
   ],
   "background": {
     "scripts": [
-      "qbittorrent.js",
+      "lib/qbittorrent.js",
       "util.js",
       "index.js"
     ]
