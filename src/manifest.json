@@ -24,6 +24,7 @@
   "background": {
     "scripts": [
       "lib/baseclient.js",
+      "lib/cloudtorrent.js",
       "lib/qbittorrent.js",
       "util.js",
       "index.js"

@@ -1,5 +1,9 @@
 const clientList = [
     {
+        id: 'cloudtorrent',
+        name: 'Cloud Torrent'
+    },
+    {
         id: 'qbittorrent',
         name: 'qBittorrent'
     }
@@ -7,6 +11,8 @@ const clientList = [
 
 const getClient = (serverOptions) => {
     switch(serverOptions.application) {
+        case 'cloudtorrent':
+            return new CloudTorrentApi(serverOptions);
         case 'qbittorrent':
             return new qBittorrentApi(serverOptions);
     }
