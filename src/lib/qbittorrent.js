@@ -30,7 +30,21 @@ class qBittorrentApi {
     }
 
     logOut() {
-        this.cookie = null;
+        const {hostname} = this.options;
+
+        return new Promise((resolve, reject) => {
+            fetch(hostname + 'logout', {
+                method: 'POST',
+                body: new FormData()
+            })
+            .then((response) => {
+                if (response.ok) {
+                    this.cookie = null;
+                    resolve();
+                }
+            })
+            .catch((error) => reject(error));
+        });
     }
 
     addTorrent(torrent) {
