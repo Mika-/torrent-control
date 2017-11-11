@@ -1,6 +1,8 @@
-class qBittorrentApi {
+class qBittorrentApi extends BaseClient {
 
     constructor(serverOptions) {
+        super();
+
         this.options = serverOptions;
         this.cookie = null;
 
