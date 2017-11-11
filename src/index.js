@@ -15,21 +15,23 @@ const addTorrent = (url) => {
     const connection = getClient(serverOptions);
 
     if (isMagnetUrl(url)) {
-        connection.logIn().then(() => {
-            connection.addTorrentUrl(url).then(() => {
-                notification(browser.i18n.getMessage('torrentAddedNotification'));
-                connection.logOut();
-            });
-        });
-    } else {
-        fetchTorrent(url).then((torrent) => {
-            connection.logIn().then(() => {
-                connection.addTorrent(torrent).then(() => {
+        connection.logIn()
+            .then(() => connection.addTorrentUrl(url)
+                .then(() => {
                     notification(browser.i18n.getMessage('torrentAddedNotification'));
                     connection.logOut();
-                });
-            });
-        }).catch((error) => notification(error));
+                })
+            ).catch((error) => notification(error.message));
+    } else {
+        fetchTorrent(url)
+            .then((torrent) => connection.logIn()
+                .then(() => connection.addTorrent(torrent)
+                    .then(() => {
+                        notification(browser.i18n.getMessage('torrentAddedNotification'));
+                        connection.logOut();
+                    })
+                )
+            ).catch((error) => notification(error.message));
     }
 }
 
@@ -43,13 +45,13 @@ const fetchTorrent = (url) => {
             if (response.ok)
                 return response.blob();
             else
-                reject(browser.i18n.getMessage('torrentFetchError'));
+                reject(new Error(browser.i18n.getMessage('torrentFetchError')));
         }).then((buffer) => {
             if (buffer.type === 'application/x-bittorrent')
                 resolve(buffer);
             else
-                reject(browser.i18n.getMessage('torrentParseError'));
-        });
+                reject(new Error(browser.i18n.getMessage('torrentParseError')));
+        }).catch((error) => reject(error));
     });
 }
 

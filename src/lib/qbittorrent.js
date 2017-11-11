@@ -23,7 +23,7 @@ class qBittorrentApi {
                 if (response.ok)
                     resolve();
                 else
-                    reject(browser.i18n.getMessage('loginError'));
+                    reject(new Error(browser.i18n.getMessage('loginError')));
             })
             .catch((error) => reject(error));
         });
@@ -62,7 +62,7 @@ class qBittorrentApi {
                 if (response.ok)
                     resolve();
                 else
-                    reject(browser.i18n.getMessage('torrentAddError'));
+                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
             })
             .catch((error) => reject(error));
         });
@@ -83,7 +83,7 @@ class qBittorrentApi {
                 if (response.ok)
                     resolve();
                 else
-                    reject(browser.i18n.getMessage('torrentAddError'));
+                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
             })
             .catch((error) => reject(error));
         });
