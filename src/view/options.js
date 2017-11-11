@@ -6,7 +6,7 @@ function persistOptions(e) {
     servers.push({
         name: 'Default',
         application: document.querySelector('#application').value,
-        hostname: document.querySelector('#hostname').value,
+        hostname: document.querySelector('#hostname').value.replace(/\/?$/, '/'),
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
     });
