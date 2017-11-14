@@ -45,6 +45,10 @@ const createContextMenu = () => {
     });
 }
 
+const removeContextMenu = () => {
+    browser.menus.removeAll();
+}
+
 const saveOptions = (options) => {
     return browser.storage.local.set(options);
 }
