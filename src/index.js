@@ -10,6 +10,12 @@ loadOptions().then((newOptions) => {
     if (options.globals.showcontextmenu) {
         createContextMenu();
     }
+
+    browser.menus.onClicked.addListener((info, tab) => {
+        if (info.menuItemId === 'add-torrent')
+            addTorrent(info.linkUrl);
+    });
+
     registerHandler();
 });
 
@@ -55,19 +61,6 @@ const fetchTorrent = (url) => {
             else
                 reject(new Error(browser.i18n.getMessage('torrentParseError')));
         }).catch((error) => reject(error));
-    });
-}
-
-const createContextMenu = () => {
-    browser.menus.create({
-      id: 'add-torrent',
-      title: browser.i18n.getMessage('addTorrentAction'),
-      contexts: ['link']
-    });
-
-    browser.menus.onClicked.addListener((info, tab) => {
-        if (info.menuItemId === 'add-torrent')
-            addTorrent(info.linkUrl);
     });
 }
 
