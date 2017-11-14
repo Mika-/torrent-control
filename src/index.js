@@ -74,5 +74,5 @@ const notification = (message) => {
         iconUrl: browser.extension.getURL('icon/default-48.png'),
         title: 'Torrent Control',
         message: message
-    });
+    }).then((id) => setTimeout(() => browser.notifications.clear(id), 3000));
 }
