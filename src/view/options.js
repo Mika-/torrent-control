@@ -60,4 +60,11 @@ function restoreOptions() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('#save-options').addEventListener('click', persistOptions);
+document.querySelector('#save-options').addEventListener('click', (e) => {
+    persistOptions(e);
+    if (document.querySelector('#contextmenu').checked) {
+        createContextMenu();
+    } else {
+        removeContextMenu();
+    }
+});
