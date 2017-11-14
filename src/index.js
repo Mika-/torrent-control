@@ -7,7 +7,9 @@ browser.storage.onChanged.addListener((changes) => {
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    createContextMenu();
+    if (options.globals.showcontextmenu) {
+        createContextMenu();
+    }
     registerHandler();
 });
 

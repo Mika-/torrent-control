@@ -2,9 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="options.css">
 </head>
 <body>
+
+<section id="options-section" class="panel">
+
+    <div class="panel-section panel-section-header">
+        <span class="text-section-header" data-i18n="addonConfigurationTitle"></span>
+    </div>
+
+    <div class="panel-section panel-section-formElements">
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="contextmenu" />
+            <label for="contextmenu" data-i18n="contextmenuOption"></label>
+        </div>
+
+    </div>
+
+</section>
+
 
 <section id="options-section" class="panel">
 
@@ -35,12 +52,13 @@
             <input type="password" id="password" />
         </div>
 
-        <div class="panel-formElements-item">
-            <button id="save-options" class="browser-style default disabled" data-i18n="saveAction"></button>
-        </div>
     </div>
 
 </section>
+
+<div class="panel-formElements-item">
+    <button id="save-options" class="browser-style default disabled" data-i18n="saveAction"></button>
+</div>
 
 <script src="../util.js"></script>
 <script src="options.js"></script>
