@@ -5,12 +5,12 @@ class qBittorrentApi extends BaseClient {
 
         this.options = serverOptions;
         this.cookie = null;
-
-        this._attachListeners();
     }
 
     logIn() {
         const {hostname, username, password} = this.options;
+
+        this._attachListeners();
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -42,6 +42,7 @@ class qBittorrentApi extends BaseClient {
             .then((response) => {
                 if (response.ok) {
                     this.cookie = null;
+                    this.removeEventListeners();
                     resolve();
                 }
             })
@@ -95,38 +96,32 @@ class qBittorrentApi extends BaseClient {
         const {hostname} = this.options;
         let sessionCookie = this.cookie;
 
-        browser.webRequest.onHeadersReceived.addListener((details) => {
-                const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
+        this.addHeadersReceivedEventListener((details) => {
+            const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
 
-                if (cookie)
-                    sessionCookie = cookie.value;
-            },
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['responseHeaders']
-        );
+            if (cookie)
+                sessionCookie = cookie.value;
+        });
 
-        browser.webRequest.onBeforeSendHeaders.addListener((details) => {
-                let requestHeaders = details.requestHeaders;
+        this.addBeforeSendHeadersEventListener((details) => {
+            let requestHeaders = details.requestHeaders;
 
+            requestHeaders.push({
+                name: 'Origin',
+                value: hostname
+            });
+
+            if (sessionCookie) {
                 requestHeaders.push({
-                    name: 'Origin',
-                    value: hostname
+                    name: 'Cookie',
+                    value: sessionCookie
                 });
+            }
 
-                if (sessionCookie) {
-                    requestHeaders.push({
-                        name: 'Cookie',
-                        value: sessionCookie
-                    });
-                }
-
-                return {
-                    requestHeaders: requestHeaders
-                };
-            },
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['blocking', 'requestHeaders']
-        );
+            return {
+                requestHeaders: requestHeaders
+            };
+        });
     }
 
 }

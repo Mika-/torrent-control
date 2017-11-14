@@ -4,9 +4,33 @@ class CloudTorrentApi extends BaseClient {
         super();
 
         this.options = serverOptions;
+    }
 
-        if (this.options.username && this.options.password)
-            this._attachListeners();
+    logIn() {
+        const {username, password} = this.options;
+
+        if (username && password) {
+            this.addBeforeSendHeadersEventListener((details) => {
+                let requestHeaders = details.requestHeaders;
+
+                requestHeaders.push({
+                    name: 'Authorization',
+                    value: 'Basic ' + btoa(username + ':' + password)
+                });
+
+                return {
+                    requestHeaders: requestHeaders
+                };
+            });
+        }
+
+        return Promise.resolve();
+    }
+
+    logOut() {
+        this.removeEventListeners();
+
+        return Promise.resolve();
     }
 
     addTorrent(torrent) {
@@ -49,26 +73,6 @@ class CloudTorrentApi extends BaseClient {
             })
             .catch((error) => reject(error));
         });
-    }
-
-    _attachListeners() {
-        const {username, password, hostname} = this.options;
-
-        browser.webRequest.onBeforeSendHeaders.addListener((details) => {
-                let requestHeaders = details.requestHeaders;
-
-                requestHeaders.push({
-                    name: 'Authorization',
-                    value: 'Basic ' + btoa(username + ':' + password)
-                });
-
-                return {
-                    requestHeaders: requestHeaders
-                };
-            },
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['blocking', 'requestHeaders']
-        );
     }
 
 }
