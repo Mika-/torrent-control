@@ -37,18 +37,6 @@ const loadOptions = () => {
     });
 }
 
-const createContextMenu = () => {
-    browser.menus.create({
-      id: 'add-torrent',
-      title: browser.i18n.getMessage('addTorrentAction'),
-      contexts: ['link']
-    });
-}
-
-const removeContextMenu = () => {
-    browser.menus.removeAll();
-}
-
 const saveOptions = (options) => {
     return browser.storage.local.set(options);
 }
