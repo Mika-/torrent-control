@@ -29,7 +29,10 @@ const addTorrent = (url) => {
                     notification(browser.i18n.getMessage('torrentAddedNotification'));
                     connection.logOut();
                 })
-            ).catch((error) => notification(error.message));
+            ).catch((error) => {
+                connection.removeEventListeners();
+                notification(error.message);
+            });
     } else {
         fetchTorrent(url)
             .then((torrent) => connection.logIn()
@@ -39,7 +42,10 @@ const addTorrent = (url) => {
                         connection.logOut();
                     })
                 )
-            ).catch((error) => notification(error.message));
+            ).catch((error) => {
+                connection.removeEventListeners();
+                notification(error.message);
+            });
     }
 }
 
