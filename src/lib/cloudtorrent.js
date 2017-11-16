@@ -13,6 +13,12 @@ class CloudTorrentApi extends BaseClient {
             this.addBeforeSendHeadersEventListener((details) => {
                 let requestHeaders = details.requestHeaders;
 
+                requestHeaders = requestHeaders.filter((header) => {
+                    return ![
+                        'authorization',
+                    ].includes(header.name.toLowerCase());
+                });
+
                 requestHeaders.push({
                     name: 'Authorization',
                     value: 'Basic ' + btoa(username + ':' + password)

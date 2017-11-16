@@ -41,8 +41,8 @@ class qBittorrentApi extends BaseClient {
             })
             .then((response) => {
                 if (response.ok) {
-                    this.cookie = null;
                     this.removeEventListeners();
+                    this.cookie = null;
                     resolve();
                 }
             })
@@ -105,6 +105,13 @@ class qBittorrentApi extends BaseClient {
 
         this.addBeforeSendHeadersEventListener((details) => {
             let requestHeaders = details.requestHeaders;
+
+            requestHeaders = requestHeaders.filter((header) => {
+                return ![
+                    'cookie',
+                    'origin',
+                ].includes(header.name.toLowerCase());
+            });
 
             requestHeaders.push({
                 name: 'Origin',
