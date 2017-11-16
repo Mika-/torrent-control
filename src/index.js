@@ -75,11 +75,6 @@ const createContextMenu = () => {
       title: browser.i18n.getMessage('addTorrentAction'),
       contexts: ['link']
     });
-
-    browser.menus.onClicked.addListener((info, tab) => {
-        if (info.menuItemId === 'add-torrent')
-            addTorrent(info.linkUrl);
-    });
 }
 
 const removeContextMenu = () => {
@@ -87,6 +82,11 @@ const removeContextMenu = () => {
 }
 
 const registerHandler = () => {
+    browser.menus.onClicked.addListener((info, tab) => {
+        if (info.menuItemId === 'add-torrent')
+            addTorrent(info.linkUrl);
+    });
+
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
             var parser = document.createElement('a');
