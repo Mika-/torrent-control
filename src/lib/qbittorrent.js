@@ -100,7 +100,7 @@ class qBittorrentApi extends BaseClient {
             const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
 
             if (cookie)
-                sessionCookie = cookie.value;
+                sessionCookie = cookie.value.match(/SID=(.+?);/)[0];
         });
 
         this.addBeforeSendHeadersEventListener((details) => {
