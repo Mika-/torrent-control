@@ -1,7 +1,12 @@
 function persistOptions(e) {
     e.preventDefault();
 
-    var servers = [];
+    var globals = {}; //global addon options
+    var servers = []; //server settings
+
+    globals = {
+        showcontextmenu: document.querySelector('#contextmenu').checked
+    };
 
     servers.push({
         name: 'Default',
@@ -12,6 +17,7 @@ function persistOptions(e) {
     });
 
     saveOptions({
+        globals: globals,
         servers: servers
     });
 
@@ -40,7 +46,10 @@ function restoreOptions() {
     });
 
     loadOptions().then((options) => {
+        const globals = options.globals;
         const server = options.servers[0];
+
+        document.querySelector('#contextmenu').checked = globals.showcontextmenu;
 
         document.querySelector('#application').value = server.application;
         document.querySelector('#hostname').value = server.hostname;

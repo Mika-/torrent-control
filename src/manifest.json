@@ -29,5 +29,12 @@
       "util.js",
       "index.js"
     ]
-  }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "magnet",
+      "name": "Torrent Control Magnet Handler",
+      "uriTemplate": "https://torrent-control.invalid/%s"
+    }
+  ]
 }

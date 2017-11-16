@@ -22,6 +22,9 @@ const getClient = (serverOptions) => {
 
 const loadOptions = () => {
     return browser.storage.local.get({
+        globals: {
+            showcontextmenu: true
+        },
         servers: [
             {
                 name: 'Default',

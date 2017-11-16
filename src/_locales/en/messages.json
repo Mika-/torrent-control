@@ -1,4 +1,12 @@
 {
+  "addonConfigurationTitle": {
+    "message": "Addon configuration",
+    "description": "Addon configuration"
+  },
+  "contextmenuOption": {
+    "message": "Show context menu",
+    "description": "Show context menu"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"

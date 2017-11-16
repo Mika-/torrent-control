@@ -2,12 +2,20 @@ var options;
 
 browser.storage.onChanged.addListener((changes) => {
     Object.keys(changes).forEach((key) => options[key] = changes[key].newValue);
+
+    removeContextMenu();
+    if (options.globals.showcontextmenu) {
+        createContextMenu();
+    }
 });
 
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    createContextMenu();
+    if (options.globals.showcontextmenu) {
+        createContextMenu();
+    }
+    registerHandler();
 });
 
 const addTorrent = (url) => {
@@ -66,6 +74,24 @@ const createContextMenu = () => {
         if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl);
     });
+}
+
+const removeContextMenu = () => {
+    browser.menus.removeAll();
+}
+
+const registerHandler = () => {
+    browser.webRequest.onBeforeRequest.addListener(
+        (details) => {
+            var parser = document.createElement('a');
+            parser.href = details.url;
+            var magnetUri = decodeURIComponent(parser.pathname).substr(1);
+            addTorrent(magnetUri);
+            return {cancel: true}
+        },
+        {urls: ['https://torrent-control.invalid/*']},
+        ['blocking']
+    );
 }
 
 const notification = (message) => {
