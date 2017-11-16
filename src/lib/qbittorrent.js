@@ -110,7 +110,13 @@ class qBittorrentApi extends BaseClient {
                 return ![
                     'cookie',
                     'origin',
+                    'referer',
                 ].includes(header.name.toLowerCase());
+            });
+
+            requestHeaders.push({
+                name: 'Referer',
+                value: hostname
             });
 
             requestHeaders.push({
