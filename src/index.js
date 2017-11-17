@@ -61,7 +61,7 @@ const fetchTorrent = (url) => {
             else
                 reject(new Error(browser.i18n.getMessage('torrentFetchError')));
         }).then((buffer) => {
-            if (buffer.type === 'application/x-bittorrent')
+            if (buffer.type === 'application/x-bittorrent' || buffer.type === 'application/octet-stream')
                 resolve(buffer);
             else
                 reject(new Error(browser.i18n.getMessage('torrentParseError')));
