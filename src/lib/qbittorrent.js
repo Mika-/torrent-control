@@ -13,16 +13,18 @@ class qBittorrentApi extends BaseClient {
         this._attachListeners();
 
         return new Promise((resolve, reject) => {
-            let form = new FormData();
-            form.append('username', username);
-            form.append('password', password);
+            let form = new URLSearchParams();
+            form.set('username', username);
+            form.set('password', password);
 
             fetch(hostname + 'login', {
                 method: 'POST',
                 body: form
             })
-            .then((response) => {
-                if (response.ok)
+            .then((response) => response.text())
+            .then((text) => {
+                console.log(text);
+                if (text === 'Ok.')
                     resolve();
                 else
                     reject(new Error(browser.i18n.getMessage('loginError')));
