@@ -4,5 +4,6 @@ Add torrent and magnet links to your Bittorrent client's web interface.
 
 Supported clients:
 - Cloud Torrent
+- Deluge
 - qBittorrent
 - More coming soon...

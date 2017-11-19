@@ -25,6 +25,7 @@
     "scripts": [
       "lib/baseclient.js",
       "lib/cloudtorrent.js",
+      "lib/deluge.js",
       "lib/qbittorrent.js",
       "util.js",
       "index.js"

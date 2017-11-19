@@ -5,6 +5,11 @@ const clientList = [
         addressPlaceholder: 'http://127.0.0.1:3000/'
     },
     {
+        id: 'deluge',
+        name: 'Deluge',
+        addressPlaceholder: 'http://127.0.0.1:8112/'
+    },
+    {
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/'
@@ -15,6 +20,8 @@ const getClient = (serverOptions) => {
     switch(serverOptions.application) {
         case 'cloudtorrent':
             return new CloudTorrentApi(serverOptions);
+        case 'deluge':
+            return new DelugeApi(serverOptions);
         case 'qbittorrent':
             return new qBittorrentApi(serverOptions);
     }
