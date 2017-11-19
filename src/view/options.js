@@ -8,10 +8,15 @@ function persistOptions(e) {
         showcontextmenu: document.querySelector('#contextmenu').checked
     };
 
+    let hostname = document.querySelector('#hostname').value;
+
+    if (hostname !== '')
+        hostname = hostname.replace(/\/?$/, '/');
+
     servers.push({
         name: 'Default',
         application: document.querySelector('#application').value,
-        hostname: document.querySelector('#hostname').value.replace(/\/?$/, '/'),
+        hostname: hostname,
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
     });

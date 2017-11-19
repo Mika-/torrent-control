@@ -87,6 +87,16 @@ const registerHandler = () => {
             addTorrent(info.linkUrl);
     });
 
+    browser.browserAction.onClicked.addListener(() => {
+        if (options.servers[0].hostname !== '') {
+            browser.tabs.create({
+                url: options.servers[0].hostname
+            });
+        } else {
+            browser.runtime.openOptionsPage();
+        }
+    });
+
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
             var parser = document.createElement('a');

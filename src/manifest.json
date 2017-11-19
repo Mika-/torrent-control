@@ -13,6 +13,10 @@
     "browser_style": true,
     "page": "view/options.html"
   },
+  "browser_action": {
+    "default_area": "navbar",
+    "default_icon": "icon/default.svg"
+  },
   "permissions": [
     "menus",
     "notifications",
