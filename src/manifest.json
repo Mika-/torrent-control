@@ -15,7 +15,11 @@
   },
   "browser_action": {
     "default_area": "navbar",
-    "default_icon": "icon/default.svg"
+    "theme_icons": [{
+      "light": "icon/default-light.svg",
+      "dark": "icon/default.svg",
+      "size": 64
+    }]
   },
   "permissions": [
     "menus",
