@@ -55,9 +55,17 @@ function restoreOptions() {
         document.querySelector('#hostname').value = server.hostname;
         document.querySelector('#username').value = server.username;
         document.querySelector('#password').value = server.password;
+
+        document.querySelector('#application').dispatchEvent(new Event('change'));
     });
 
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#save-options').addEventListener('click', persistOptions);
+document.querySelector('#application').addEventListener('change', (e) => {
+    const client = clientList.find((client) => client.id === e.target.value);
+
+    if (client)
+        document.querySelector('#hostname').setAttribute('placeholder', client.addressPlaceholder);
+});

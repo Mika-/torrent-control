@@ -1,11 +1,13 @@
 const clientList = [
     {
         id: 'cloudtorrent',
-        name: 'Cloud Torrent'
+        name: 'Cloud Torrent',
+        addressPlaceholder: 'http://127.0.0.1:3000/'
     },
     {
         id: 'qbittorrent',
-        name: 'qBittorrent'
+        name: 'qBittorrent',
+        addressPlaceholder: 'http://127.0.0.1:8080/'
     }
 ];
 
