@@ -99,9 +99,9 @@ const registerHandler = () => {
 
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
-            var parser = document.createElement('a');
+            let parser = document.createElement('a');
             parser.href = details.url;
-            var magnetUri = decodeURIComponent(parser.pathname).substr(1);
+            let magnetUri = decodeURIComponent(parser.pathname).substr(1);
             addTorrent(magnetUri);
             return {cancel: true}
         },

@@ -70,14 +70,14 @@ class qBittorrentApi extends BaseClient {
                 if (response.ok)
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options
+        const {hostname} = this.options;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -91,7 +91,7 @@ class qBittorrentApi extends BaseClient {
                 if (response.ok)
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });

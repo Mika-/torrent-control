@@ -40,7 +40,7 @@ class CloudTorrentApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options
+        const {hostname} = this.options;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/torrentfile', {
@@ -61,7 +61,7 @@ class CloudTorrentApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options
+        const {hostname} = this.options;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/magnet', {
