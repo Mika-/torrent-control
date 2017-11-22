@@ -48,7 +48,7 @@
     "description": "Add error."
   },
   "torrentFetchError": {
-    "message": "Failed to fetch torrent",
+    "message": "Failed to fetch torrent. ($1)",
     "description": "Fetch error."
   },
   "torrentParseError": {

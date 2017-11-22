@@ -56,15 +56,15 @@ const fetchTorrent = (url) => {
                 'Accept': 'application/x-bittorrent,*/*;q=0.9'
             })
         }).then((response) => {
-            if (response.ok)
-                return response.blob();
-            else
-                reject(new Error(browser.i18n.getMessage('torrentFetchError')));
+            if (!response.ok)
+                throw new Error(browser.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
+
+            return response.blob();
         }).then((buffer) => {
             if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/))
                 resolve(buffer);
             else
-                reject(new Error(browser.i18n.getMessage('torrentParseError')));
+                throw new Error(browser.i18n.getMessage('torrentParseError'));
         }).catch((error) => reject(error));
     });
 }
