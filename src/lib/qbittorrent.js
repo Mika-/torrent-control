@@ -38,15 +38,12 @@ class qBittorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'logout', {
-                method: 'POST',
-                body: new FormData()
+                method: 'GET'
             })
             .then((response) => {
-                if (response.ok) {
-                    this.removeEventListeners();
-                    this.cookie = null;
-                    resolve();
-                }
+                this.removeEventListeners();
+                this.cookie = null;
+                resolve();
             })
             .catch((error) => reject(error));
         });
