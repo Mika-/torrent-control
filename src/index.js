@@ -53,7 +53,7 @@ const fetchTorrent = (url) => {
     return new Promise((resolve, reject) => {
         fetch(url, {
             headers: new Headers({
-                'Content-Type': 'application/x-bittorrent'
+                'Accept': 'application/x-bittorrent,*/*;q=0.9'
             })
         }).then((response) => {
             if (response.ok)
