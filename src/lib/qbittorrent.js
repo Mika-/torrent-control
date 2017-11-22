@@ -21,13 +21,19 @@ class qBittorrentApi extends BaseClient {
                 method: 'POST',
                 body: form
             })
-            .then((response) => response.text())
+            .then((response) => {
+                if (response.ok)
+                    return response.text();
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
             .then((text) => {
-                console.log(text);
                 if (text === 'Ok.')
                     resolve();
+                else if (text === 'Fails.')
+                    throw new Error(browser.i18n.getMessage('loginError'));
                 else
-                    reject(new Error(browser.i18n.getMessage('loginError')));
+                    throw new Error(browser.i18n.getMessage('apiError', text));
             })
             .catch((error) => reject(error));
         });

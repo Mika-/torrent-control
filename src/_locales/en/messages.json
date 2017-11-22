@@ -40,8 +40,12 @@
     "description": "Torrent added notification."
   },
   "loginError": {
-    "message": "Wrong username or password",
+    "message": "Failed to login",
     "description": "Login error."
+  },
+  "apiError": {
+    "message": "Unknown response. ($1)",
+    "description": "Unknown response."
   },
   "torrentAddError": {
     "message": "Failed to add torrent",
