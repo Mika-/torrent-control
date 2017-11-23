@@ -52,9 +52,19 @@ class CloudTorrentApi extends BaseClient {
             })
             .then((response) => {
                 if (response.ok)
+                    return response.text();
+                else if (response.status === 400)
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                else if (response.status === 401)
+                    throw new Error(browser.i18n.getMessage('loginError'));
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .then((text) => {
+                if (text === 'OK')
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                    throw new Error(browser.i18n.getMessage('apiError', text));
             })
             .catch((error) => reject(error));
         });
@@ -73,9 +83,19 @@ class CloudTorrentApi extends BaseClient {
             })
             .then((response) => {
                 if (response.ok)
+                    return response.text();
+                else if (response.status === 400)
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                else if (response.status === 401)
+                    throw new Error(browser.i18n.getMessage('loginError'));
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .then((text) => {
+                if (text === 'OK')
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                    throw new Error(browser.i18n.getMessage('apiError', text));
             })
             .catch((error) => reject(error));
         });
