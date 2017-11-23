@@ -26,12 +26,17 @@ class DelugeApi extends BaseClient {
                     id: 1
                 })
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.ok)
+                    return response.json();
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
             .then((json) => {
                 if (json.error === null && json.result === true)
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('loginError')));
+                    throw new Error(browser.i18n.getMessage('loginError'));
             })
             .catch((error) => reject(error));
         });
@@ -81,12 +86,17 @@ class DelugeApi extends BaseClient {
                         id: 2
                     })
                 })
-                .then((response) => response.json())
+                .then((response) => {
+                    if (response.ok)
+                        return response.json();
+                    else
+                        throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+                })
                 .then((json) => {
                     if (json.error === null)
                         resolve();
                     else
-                        reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                        throw new Error(browser.i18n.getMessage('torrentAddError'));
                 })
             ).catch((error) => reject(error));
         });
@@ -110,12 +120,17 @@ class DelugeApi extends BaseClient {
                     id: 2
                 })
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.ok)
+                    return response.json();
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
             .then((json) => {
                 if (json.error === null)
                     resolve();
                 else
-                    reject(new Error(browser.i18n.getMessage('torrentAddError')));
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });
