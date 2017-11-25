@@ -10,6 +10,11 @@ const clientList = [
         addressPlaceholder: 'http://127.0.0.1:8112/'
     },
     {
+        id: 'transmission',
+        name: 'Transmission',
+        addressPlaceholder: 'http://127.0.0.1:9091/'
+    },
+    {
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/'
@@ -22,6 +27,8 @@ const getClient = (serverOptions) => {
             return new CloudTorrentApi(serverOptions);
         case 'deluge':
             return new DelugeApi(serverOptions);
+        case 'transmission':
+            return new TransmissionApi(serverOptions);
         case 'qbittorrent':
             return new qBittorrentApi(serverOptions);
     }
