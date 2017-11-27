@@ -1,4 +1,4 @@
-function persistOptions(e) {
+const persistOptions = (e) => {
     e.preventDefault();
 
     var globals = {}; //global addon options
@@ -29,7 +29,7 @@ function persistOptions(e) {
     document.querySelector('#save-options').classList.add('disabled');
 }
 
-function restoreOptions() {
+const restoreOptions = () => {
 
     const saveButton = document.querySelector('#save-options');
 
