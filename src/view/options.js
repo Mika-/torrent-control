@@ -71,6 +71,12 @@ document.querySelector('#save-options').addEventListener('click', persistOptions
 document.querySelector('#application').addEventListener('change', (e) => {
     const client = clientList.find((client) => client.id === e.target.value);
 
-    if (client)
+    if (client) {
         document.querySelector('#hostname').setAttribute('placeholder', client.addressPlaceholder);
+
+        if (client.id === 'deluge')
+            document.querySelector('#username').setAttribute('disabled', 'true');
+        else
+            document.querySelector('#username').removeAttribute('disabled');
+    }
 });
