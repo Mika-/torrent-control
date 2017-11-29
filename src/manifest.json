@@ -34,6 +34,7 @@
       "lib/baseclient.js",
       "lib/cloudtorrent.js",
       "lib/deluge.js",
+      "lib/rutorrent.js",
       "lib/transmission.js",
       "lib/qbittorrent.js",
       "util.js",
