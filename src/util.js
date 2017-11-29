@@ -51,7 +51,7 @@ const loadOptions = () => {
         servers: [
             {
                 name: 'Default',
-                application: 'qbittorrent',
+                application: clientList[0].id,
                 hostname: '',
                 username: '',
                 password: ''
