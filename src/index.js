@@ -26,7 +26,8 @@ const addTorrent = (url) => {
         connection.logIn()
             .then(() => connection.addTorrentUrl(url)
                 .then(() => {
-                    notification(browser.i18n.getMessage('torrentAddedNotification'));
+                    const torrentName = getMagnetUrlName(url);
+                    notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                     connection.logOut();
                 })
             ).catch((error) => {
