@@ -36,10 +36,10 @@ const addTorrent = (url) => {
             });
     } else {
         fetchTorrent(url)
-            .then((torrent) => connection.logIn()
+            .then(({torrent, torrentName}) => connection.logIn()
                 .then(() => connection.addTorrent(torrent)
                     .then(() => {
-                        notification(browser.i18n.getMessage('torrentAddedNotification'));
+                        notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                         connection.logOut();
                     })
                 )
@@ -62,10 +62,15 @@ const fetchTorrent = (url) => {
 
             return response.blob();
         }).then((buffer) => {
-            if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/))
-                resolve(buffer);
-            else
+            if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/)) {
+                getTorrentName(buffer).then((name) => resolve({
+                    torrent: buffer,
+                    torrentName: name,
+                }));
+            }
+            else {
                 throw new Error(browser.i18n.getMessage('torrentParseError'));
+            }
         }).catch((error) => reject(error));
     });
 }
