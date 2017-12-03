@@ -18,7 +18,7 @@ loadOptions().then((newOptions) => {
     registerHandler();
 });
 
-const addTorrent = (url) => {
+const addTorrent = (url, referer = null) => {
     const serverOptions = options.servers[0];
     const connection = getClient(serverOptions);
 
@@ -35,7 +35,7 @@ const addTorrent = (url) => {
                 notification(error.message);
             });
     } else {
-        fetchTorrent(url)
+        fetchTorrent(url, referer)
             .then(({torrent, torrentName}) => connection.logIn()
                 .then(() => connection.addTorrent(torrent)
                     .then(() => {
@@ -50,28 +50,64 @@ const addTorrent = (url) => {
     }
 }
 
-const fetchTorrent = (url) => {
+const fetchTorrent = (url, referer) => {
     return new Promise((resolve, reject) => {
-        fetch(url, {
-            headers: new Headers({
-                'Accept': 'application/x-bittorrent,*/*;q=0.9'
-            })
-        }).then((response) => {
-            if (!response.ok)
-                throw new Error(browser.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
+        createBrowserRequest(url, referer).then((removeEventListeners) => {
+            fetch(url, {
+                headers: new Headers({
+                    'Accept': 'application/x-bittorrent,*/*;q=0.9'
+                }),
+                credentials: 'include'
+            }).then((response) => {
+                if (!response.ok)
+                    throw new Error(browser.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
 
-            return response.blob();
-        }).then((buffer) => {
-            if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/)) {
-                getTorrentName(buffer).then((name) => resolve({
-                    torrent: buffer,
-                    torrentName: name,
-                }));
-            }
-            else {
-                throw new Error(browser.i18n.getMessage('torrentParseError'));
-            }
-        }).catch((error) => reject(error));
+                return response.blob();
+            }).then((buffer) => {
+                if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/)) {
+                    getTorrentName(buffer).then((name) => resolve({
+                        torrent: buffer,
+                        torrentName: name,
+                    }));
+                }
+                else {
+                    throw new Error(browser.i18n.getMessage('torrentParseError'));
+                }
+            }).catch((error) => reject(error))
+            .then(() => removeEventListeners());
+        });
+    });
+}
+
+const createBrowserRequest = (url, referer) => {
+    return new Promise((resolve, reject) => {
+        const listener = (details) => {
+            let requestHeaders = details.requestHeaders;
+
+            requestHeaders = requestHeaders.filter((header) => {
+                return ![
+                    'origin',
+                    'referer',
+                ].includes(header.name.toLowerCase());
+            });
+
+            requestHeaders.push({
+                name: 'Referer',
+                value: referer
+            });
+
+            return {
+                requestHeaders: requestHeaders
+            };
+        }
+
+        browser.webRequest.onBeforeSendHeaders.addListener(
+            listener,
+            {urls: [url]},
+            ['blocking', 'requestHeaders']
+        );
+
+        resolve(() => browser.webRequest.onBeforeSendHeaders.removeListener(listener));
     });
 }
 
@@ -90,7 +126,7 @@ const removeContextMenu = () => {
 const registerHandler = () => {
     browser.menus.onClicked.addListener((info, tab) => {
         if (info.menuItemId === 'add-torrent')
-            addTorrent(info.linkUrl);
+            addTorrent(info.linkUrl, info.pageUrl);
     });
 
     browser.browserAction.onClicked.addListener(() => {
