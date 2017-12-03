@@ -74,6 +74,11 @@ document.querySelector('#application').addEventListener('change', (e) => {
     if (client) {
         document.querySelector('#hostname').setAttribute('placeholder', client.addressPlaceholder);
 
+        const currentAddress = document.querySelector('#hostname').value;
+
+        if (currentAddress === '' || clientList.find((client) => client.addressPlaceholder === currentAddress))
+            document.querySelector('#hostname').value = client.addressPlaceholder;
+
         if (client.id === 'deluge')
             document.querySelector('#username').setAttribute('disabled', 'true');
         else
