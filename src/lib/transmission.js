@@ -44,24 +44,10 @@ class TransmissionApi extends BaseClient {
     }
 
     logOut() {
-        const {hostname} = this.options;
+        this.removeEventListeners();
+        this.session = null;
 
-        return new Promise((resolve, reject) => {
-            fetch(hostname + 'transmission/rpc', {
-                method: 'POST',
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                }),
-                body: JSON.stringify({
-                    method: 'session-close'
-                })
-            })
-            .then((response) => {
-                this.session = null;
-                resolve();
-            })
-            .catch((error) => reject(error));
-        });
+        return Promise.resolve();
     }
 
     addTorrent(torrent) {
