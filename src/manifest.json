@@ -36,6 +36,7 @@
       "lib/deluge.js",
       "lib/rutorrent.js",
       "lib/transmission.js",
+      "lib/utorrent.js",
       "lib/qbittorrent.js",
       "util.js",
       "index.js"

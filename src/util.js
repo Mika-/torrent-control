@@ -20,6 +20,11 @@ const clientList = [
         addressPlaceholder: 'http://127.0.0.1:9091/'
     },
     {
+        id: 'utorrent',
+        name: 'µTorrent',
+        addressPlaceholder: 'http://127.0.0.1:8112/gui/'
+    },
+    {
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/'
@@ -36,6 +41,8 @@ const getClient = (serverOptions) => {
             return new ruTorrentApi(serverOptions);
         case 'transmission':
             return new TransmissionApi(serverOptions);
+        case 'utorrent':
+            return new uTorrentApi(serverOptions);
         case 'qbittorrent':
             return new qBittorrentApi(serverOptions);
     }
