@@ -8,10 +8,9 @@ class TransmissionApi extends BaseClient {
     }
 
     logIn() {
-        const {hostname, username, password} = this.options;
+        const {hostname} = this.options;
 
-        if (username && password)
-            this._attachListeners();
+        this._attachListeners();
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'transmission/rpc', {
@@ -129,10 +128,13 @@ class TransmissionApi extends BaseClient {
                     });
                 }
 
-                requestHeaders.push({
-                    name: 'Authorization',
-                    value: 'Basic ' + btoa(username + ':' + password)
-                });
+
+                if (username && password) {
+                    requestHeaders.push({
+                        name: 'Authorization',
+                        value: 'Basic ' + btoa(username + ':' + password)
+                    });
+                }
 
                 return {
                     requestHeaders: requestHeaders
