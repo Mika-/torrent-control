@@ -7,5 +7,6 @@ Supported clients:
 - Deluge
 - ruTorrent
 - Transmission
+- µTorrent
 - qBittorrent
 - More coming soon...
