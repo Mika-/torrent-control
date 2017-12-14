@@ -1,5 +1,10 @@
 const clientList = [
     {
+        id: 'biglybt',
+        name: 'BiglyBT',
+        addressPlaceholder: 'http://127.0.0.1:9091/'
+    },
+    {
         id: 'cloudtorrent',
         name: 'Cloud Torrent',
         addressPlaceholder: 'http://127.0.0.1:3000/'
@@ -33,6 +38,8 @@ const clientList = [
 
 const getClient = (serverOptions) => {
     switch(serverOptions.application) {
+        case 'biglybt':
+            return new TransmissionApi(serverOptions);
         case 'cloudtorrent':
             return new CloudTorrentApi(serverOptions);
         case 'deluge':
