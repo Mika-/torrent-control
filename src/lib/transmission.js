@@ -105,44 +105,38 @@ class TransmissionApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {username, password, hostname} = this.options;
+        const {username, password} = this.options;
         let session = this.session;
 
-        browser.webRequest.onHeadersReceived.addListener((details) => {
-                const sessionHeader = details.responseHeaders.find((header) => header.name.toLowerCase() === 'x-transmission-session-id');
+        this.addHeadersReceivedEventListener((details) => {
+            const sessionHeader = details.responseHeaders.find((header) => header.name.toLowerCase() === 'x-transmission-session-id');
 
-                if (sessionHeader)
-                    session = sessionHeader.value;
-            },
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['responseHeaders']
-        );
+            if (sessionHeader)
+                session = sessionHeader.value;
+        });
 
-        browser.webRequest.onBeforeSendHeaders.addListener((details) => {
-                let requestHeaders = details.requestHeaders;
+        this.addBeforeSendHeadersEventListener((details) => {
+            let requestHeaders = details.requestHeaders;
 
-                if (session) {
-                    requestHeaders.push({
-                        name: 'X-Transmission-Session-Id',
-                        value: session
-                    });
-                }
+            if (session) {
+                requestHeaders.push({
+                    name: 'X-Transmission-Session-Id',
+                    value: session
+                });
+            }
 
 
-                if (username && password) {
-                    requestHeaders.push({
-                        name: 'Authorization',
-                        value: 'Basic ' + btoa(username + ':' + password)
-                    });
-                }
+            if (username && password) {
+                requestHeaders.push({
+                    name: 'Authorization',
+                    value: 'Basic ' + btoa(username + ':' + password)
+                });
+            }
 
-                return {
-                    requestHeaders: requestHeaders
-                };
-            },
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['blocking', 'requestHeaders']
-        );
+            return {
+                requestHeaders: requestHeaders
+            };
+        });
     }
 
 }
