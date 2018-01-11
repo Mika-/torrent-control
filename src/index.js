@@ -64,7 +64,7 @@ const fetchTorrent = (url, referer) => {
 
                 return response.blob();
             }).then((buffer) => {
-                if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream)/)) {
+                if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream|text\/html)/)) {
                     getTorrentName(buffer).then((name) => resolve({
                         torrent: buffer,
                         torrentName: name,
