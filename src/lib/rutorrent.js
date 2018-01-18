@@ -9,26 +9,8 @@ class ruTorrentApi extends BaseClient {
     logIn() {
         const {username, password} = this.options;
 
-        if (username && password) {
-            this.addBeforeSendHeadersEventListener((details) => {
-                let requestHeaders = details.requestHeaders;
-
-                requestHeaders = requestHeaders.filter((header) => {
-                    return ![
-                        'authorization',
-                    ].includes(header.name.toLowerCase());
-                });
-
-                requestHeaders.push({
-                    name: 'Authorization',
-                    value: 'Basic ' + btoa(username + ':' + password)
-                });
-
-                return {
-                    requestHeaders: requestHeaders
-                };
-            });
-        }
+        if (username && password)
+            this.addAuthRequiredListener();
 
         return Promise.resolve();
     }
@@ -48,6 +30,7 @@ class ruTorrentApi extends BaseClient {
 
             fetch(hostname + 'php/addtorrent.php?json=1', {
                 method: 'POST',
+                credentials: 'include',
                 body: form
             })
             .then((response) => {
@@ -75,7 +58,8 @@ class ruTorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'php/addtorrent.php?url=' + encodeURIComponent(url) + '&json=1', {
-                method: 'GET'
+                method: 'GET',
+                credentials: 'include'
             })
             .then((response) => {
                 if (response.ok)
