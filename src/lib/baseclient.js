@@ -2,6 +2,7 @@ class BaseClient {
 
     constructor() {
         this.listeners = {};
+        this.pendingRequests = [];
     }
 
     logIn() {
@@ -44,12 +45,59 @@ class BaseClient {
         );
     }
 
+    addAuthRequiredListener() {
+        const {hostname, username, password} = this.options;
+
+        this.listeners.onAuthRequired = (details) => {
+            if (this.pendingRequests.indexOf(details.requestId) !== -1)
+                return;
+
+            this.pendingRequests.push(details.requestId);
+
+            return {
+                authCredentials: {
+                    username: username,
+                    password: password
+                }
+            };
+        };
+
+        this.listeners.onAuthCompleted = (details) => {
+            let index = this.pendingRequests.indexOf(details.requestId);
+
+            if (index > -1)
+                this.pendingRequests.splice(index, 1);
+        };
+
+        browser.webRequest.onAuthRequired.addListener(
+            this.listeners.onAuthRequired,
+            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            ['blocking']
+        );
+
+        browser.webRequest.onCompleted.addListener(
+            this.listeners.onAuthCompleted,
+            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+        );
+
+        browser.webRequest.onErrorOccurred.addListener(
+            this.listeners.onAuthCompleted,
+            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+        );
+    }
+
     removeEventListeners() {
         if (this.listeners.onHeadersReceived)
             browser.webRequest.onHeadersReceived.removeListener(this.listeners.onHeadersReceived);
 
         if (this.listeners.onBeforeSendHeaders)
             browser.webRequest.onBeforeSendHeaders.removeListener(this.listeners.onBeforeSendHeaders);
+
+        if (this.listeners.onAuthRequired) {
+            browser.webRequest.onAuthRequired.removeListener(this.listeners.onAuthRequired);
+            browser.webRequest.onCompleted.removeListener(this.listeners.onAuthCompleted);
+            browser.webRequest.onErrorOccurred.removeListener(this.listeners.onAuthCompleted);
+        }
     }
 
 }
