@@ -10,4 +10,3 @@ Supported clients:
 - Transmission
 - µTorrent
 - qBittorrent
-- More coming soon...
