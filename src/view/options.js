@@ -14,7 +14,7 @@ const persistOptions = (e) => {
         hostname = hostname.replace(/\/?$/, '/');
 
     servers.push({
-        name: 'Default',
+        name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: hostname,
         username: document.querySelector('#username').value,
@@ -56,6 +56,7 @@ const restoreOptions = () => {
 
         document.querySelector('#contextmenu').checked = globals.showcontextmenu;
 
+        document.querySelector('#name').value = server.name;
         document.querySelector('#application').value = server.application;
         document.querySelector('#hostname').value = server.hostname;
         document.querySelector('#username').value = server.username;

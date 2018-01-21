@@ -23,6 +23,10 @@
     "message": "Bittorrent client",
     "description": "Bittorrent client option"
   },
+  "serverNameOption": {
+    "message": "Server name",
+    "description": "Server name option"
+  },
   "serverAddressOption": {
     "message": "Server address",
     "description": "Server address option"
