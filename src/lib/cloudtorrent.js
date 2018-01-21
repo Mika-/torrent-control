@@ -9,26 +9,8 @@ class CloudTorrentApi extends BaseClient {
     logIn() {
         const {username, password} = this.options;
 
-        if (username && password) {
-            this.addBeforeSendHeadersEventListener((details) => {
-                let requestHeaders = details.requestHeaders;
-
-                requestHeaders = requestHeaders.filter((header) => {
-                    return ![
-                        'authorization',
-                    ].includes(header.name.toLowerCase());
-                });
-
-                requestHeaders.push({
-                    name: 'Authorization',
-                    value: 'Basic ' + btoa(username + ':' + password)
-                });
-
-                return {
-                    requestHeaders: requestHeaders
-                };
-            });
-        }
+        if (username && password)
+            this.addAuthRequiredListener();
 
         return Promise.resolve();
     }
@@ -45,6 +27,7 @@ class CloudTorrentApi extends BaseClient {
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/torrentfile', {
                 method: 'POST',
+                credentials: 'include',
                 headers: new Headers({
                     'Content-Type': 'application/x-bittorrent'
                 }),
@@ -76,6 +59,7 @@ class CloudTorrentApi extends BaseClient {
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/magnet', {
                 method: 'POST',
+                credentials: 'include',
                 headers: new Headers({
                     'Content-Type': 'text/plain'
                 }),
