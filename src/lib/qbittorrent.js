@@ -46,7 +46,7 @@ class qBittorrentApi extends BaseClient {
             fetch(hostname + 'logout', {
                 method: 'GET'
             })
-            .then((response) => {
+            .finally((response) => {
                 this.removeEventListeners();
                 this.cookie = null;
                 resolve();

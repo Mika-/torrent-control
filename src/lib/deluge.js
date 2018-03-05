@@ -57,7 +57,7 @@ class DelugeApi extends BaseClient {
                     id: 3
                 })
             })
-            .then((response) => {
+            .finally((response) => {
                 this.removeEventListeners();
                 this.cookie = null;
                 resolve();
