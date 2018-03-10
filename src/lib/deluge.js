@@ -16,7 +16,8 @@ class DelugeApi extends BaseClient {
             fetch(hostname + 'json', {
                 method: 'POST',
                 headers: new Headers({
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Internal': true
                 }),
                 body: JSON.stringify({
                     method: 'auth.login',
@@ -49,7 +50,8 @@ class DelugeApi extends BaseClient {
             fetch(hostname + 'json', {
                 method: 'POST',
                 headers: new Headers({
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Internal': true
                 }),
                 body: JSON.stringify({
                     method: 'auth.delete_session',
@@ -74,7 +76,8 @@ class DelugeApi extends BaseClient {
                 fetch(hostname + 'json', {
                     method: 'POST',
                     headers: new Headers({
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-Internal': true
                     }),
                     body: JSON.stringify({
                         method: 'core.add_torrent_file',
@@ -109,7 +112,8 @@ class DelugeApi extends BaseClient {
             fetch(hostname + 'json', {
                 method: 'POST',
                 headers: new Headers({
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Internal': true
                 }),
                 body: JSON.stringify({
                     method: 'core.add_torrent_magnet',
@@ -149,18 +153,22 @@ class DelugeApi extends BaseClient {
 
         this.addBeforeSendHeadersEventListener((details) => {
             let requestHeaders = details.requestHeaders;
+            const isInternal = !!requestHeaders.find((header) => header.name.toLowerCase() === 'x-internal');
 
-            requestHeaders = requestHeaders.filter((header) => {
-                return ![
-                    'cookie',
-                ].includes(header.name.toLowerCase());
-            });
-
-            if (sessionCookie) {
-                requestHeaders.push({
-                    name: 'Cookie',
-                    value: sessionCookie
+            if (isInternal) {
+                requestHeaders = requestHeaders.filter((header) => {
+                    return ![
+                        'cookie',
+                        'x-internal',
+                    ].includes(header.name.toLowerCase());
                 });
+
+                if (sessionCookie) {
+                    requestHeaders.push({
+                        name: 'Cookie',
+                        value: sessionCookie
+                    });
+                }
             }
 
             return {
