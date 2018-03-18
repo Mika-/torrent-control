@@ -35,6 +35,7 @@
       "lib/cloudtorrent.js",
       "lib/deluge.js",
       "lib/rutorrent.js",
+      "lib/tixati.js",
       "lib/transmission.js",
       "lib/utorrent.js",
       "lib/qbittorrent.js",

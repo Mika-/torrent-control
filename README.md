@@ -12,6 +12,7 @@ Supported clients:
 - Cloud Torrent
 - Deluge
 - ruTorrent
+- Tixati
 - Transmission
 - µTorrent
 - qBittorrent

@@ -20,6 +20,11 @@ const clientList = [
         addressPlaceholder: 'http://127.0.0.1:80/'
     },
     {
+        id: 'tixati',
+        name: 'Tixati',
+        addressPlaceholder: 'http://127.0.0.1:8888/'
+    },
+    {
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/'
@@ -46,6 +51,8 @@ const getClient = (serverOptions) => {
             return new DelugeApi(serverOptions);
         case 'rutorrent':
             return new ruTorrentApi(serverOptions);
+        case 'tixati':
+            return new TixatiApi(serverOptions);
         case 'transmission':
             return new TransmissionApi(serverOptions);
         case 'utorrent':

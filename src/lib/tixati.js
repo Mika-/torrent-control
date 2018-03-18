@@ -1,0 +1,80 @@
+class TixatiApi extends BaseClient {
+
+    constructor(serverOptions) {
+        super();
+
+        this.options = serverOptions;
+    }
+
+    logIn() {
+        const {username, password} = this.options;
+
+        if (username && password)
+            this.addAuthRequiredListener();
+
+        return Promise.resolve();
+    }
+
+    logOut() {
+        this.removeEventListeners();
+
+        return Promise.resolve();
+    }
+
+    addTorrent(torrent) {
+        const {hostname} = this.options;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('metafile', torrent, 'temp.torrent');
+            form.append('addmetafile', 'Add');
+            form.append('noautostart', 0);
+
+            fetch(hostname + 'transfers/action', {
+                method: 'POST',
+                credentials: 'include',
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    return resolve();
+                else if (response.status === 400)
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                else if (response.status === 401)
+                    throw new Error(browser.i18n.getMessage('loginError'));
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
+    addTorrentUrl(url) {
+        const {hostname} = this.options;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('addlinktext', url);
+            form.append('addlink', 'Add');
+            form.append('noautostart', 0);
+
+            fetch(hostname + 'transfers/action', {
+                method: 'POST',
+                credentials: 'include',
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    return resolve();
+                else if (response.status === 400)
+                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                else if (response.status === 401)
+                    throw new Error(browser.i18n.getMessage('loginError'));
+                else
+                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
+}
