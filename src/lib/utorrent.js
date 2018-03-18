@@ -15,7 +15,8 @@ class uTorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'token.html', {
-                method: 'GET'
+                method: 'GET',
+                credentials: 'include'
             })
             .then((response) => {
                 if (response.ok)
@@ -59,6 +60,7 @@ class uTorrentApi extends BaseClient {
 
             fetch(hostname + '?token=' + token + '&action=add-file', {
                 method: 'POST',
+                credentials: 'include',
                 body: form
             })
             .then((response) => response.json())
@@ -77,7 +79,8 @@ class uTorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             fetch(hostname + '?token=' + token + '&action=add-url&s=' + encodeURIComponent(url), {
-                method: 'GET'
+                method: 'GET',
+                credentials: 'include'
             })
             .then((response) => response.json())
             .then((json) => {
@@ -94,6 +97,9 @@ class uTorrentApi extends BaseClient {
         const {hostname, username, password} = this.options;
         let sessionCookie = this.cookie;
 
+        if (username && password)
+            this.addAuthRequiredListener();
+
         this.addHeadersReceivedEventListener((details) => {
             const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
 
@@ -106,14 +112,8 @@ class uTorrentApi extends BaseClient {
 
             requestHeaders = requestHeaders.filter((header) => {
                 return ![
-                    'authorization',
                     'cookie',
                 ].includes(header.name.toLowerCase());
-            });
-
-            requestHeaders.push({
-                name: 'Authorization',
-                value: 'Basic ' + btoa(username + ':' + password)
             });
 
             if (sessionCookie) {

@@ -15,6 +15,7 @@ class TransmissionApi extends BaseClient {
         return new Promise((resolve, reject) => {
             fetch(hostname + 'transmission/rpc', {
                 method: 'POST',
+                credentials: 'include',
                 headers: new Headers({
                     'Content-Type': 'application/json'
                 }),
@@ -56,6 +57,7 @@ class TransmissionApi extends BaseClient {
             base64Encode(torrent).then((base64torrent) =>
                 fetch(hostname + 'transmission/rpc', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: new Headers({
                         'Content-Type': 'application/json'
                     }),
@@ -83,6 +85,7 @@ class TransmissionApi extends BaseClient {
         return new Promise((resolve, reject) => {
             fetch(hostname + 'transmission/rpc', {
                 method: 'POST',
+                credentials: 'include',
                 headers: new Headers({
                     'Content-Type': 'application/json'
                 }),
@@ -108,6 +111,9 @@ class TransmissionApi extends BaseClient {
         const {username, password} = this.options;
         let session = this.session;
 
+        if (username && password)
+            this.addAuthRequiredListener();
+
         this.addHeadersReceivedEventListener((details) => {
             const sessionHeader = details.responseHeaders.find((header) => header.name.toLowerCase() === 'x-transmission-session-id');
 
@@ -122,14 +128,6 @@ class TransmissionApi extends BaseClient {
                 requestHeaders.push({
                     name: 'X-Transmission-Session-Id',
                     value: session
-                });
-            }
-
-
-            if (username && password) {
-                requestHeaders.push({
-                    name: 'Authorization',
-                    value: 'Basic ' + btoa(username + ':' + password)
                 });
             }
 
