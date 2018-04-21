@@ -11,6 +11,7 @@ Supported clients:
 - BiglyBT
 - Cloud Torrent
 - Deluge
+- Flood
 - ruTorrent
 - Tixati
 - Transmission
