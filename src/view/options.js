@@ -8,7 +8,7 @@ const persistOptions = (e) => {
         showcontextmenu: document.querySelector('#contextmenu').checked
     };
 
-    let hostname = document.querySelector('#hostname').value;
+    let hostname = document.querySelector('#hostname').value.replace(/\s+/, '');
 
     if (hostname !== '')
         hostname = hostname.replace(/\/?$/, '/');
