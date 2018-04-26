@@ -52,7 +52,7 @@ const restoreOptions = () => {
 
     loadOptions().then((options) => {
         const globals = options.globals;
-        const server = options.servers[0];
+        const server = options.servers[globals.currentServer];
 
         document.querySelector('#contextmenu').checked = globals.showcontextmenu;
 

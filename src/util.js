@@ -74,6 +74,7 @@ const getClient = (serverOptions) => {
 const loadOptions = () => {
     return browser.storage.local.get({
         globals: {
+            currentServer: 0,
             showcontextmenu: true
         },
         servers: [
