@@ -4,17 +4,23 @@ browser.storage.onChanged.addListener((changes) => {
     Object.keys(changes).forEach((key) => options[key] = changes[key].newValue);
 
     removeContextMenu();
-    if (options.globals.showcontextmenu) {
+
+    if (options.globals.showcontextmenu)
         createContextMenu();
-    }
+
+    if (options.servers.length > 1)
+        createBrowserActionContextMenu();
 });
 
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    if (options.globals.showcontextmenu) {
+    if (options.globals.showcontextmenu)
         createContextMenu();
-    }
+
+    if (options.servers.length > 1)
+        createBrowserActionContextMenu();
+
     registerHandler();
 });
 
@@ -108,6 +114,20 @@ const createBrowserRequest = (url, referer) => {
         );
 
         resolve(() => browser.webRequest.onBeforeSendHeaders.removeListener(listener));
+    });
+}
+
+const createBrowserActionContextMenu = () => {
+    options.servers.forEach((server, id) => {
+        browser.menus.create({
+            id: 'current-server-' + id.toString(),
+            type: 'radio',
+            checked: id === options.globals.currentServer,
+            title: server.name,
+            contexts: [
+                'browser_action',
+            ]
+        });
     });
 }
 
