@@ -145,8 +145,12 @@ const removeContextMenu = () => {
 
 const registerHandler = () => {
     browser.menus.onClicked.addListener((info, tab) => {
+        const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
+
         if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl);
+        else if (currentServer)
+            setCurrentServer(parseInt(currentServer[1]));
     });
 
     browser.browserAction.onClicked.addListener(() => {
@@ -179,4 +183,9 @@ const notification = (message) => {
         title: 'Torrent Control',
         message: message
     }).then((id) => setTimeout(() => browser.notifications.clear(id), 3000));
+}
+
+const setCurrentServer = (id) => {
+    options.globals.currentServer = id;
+    saveOptions(options);
 }
