@@ -59,8 +59,28 @@ const restoreOptions = () => {
         document.querySelector('#password').value = server.password;
 
         document.querySelector('#application').dispatchEvent(new Event('change'));
+}
+
+const addServer = () => {
+    options.servers.push({
+        name: 'New server',
+        application: clientList[0].id,
+        hostname: '',
+        username: '',
+        password: ''
     });
 
+    persistOptions();
+}
+
+const removeServer = (id) => {
+    if (options.servers.length > 1)
+        options.servers.splice(~~id, 1);
+
+    if (options.globals.currentServer === ~~id)
+        options.globals.currentServer = 0;
+
+    persistOptions();
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
