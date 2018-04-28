@@ -72,7 +72,7 @@ const getClient = (serverOptions) => {
 }
 
 const loadOptions = () => {
-    return browser.storage.local.get({
+    const defaults = {
         globals: {
             currentServer: 0,
             showcontextmenu: true
@@ -86,6 +86,13 @@ const loadOptions = () => {
                 password: ''
             }
         ]
+    };
+
+    return new Promise((resolve, reject) => {
+        browser.storage.local.get(defaults).then((options) => {
+            mergeObjects(defaults, options);
+            resolve(defaults);
+        });
     });
 }
 
@@ -137,4 +144,11 @@ const base64Encode = (data) => {
         reader.onload = () => resolve(reader.result.split(',')[1]);
         reader.readAsDataURL(data);
     });
+}
+
+const mergeObjects = (target, source) => {
+    Object.keys(source).forEach((key) =>
+        target.hasOwnProperty(key) && typeof target[key] === 'object' ?
+            mergeObjects(target[key], source[key]) : target[key] = source[key]
+    );
 }
