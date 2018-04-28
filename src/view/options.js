@@ -1,30 +1,23 @@
-const persistOptions = (e) => {
-    e.preventDefault();
+var options;
 
-    var globals = {}; //global addon options
-    var servers = []; //server settings
 
-    globals = {
-        showcontextmenu: document.querySelector('#contextmenu').checked
-    };
+const persistOptions = () => {
+    options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
 
     let hostname = document.querySelector('#hostname').value.replace(/\s+/, '');
 
     if (hostname !== '')
         hostname = hostname.replace(/\/?$/, '/');
 
-    servers.push({
+    options.servers[0] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: hostname,
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
-    });
+    };
 
-    saveOptions({
-        globals: globals,
-        servers: servers
-    });
+    saveOptions(options);
 
     document.querySelector('#save-options').classList.add('disabled');
 }
@@ -50,9 +43,12 @@ const restoreOptions = () => {
         document.querySelector('#application').appendChild(element);
     });
 
-    loadOptions().then((options) => {
         const globals = options.globals;
         const server = options.servers[globals.currentServer];
+    loadOptions().then((newOptions) => {
+        options = newOptions;
+
+        document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
 
         document.querySelector('#contextmenu').checked = globals.showcontextmenu;
 
@@ -68,7 +64,10 @@ const restoreOptions = () => {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('#save-options').addEventListener('click', persistOptions);
+document.querySelector('#save-options').addEventListener('click', (e) => {
+    e.preventDefault();
+    persistOptions();
+});
 document.querySelector('#application').addEventListener('change', (e) => {
     const client = clientList.find((client) => client.id === e.target.value);
 
