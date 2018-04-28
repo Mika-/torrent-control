@@ -25,7 +25,7 @@ loadOptions().then((newOptions) => {
 });
 
 const addTorrent = (url, referer = null) => {
-    const serverOptions = options.servers[0];
+    const serverOptions = options.servers[options.globals.currentServer];
     const connection = getClient(serverOptions);
 
     if (isMagnetUrl(url)) {
@@ -154,9 +154,9 @@ const registerHandler = () => {
     });
 
     browser.browserAction.onClicked.addListener(() => {
-        if (options.servers[0].hostname !== '') {
+        if (options.servers[options.globals.currentServer].hostname !== '') {
             browser.tabs.create({
-                url: options.servers[0].hostname
+                url: options.servers[options.globals.currentServer].hostname
             });
         } else {
             browser.runtime.openOptionsPage();
