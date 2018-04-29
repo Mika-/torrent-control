@@ -15,6 +15,10 @@
     "message": "Save",
     "description": "Save action"
   },
+  "removeAction": {
+    "message": "Remove server",
+    "description": "Remove action"
+  },
   "addServerAction": {
     "message": "Add a new server",
     "description": "Add server action"

@@ -85,6 +85,11 @@ const restoreServer = (id) => {
     document.querySelector('#password').value = server.password;
 
     document.querySelector('#application').dispatchEvent(new Event('change'));
+
+    if (options.servers.length > 1)
+        document.querySelector('#remove-server').classList.remove('disabled');
+    else
+        document.querySelector('#remove-server').classList.add('disabled');
 }
 
 const addServer = () => {
@@ -115,6 +120,11 @@ const removeServer = (id) => {
 
 serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addServer() : restoreServer(e.target.value));
 document.addEventListener('DOMContentLoaded', restoreOptions);
+document.querySelector('#remove-server').addEventListener('click', (e) => {
+    e.preventDefault();
+    removeServer(serverSelect.value);
+    restoreServerList();
+});
 document.querySelector('#save-options').addEventListener('click', (e) => {
     e.preventDefault();
     persistOptions();
