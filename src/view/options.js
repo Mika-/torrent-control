@@ -27,7 +27,7 @@ const restoreOptions = () => {
 
     const saveButton = document.querySelector('#save-options');
 
-    document.querySelectorAll('input, select').forEach((element) => {
+    document.querySelectorAll('input, select:not(#server-list)').forEach((element) => {
         element.addEventListener('input', () => {
             saveButton.classList.remove('disabled');
         }, { passive: true });
