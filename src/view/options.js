@@ -1,5 +1,6 @@
 var options;
 
+const serverSelect = document.querySelector('#server-list');
 
 const persistOptions = () => {
     options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
@@ -9,7 +10,7 @@ const persistOptions = () => {
     if (hostname !== '')
         hostname = hostname.replace(/\/?$/, '/');
 
-    options.servers[0] = {
+    options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: hostname,
@@ -43,22 +44,47 @@ const restoreOptions = () => {
         document.querySelector('#application').appendChild(element);
     });
 
-        const globals = options.globals;
-        const server = options.servers[globals.currentServer];
     loadOptions().then((newOptions) => {
         options = newOptions;
 
         document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
 
-        document.querySelector('#contextmenu').checked = globals.showcontextmenu;
+        restoreServerList();
+        restoreServer(serverSelect.value);
+    });
 
-        document.querySelector('#name').value = server.name;
-        document.querySelector('#application').value = server.application;
-        document.querySelector('#hostname').value = server.hostname;
-        document.querySelector('#username').value = server.username;
-        document.querySelector('#password').value = server.password;
+}
 
-        document.querySelector('#application').dispatchEvent(new Event('change'));
+const restoreServerList = () => {
+    const selectedServer = serverSelect.value || 0;
+    serverSelect.innerHTML = '';
+
+    options.servers.forEach((server, id) => {
+        let element = document.createElement('option');
+        element.setAttribute('value', id.toString());
+        element.textContent = server.name;
+        serverSelect.appendChild(element);
+    });
+
+    let element = document.createElement('option');
+    element.setAttribute('value', 'add');
+    element.textContent = browser.i18n.getMessage('addServerAction');
+    serverSelect.appendChild(element);
+
+    serverSelect.value = selectedServer;
+}
+
+const restoreServer = (id) => {
+    const server = options.servers[~~id];
+    serverSelect.value = id;
+
+    document.querySelector('#name').value = server.name;
+    document.querySelector('#application').value = server.application;
+    document.querySelector('#hostname').value = server.hostname;
+    document.querySelector('#username').value = server.username;
+    document.querySelector('#password').value = server.password;
+
+    document.querySelector('#application').dispatchEvent(new Event('change'));
 }
 
 const addServer = () => {
@@ -70,6 +96,8 @@ const addServer = () => {
         password: ''
     });
 
+    restoreServerList();
+    restoreServer(options.servers.length - 1);
     persistOptions();
 }
 
@@ -80,13 +108,17 @@ const removeServer = (id) => {
     if (options.globals.currentServer === ~~id)
         options.globals.currentServer = 0;
 
+    restoreServerList();
+    restoreServer(0);
     persistOptions();
 }
 
+serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addServer() : restoreServer(e.target.value));
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#save-options').addEventListener('click', (e) => {
     e.preventDefault();
     persistOptions();
+    restoreServerList();
 });
 document.querySelector('#application').addEventListener('change', (e) => {
     const client = clientList.find((client) => client.id === e.target.value);
