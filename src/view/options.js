@@ -5,15 +5,10 @@ const serverSelect = document.querySelector('#server-list');
 const persistOptions = () => {
     options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
 
-    let hostname = document.querySelector('#hostname').value.replace(/\s+/, '');
-
-    if (hostname !== '')
-        hostname = hostname.replace(/\/?$/, '/');
-
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
-        hostname: hostname,
+        hostname: document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/'),
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
     };
@@ -118,6 +113,15 @@ const removeServer = (id) => {
     persistOptions();
 }
 
+const validateUrl = (str) => {
+    try {
+        const url = new URL(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addServer() : restoreServer(e.target.value));
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#remove-server').addEventListener('click', (e) => {
@@ -127,8 +131,15 @@ document.querySelector('#remove-server').addEventListener('click', (e) => {
 });
 document.querySelector('#save-options').addEventListener('click', (e) => {
     e.preventDefault();
-    persistOptions();
-    restoreServerList();
+
+    const hostname = document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/');
+
+    if (validateUrl(hostname)) {
+        persistOptions();
+        restoreServerList();
+    } else {
+        alert('Server address is invalid');
+    }
 });
 document.querySelector('#application').addEventListener('change', (e) => {
     const client = clientList.find((client) => client.id === e.target.value);
@@ -146,4 +157,12 @@ document.querySelector('#application').addEventListener('change', (e) => {
         else
             document.querySelector('#username').removeAttribute('disabled');
     }
+});
+document.querySelector('#hostname').addEventListener('input', (e) => {
+    const hostname = e.target.value.replace(/\s+/, '').replace(/\/?$/, '/');
+
+    if (validateUrl(hostname))
+        document.querySelector('#hostname').setAttribute('style', '');
+    else
+        document.querySelector('#hostname').setAttribute('style', 'border-color:red;');
 });
