@@ -43,6 +43,11 @@ const clientList = [
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/'
+    },
+    {
+        id: 'qbittorrent_404',
+        name: 'qBittorrent (<=4.0.4)',
+        addressPlaceholder: 'http://127.0.0.1:8080/'
     }
 ];
 
@@ -66,6 +71,11 @@ const getClient = (serverOptions) => {
             return new uTorrentApi(serverOptions);
         case 'qbittorrent':
             return new qBittorrentApi(serverOptions);
+        case 'qbittorrent_404':
+            return new qBittorrentApi({
+                apiVersion: 1,
+                ...serverOptions
+            });
     }
 
     return new Error('No client found');

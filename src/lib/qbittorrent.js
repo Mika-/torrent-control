@@ -3,12 +3,16 @@ class qBittorrentApi extends BaseClient {
     constructor(serverOptions) {
         super();
 
-        this.options = serverOptions;
+        this.options = {
+            apiVersion: 2,
+            ...serverOptions
+        };
         this.cookie = null;
     }
 
     logIn() {
         const {hostname, username, password} = this.options;
+        const loginPath = this.options.apiVersion === 2 ? 'api/v2/auth/login' : 'login';
 
         this._attachListeners();
 
@@ -17,7 +21,7 @@ class qBittorrentApi extends BaseClient {
             form.set('username', username);
             form.set('password', password);
 
-            fetch(hostname + 'login', {
+            fetch(hostname + loginPath, {
                 method: 'POST',
                 body: form
             })
@@ -41,9 +45,10 @@ class qBittorrentApi extends BaseClient {
 
     logOut() {
         const {hostname} = this.options;
+        const logoutPath = this.options.apiVersion === 2 ? 'api/v2/auth/logout' : 'logout';
 
         return new Promise((resolve, reject) => {
-            fetch(hostname + 'logout', {
+            fetch(hostname + logoutPath, {
                 method: 'GET'
             })
             .finally((response) => {
@@ -57,12 +62,17 @@ class qBittorrentApi extends BaseClient {
 
     addTorrent(torrent) {
         const {hostname} = this.options
+        const addTorrentPath = this.options.apiVersion === 2 ? 'api/v2/torrents/add' : 'command/upload';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
-            form.append('torrents', torrent, 'temp.torrent');
 
-            fetch(hostname + 'command/upload', {
+            if (this.options.apiVersion === 2)
+                form.append('fileselect', torrent, 'temp.torrent');
+            else
+                form.append('torrents', torrent, 'temp.torrent');
+
+            fetch(hostname + addTorrentPath, {
                 method: 'POST',
                 body: form
             })
@@ -78,12 +88,13 @@ class qBittorrentApi extends BaseClient {
 
     addTorrentUrl(url) {
         const {hostname} = this.options;
+        const addTorrentUrlPath = this.options.apiVersion === 2 ? 'api/v2/torrents/add' : 'command/download';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('urls', url);
 
-            fetch(hostname + 'command/download', {
+            fetch(hostname + addTorrentUrlPath, {
                 method: 'POST',
                 body: form
             })
