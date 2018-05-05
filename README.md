@@ -5,6 +5,7 @@ Add torrent and magnet links to your Bittorrent client's web interface.
 Features:
 - Supports magnet links
 - Supports private trackers
+- Supports multiple servers
 - HTTP Digest authentication
 
 Supported clients:
