@@ -1,0 +1,13 @@
+{
+  "name": "torrent-control",
+  "version": "0.1.0",
+  "repository": "git@github.com:Mika-/torrent-control.git",
+  "license": "MIT",
+  "scripts": {
+  	"start": "web-ext run --source-dir ./src/",
+  	"build": "web-ext build --source-dir ./src/"
+  },
+  "devDependencies": {
+    "web-ext": "^2.6.0"
+  }
+}
