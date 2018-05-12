@@ -68,19 +68,18 @@ const fetchTorrent = (url, referer) => {
                 if (!response.ok)
                     throw new Error(browser.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
 
+                const contentType = response.headers.get('content-type');
+                if (!contentType.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
+                    throw new Error(browser.i18n.getMessage('torrentParseError', 'Unkown type: ' + contentType));
+
                 return response.blob();
             }).then((buffer) => {
-                if (buffer.type.match(/(application\/x-bittorrent|application\/octet-stream|text\/html)/)) {
-                    getTorrentName(buffer).then((name) => resolve({
-                        torrent: buffer,
-                        torrentName: name,
-                    }));
-                }
-                else {
-                    throw new Error(browser.i18n.getMessage('torrentParseError'));
-                }
+                getTorrentName(buffer).then((name) => resolve({
+                    torrent: buffer,
+                    torrentName: name,
+                }));
             }).catch((error) => reject(error))
-            .then(() => removeEventListeners());
+            .finally(() => removeEventListeners());
         });
     });
 }

@@ -72,7 +72,7 @@
     "description": "Fetch error."
   },
   "torrentParseError": {
-    "message": "Failed to read torrent",
+    "message": "Failed to read torrent. ($1)",
     "description": "Parse error."
   }
 }
