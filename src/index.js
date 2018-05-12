@@ -9,7 +9,7 @@ browser.storage.onChanged.addListener((changes) => {
         createContextMenu();
 
     if (options.servers.length > 1)
-        createBrowserActionContextMenu();
+        createServerSelectionContextMenu();
 });
 
 loadOptions().then((newOptions) => {
@@ -19,7 +19,7 @@ loadOptions().then((newOptions) => {
         createContextMenu();
 
     if (options.servers.length > 1)
-        createBrowserActionContextMenu();
+        createServerSelectionContextMenu();
 
     registerHandler();
 });
@@ -117,16 +117,19 @@ const createBrowserRequest = (url, referer) => {
     });
 }
 
-const createBrowserActionContextMenu = () => {
+const createServerSelectionContextMenu = () => {
+    let context = ['browser_action'];
+
+    if (options.globals.showcontextmenu)
+        context.push('page');
+
     options.servers.forEach((server, id) => {
         browser.menus.create({
             id: 'current-server-' + id.toString(),
             type: 'radio',
             checked: id === options.globals.currentServer,
             title: server.name,
-            contexts: [
-                'browser_action',
-            ]
+            contexts: context
         });
     });
 }
