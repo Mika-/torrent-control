@@ -176,6 +176,19 @@ const registerHandler = () => {
         {urls: ['https://torrent-control.invalid/*']},
         ['blocking']
     );
+
+    browser.webRequest.onBeforeRequest.addListener(
+        (details) => {
+            if (details.type === 'main_frame' && details.url.match(/\.torrent$/)) {
+                addTorrent(details.url, details.originUrl);
+                return {cancel: true};
+            }
+
+            return {cancel: false};
+        },
+        {urls: ['<all_urls>']},
+        ['blocking']
+    );
 }
 
 const notification = (message) => {
