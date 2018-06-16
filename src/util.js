@@ -85,7 +85,8 @@ const loadOptions = () => {
     const defaults = {
         globals: {
             currentServer: 0,
-            showcontextmenu: true
+            showcontextmenu: true,
+            catchUrls: true
         },
         servers: [
             {
@@ -112,6 +113,10 @@ const saveOptions = (options) => {
 
 const isMagnetUrl = (url) => {
     return !!url.match(/^magnet:/);
+}
+
+const isTorrentUrl = (url) => {
+    return !!url.match(/\.torrent$/);
 }
 
 const getMagnetUrlName = (url) => {

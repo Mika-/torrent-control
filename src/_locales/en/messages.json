@@ -7,6 +7,10 @@
     "message": "Show context menu",
     "description": "Show context menu"
   },
+  "catchUrlsOption": {
+    "message": "Catch torrent urls",
+    "description": "Catch torrent urls"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"

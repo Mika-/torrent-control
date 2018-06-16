@@ -4,6 +4,7 @@ const serverSelect = document.querySelector('#server-list');
 
 const persistOptions = () => {
     options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
+    options.globals.catchUrls = document.querySelector('#catchurls').checked;
 
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
@@ -43,6 +44,7 @@ const restoreOptions = () => {
         options = newOptions;
 
         document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
+        document.querySelector('#catchurls').checked = options.globals.catchUrls;
 
         restoreServerList();
         restoreServer(serverSelect.value);

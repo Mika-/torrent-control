@@ -179,7 +179,7 @@ const registerHandler = () => {
 
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
-            if (details.type === 'main_frame' && details.url.match(/\.torrent$/)) {
+            if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
                 addTorrent(details.url, details.originUrl);
                 return {cancel: true};
             }
