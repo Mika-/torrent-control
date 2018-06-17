@@ -24,96 +24,29 @@ loadOptions().then((newOptions) => {
     registerHandler();
 });
 
-const addTorrent = (url, referer = null) => {
+const submitTorrent = (url, torrent, torrentName) => {
     const serverOptions = options.servers[options.globals.currentServer];
     const connection = getClient(serverOptions);
-
-    if (isMagnetUrl(url)) {
-        connection.logIn()
-            .then(() => connection.addTorrentUrl(url)
-                .then(() => {
-                    const torrentName = getMagnetUrlName(url);
-                    notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
-                    connection.logOut();
-                })
-            ).catch((error) => {
-                connection.removeEventListeners();
-                notification(error.message);
+    connection.logIn()
+        .then(() => {
+            (url ? connection.addTorrentUrl(url) : connection.addTorrent(torrent))
+            .then(() => {
+                notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
+                connection.logOut();
             });
+        }).catch((error) => {
+            connection.removeEventListeners();
+            notification(error.message);
+        });
+};
+
+const addTorrent = (url, referer = null) => {
+    if (isMagnetUrl(url)) {
+        submitTorrent(url, null, getMagnetUrlName(url));
     } else {
         fetchTorrent(url, referer)
-            .then(({torrent, torrentName}) => connection.logIn()
-                .then(() => connection.addTorrent(torrent)
-                    .then(() => {
-                        notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
-                        connection.logOut();
-                    })
-                )
-            ).catch((error) => {
-                connection.removeEventListeners();
-                notification(error.message);
-            });
+            .then(({torrent, torrentName}) => submitTorrent(null, torrent, torrentName));
     }
-}
-
-const fetchTorrent = (url, referer) => {
-    return new Promise((resolve, reject) => {
-        createBrowserRequest(url, referer).then((removeEventListeners) => {
-            fetch(url, {
-                headers: new Headers({
-                    'Accept': 'application/x-bittorrent,*/*;q=0.9'
-                }),
-                credentials: 'include'
-            }).then((response) => {
-                if (!response.ok)
-                    throw new Error(browser.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
-
-                const contentType = response.headers.get('content-type');
-                if (!contentType.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
-                    throw new Error(browser.i18n.getMessage('torrentParseError', 'Unkown type: ' + contentType));
-
-                return response.blob();
-            }).then((buffer) => {
-                getTorrentName(buffer).then((name) => resolve({
-                    torrent: buffer,
-                    torrentName: name,
-                }));
-            }).catch((error) => reject(error))
-            .finally(() => removeEventListeners());
-        });
-    });
-}
-
-const createBrowserRequest = (url, referer) => {
-    return new Promise((resolve, reject) => {
-        const listener = (details) => {
-            let requestHeaders = details.requestHeaders;
-
-            requestHeaders = requestHeaders.filter((header) => {
-                return ![
-                    'origin',
-                    'referer',
-                ].includes(header.name.toLowerCase());
-            });
-
-            requestHeaders.push({
-                name: 'Referer',
-                value: referer
-            });
-
-            return {
-                requestHeaders: requestHeaders
-            };
-        }
-
-        browser.webRequest.onBeforeSendHeaders.addListener(
-            listener,
-            {urls: [url]},
-            ['blocking', 'requestHeaders']
-        );
-
-        resolve(() => browser.webRequest.onBeforeSendHeaders.removeListener(listener));
-    });
 }
 
 const createServerSelectionContextMenu = () => {
@@ -146,13 +79,21 @@ const removeContextMenu = () => {
 }
 
 const registerHandler = () => {
+
+    browser.runtime.onMessage.addListener((message) => {
+        console.log("===== torrent-control: add torrent: via link click");
+        submitTorrent(null, message.torrent, message.torrentName);
+    });
+
     browser.menus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
 
-        if (info.menuItemId === 'add-torrent')
+        if (info.menuItemId === 'add-torrent') {
+            console.log("===== torrent-control: add torrent: via link context menu");
             addTorrent(info.linkUrl, info.pageUrl);
-        else if (currentServer)
+        } else if (currentServer) {
             setCurrentServer(parseInt(currentServer[1]));
+        }
     });
 
     browser.browserAction.onClicked.addListener(() => {
@@ -167,6 +108,7 @@ const registerHandler = () => {
 
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
+            console.log("===== torrent-control: add torrent: via magnet protocol handler");
             let parser = document.createElement('a');
             parser.href = details.url;
             let magnetUri = decodeURIComponent(parser.pathname).substr(1);

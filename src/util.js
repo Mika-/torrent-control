@@ -120,33 +120,6 @@ const getMagnetUrlName = (url) => {
     return (params.has('dn') ? params.get('dn') : false);
 }
 
-const getTorrentName = (data) => {
-    return new Promise((resolve, reject) => {
-        let reader = new FileReader();
-        reader.onerror = (error) => resolve(false);
-        reader.onload = () => {
-            const offset = reader.result.match(/name(\d+):/) || false;
-            let text = false;
-
-            if (offset) {
-                const index = offset.index + offset[0].length;
-                let bytes = 0;
-                text = '';
-
-                while (bytes < offset[1]) {
-                    let char = reader.result.charAt(index + text.length);
-
-                    text += char;
-                    bytes += unescape(encodeURI(char)).length;
-                }
-            }
-
-            resolve(text);
-        };
-        reader.readAsText(data);
-    });
-}
-
 const base64Encode = (data) => {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
