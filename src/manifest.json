@@ -40,10 +40,20 @@
       "lib/transmission.js",
       "lib/utorrent.js",
       "lib/qbittorrent.js",
+      "common.js",
       "util.js",
       "index.js"
     ]
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "common.js",
+        "script.js"
+      ]
+    }
+  ],
   "protocol_handlers": [
     {
       "protocol": "magnet",
