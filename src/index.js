@@ -10,6 +10,8 @@ browser.storage.onChanged.addListener((changes) => {
 
     if (options.servers.length > 1)
         createServerSelectionContextMenu();
+
+    createDefaultMenu();
 });
 
 loadOptions().then((newOptions) => {
@@ -21,6 +23,7 @@ loadOptions().then((newOptions) => {
     if (options.servers.length > 1)
         createServerSelectionContextMenu();
 
+    createDefaultMenu();
     registerHandler();
 });
 
@@ -133,6 +136,14 @@ const createServerSelectionContextMenu = () => {
     });
 }
 
+const createDefaultMenu = () => {
+    browser.menus.create({
+        id: 'settings',
+        title: browser.i18n.getMessage('settingsAction'),
+        contexts: ['browser_action']
+    });
+}
+
 const createContextMenu = () => {
     browser.menus.create({
       id: 'add-torrent',
@@ -149,7 +160,9 @@ const registerHandler = () => {
     browser.menus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
 
-        if (info.menuItemId === 'add-torrent')
+        if (info.menuItemId === 'settings')
+            browser.runtime.openOptionsPage();
+        else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl);
         else if (currentServer)
             setCurrentServer(parseInt(currentServer[1]));

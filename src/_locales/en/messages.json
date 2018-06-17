@@ -27,6 +27,10 @@
     "message": "Add a new server",
     "description": "Add server action"
   },
+  "settingsAction": {
+    "message": "Settings",
+    "description": "Settings action"
+  },
   "serverConfigurationTitle": {
     "message": "Server configuration",
     "description": "Server configuration title"
