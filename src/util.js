@@ -116,7 +116,12 @@ const isMagnetUrl = (url) => {
 }
 
 const isTorrentUrl = (url) => {
-    return !!url.match(/\.torrent$/);
+    if (url.match(/\.torrent$/))
+        return true;
+    else if (url.match(/torrents\.php\?action=download&id=\d+/)) // gazelle
+        return true;
+
+    return false;
 }
 
 const getMagnetUrlName = (url) => {
