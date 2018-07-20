@@ -101,20 +101,22 @@ class uTorrentApi extends BaseClient {
             this.addAuthRequiredListener();
 
         this.addHeadersReceivedEventListener((details) => {
-            const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
+            const cookie = this.getCookie(details.responseHeaders, 'GUID');
 
             if (cookie)
-                sessionCookie = cookie.value.match(/GUID=(.+?);/)[0];
+                sessionCookie = cookie;
+
+            return {
+                responseHeaders: this.filterHeaders(details.responseHeaders, [
+                    'set-cookie',
+                ])
+            };
         });
 
         this.addBeforeSendHeadersEventListener((details) => {
-            let requestHeaders = details.requestHeaders;
-
-            requestHeaders = requestHeaders.filter((header) => {
-                return ![
-                    'cookie',
-                ].includes(header.name.toLowerCase());
-            });
+            let requestHeaders = this.filterHeaders(details.requestHeaders, [
+                'cookie',
+            ]);
 
             if (sessionCookie) {
                 requestHeaders.push({

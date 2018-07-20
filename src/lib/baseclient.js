@@ -29,7 +29,7 @@ class BaseClient {
         browser.webRequest.onHeadersReceived.addListener(
             this.listeners.onHeadersReceived,
             {urls: [hostname.replace(/\:\d+/, '') + '*']},
-            ['responseHeaders']
+            ['blocking', 'responseHeaders']
         );
     }
 
@@ -100,4 +100,22 @@ class BaseClient {
         }
     }
 
+    filterHeaders(headers, filters) {
+        return headers.filter((header) => {
+            return !filters.includes(header.name.toLowerCase());
+        });
+    }
+
+    getCookie(headers, key) {
+        const cookie = headers.find((header) => {
+            return header.name.toLowerCase() === 'set-cookie';
+        });
+
+        const regex = new RegExp(key + '=(.+?);');
+
+        if (cookie)
+            return cookie.value.match(regex)[0] || false;
+
+        return false;
+    }
 }

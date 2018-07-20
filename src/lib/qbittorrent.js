@@ -113,22 +113,24 @@ class qBittorrentApi extends BaseClient {
         let sessionCookie = this.cookie;
 
         this.addHeadersReceivedEventListener((details) => {
-            const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
+            const cookie = this.getCookie(details.responseHeaders, 'SID');
 
             if (cookie)
-                sessionCookie = cookie.value.match(/SID=(.+?);/)[0];
+                sessionCookie = cookie;
+
+            return {
+                responseHeaders: this.filterHeaders(details.responseHeaders, [
+                    'set-cookie',
+                ])
+            };
         });
 
         this.addBeforeSendHeadersEventListener((details) => {
-            let requestHeaders = details.requestHeaders;
-
-            requestHeaders = requestHeaders.filter((header) => {
-                return ![
-                    'cookie',
-                    'origin',
-                    'referer',
-                ].includes(header.name.toLowerCase());
-            });
+            let requestHeaders = this.filterHeaders(details.requestHeaders, [
+                'cookie',
+                'origin',
+                'referer',
+            ]);
 
             requestHeaders.push({
                 name: 'Referer',

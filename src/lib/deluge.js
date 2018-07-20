@@ -145,10 +145,16 @@ class DelugeApi extends BaseClient {
         let sessionCookie = this.cookie;
 
         this.addHeadersReceivedEventListener((details) => {
-            const cookie = details.responseHeaders.find((header) => header.name.toLowerCase() === 'set-cookie');
+            const cookie = this.getCookie(details.responseHeaders, '_session_id');
 
             if (cookie)
-                sessionCookie = cookie.value.match(/_session_id=(.+?);/)[0];
+                sessionCookie = cookie;
+
+            return {
+                responseHeaders: this.filterHeaders(details.responseHeaders, [
+                    'set-cookie',
+                ])
+            };
         });
 
         this.addBeforeSendHeadersEventListener((details) => {
@@ -156,12 +162,10 @@ class DelugeApi extends BaseClient {
             const isInternal = !!requestHeaders.find((header) => header.name.toLowerCase() === 'x-internal');
 
             if (isInternal) {
-                requestHeaders = requestHeaders.filter((header) => {
-                    return ![
-                        'cookie',
-                        'x-internal',
-                    ].includes(header.name.toLowerCase());
-                });
+                requestHeaders = this.filterHeaders(requestHeaders, [
+                    'cookie',
+                    'x-internal',
+                ]);
 
                 if (sessionCookie) {
                     requestHeaders.push({
