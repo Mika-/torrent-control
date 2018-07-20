@@ -30,6 +30,9 @@ loadOptions().then((newOptions) => {
 const addTorrent = (url, referer = null) => {
     const serverOptions = options.servers[options.globals.currentServer];
     const connection = getClient(serverOptions);
+    const networkErrors = [
+        'NetworkError when attempting to fetch resource.',
+    ];
 
     if (isMagnetUrl(url)) {
         connection.logIn()
@@ -41,7 +44,11 @@ const addTorrent = (url, referer = null) => {
                 })
             ).catch((error) => {
                 connection.removeEventListeners();
-                notification(error.message);
+
+                if (networkErrors.includes(error.message))
+                    notification(browser.i18n.getMessage('torrentAddError', 'Network error'));
+                else
+                    notification(error.message);
             });
     } else {
         fetchTorrent(url, referer)
@@ -54,7 +61,11 @@ const addTorrent = (url, referer = null) => {
                 )
             ).catch((error) => {
                 connection.removeEventListeners();
-                notification(error.message);
+
+                if (networkErrors.includes(error.message))
+                    notification(browser.i18n.getMessage('torrentAddError', 'Network error'));
+                else
+                    notification(error.message);
             });
     }
 }

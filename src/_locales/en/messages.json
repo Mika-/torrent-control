@@ -72,7 +72,7 @@
     "description": "Unknown response."
   },
   "torrentAddError": {
-    "message": "Failed to add torrent",
+    "message": "Failed to add torrent. $1",
     "description": "Add error."
   },
   "torrentFetchError": {
