@@ -1,0 +1,86 @@
+{
+  "addonConfigurationTitle": {
+    "message": "Lisäosan asetukset",
+    "description": "Addon configuration"
+  },
+  "contextmenuOption": {
+    "message": "Näytä kontekstivalikko",
+    "description": "Show context menu"
+  },
+  "catchUrlsOption": {
+    "message": "Kaappaa torrent osoitteet",
+    "description": "Catch torrent URLs"
+  },
+  "addTorrentAction": {
+    "message": "Lisää torrent",
+    "description": "Context menu action"
+  },
+  "saveAction": {
+    "message": "Tallenna",
+    "description": "Save action"
+  },
+  "removeAction": {
+    "message": "Poista palvelin",
+    "description": "Remove action"
+  },
+  "addServerAction": {
+    "message": "Lisää uusi palvelin",
+    "description": "Add server action"
+  },
+  "settingsAction": {
+    "message": "Asetukset",
+    "description": "Settings action"
+  },
+  "serverConfigurationTitle": {
+    "message": "Palvelimen asetukset",
+    "description": "Server configuration title"
+  },
+  "bittorrentClientOption": {
+    "message": "Bittorrent-sovellus",
+    "description": "Bittorrent client option"
+  },
+  "serverSelect": {
+    "message": "Nykyinen palvelin",
+    "description": "Server select"
+  },
+  "serverNameOption": {
+    "message": "Palvelimen nimi",
+    "description": "Server name option"
+  },
+  "serverAddressOption": {
+    "message": "Palvelimen osoite",
+    "description": "Server address option"
+  },
+  "usernameOption": {
+    "message": "Käyttäjätunnus",
+    "description": "Username option"
+  },
+  "passwordOption": {
+    "message": "Salasana",
+    "description": "Password option"
+  },
+  "torrentAddedNotification": {
+    "message": "Torrentti lisätty",
+    "description": "Torrent added notification."
+  },
+  "loginError": {
+    "message": "Sisäänkirjautuminen epäonnistui",
+    "description": "Login error."
+  },
+  "apiError": {
+    "message": "Tuntematon vastaus. ($1)",
+    "description": "Unknown response."
+  },
+  "torrentAddError": {
+    "message": "Torrentin lisäys epäonnistui. $1",
+    "description": "Add error."
+  },
+  "torrentFetchError": {
+    "message": "Torrentin hakeminen epäonnistui. ($1)",
+    "description": "Fetch error."
+  },
+  "torrentParseError": {
+    "message": "Torrentin lukeminen epäonnistui. ($1)",
+    "description": "Parse error."
+  }
+}
