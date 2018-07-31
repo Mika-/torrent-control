@@ -153,6 +153,13 @@ const createDefaultMenu = () => {
         title: browser.i18n.getMessage('settingsAction'),
         contexts: ['browser_action']
     });
+    browser.menus.create({
+        id: 'catch-urls',
+        type: 'checkbox',
+        checked: options.globals.catchUrls,
+        title: browser.i18n.getMessage('catchUrlsOption'),
+        contexts: ['browser_action']
+    });
 }
 
 const createContextMenu = () => {
@@ -173,6 +180,8 @@ const registerHandler = () => {
 
         if (info.menuItemId === 'settings')
             browser.runtime.openOptionsPage();
+        else if (info.menuItemId === 'catch-urls')
+            toggleURLCatching();
         else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl);
         else if (currentServer)
@@ -226,5 +235,10 @@ const notification = (message) => {
 
 const setCurrentServer = (id) => {
     options.globals.currentServer = id;
+    saveOptions(options);
+}
+
+const toggleURLCatching = () => {
+    options.globals.catchUrls = !options.globals.catchUrls;
     saveOptions(options);
 }

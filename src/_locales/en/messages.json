@@ -8,8 +8,8 @@
     "description": "Show context menu"
   },
   "catchUrlsOption": {
-    "message": "Catch torrent urls",
-    "description": "Catch torrent urls"
+    "message": "Catch torrent URLs",
+    "description": "Catch torrent URLs"
   },
   "addTorrentAction": {
     "message": "Add torrent",
