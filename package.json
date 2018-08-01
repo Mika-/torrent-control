@@ -4,9 +4,9 @@
   "repository": "git@github.com:Mika-/torrent-control.git",
   "license": "MIT",
   "scripts": {
-  	"start": "web-ext run --source-dir ./src/",
+    "start": "web-ext run --source-dir ./src/",
     "startdev": "web-ext run --firefox=firefoxdeveloperedition --source-dir ./src/",
-  	"build": "web-ext build --source-dir ./src/"
+    "build": "web-ext build --source-dir ./src/"
   },
   "devDependencies": {
     "web-ext": "^2.6.0"
