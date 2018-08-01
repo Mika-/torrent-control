@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
   	"start": "web-ext run --source-dir ./src/",
+    "startdev": "web-ext run --firefox=firefoxdeveloperedition --source-dir ./src/",
   	"build": "web-ext build --source-dir ./src/"
   },
   "devDependencies": {
