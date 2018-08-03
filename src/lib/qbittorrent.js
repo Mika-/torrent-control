@@ -60,17 +60,27 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname, apiVersion} = this.settings;
         const addTorrentPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/upload';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
 
-            if (apiVersion === 2)
+            if (apiVersion === 2) {
                 form.append('fileselect', torrent, 'temp.torrent');
-            else
+
+                if (options.paused)
+                    form.append('paused', options.paused);
+
+                if (options.path)
+                    form.append('savepath', options.path);
+
+                if (options.label)
+                    form.append('category', options.label);
+            } else {
                 form.append('torrents', torrent, 'temp.torrent');
+            }
 
             fetch(hostname + addTorrentPath, {
                 method: 'POST',
@@ -86,13 +96,24 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options = {}) {
         const {hostname, apiVersion} = this.settings;
         const addTorrentUrlPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/download';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('urls', url);
+
+            if (apiVersion === 2) {
+                if (options.paused)
+                    form.append('paused', options.paused);
+
+                if (options.path)
+                    form.append('savepath', options.path);
+
+                if (options.label)
+                    form.append('category', options.label);
+            }
 
             fetch(hostname + addTorrentUrlPath, {
                 method: 'POST',
