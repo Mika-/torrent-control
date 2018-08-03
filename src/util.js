@@ -51,30 +51,30 @@ const clientList = [
     }
 ];
 
-const getClient = (serverOptions) => {
-    switch(serverOptions.application) {
+const getClient = (serverSettings) => {
+    switch(serverSettings.application) {
         case 'biglybt':
-            return new TransmissionApi(serverOptions);
+            return new TransmissionApi(serverSettings);
         case 'cloudtorrent':
-            return new CloudTorrentApi(serverOptions);
+            return new CloudTorrentApi(serverSettings);
         case 'deluge':
-            return new DelugeApi(serverOptions);
+            return new DelugeApi(serverSettings);
         case 'flood':
-            return new floodApi(serverOptions);
+            return new floodApi(serverSettings);
         case 'rutorrent':
-            return new ruTorrentApi(serverOptions);
+            return new ruTorrentApi(serverSettings);
         case 'tixati':
-            return new TixatiApi(serverOptions);
+            return new TixatiApi(serverSettings);
         case 'transmission':
-            return new TransmissionApi(serverOptions);
+            return new TransmissionApi(serverSettings);
         case 'utorrent':
-            return new uTorrentApi(serverOptions);
+            return new uTorrentApi(serverSettings);
         case 'qbittorrent':
-            return new qBittorrentApi(serverOptions);
+            return new qBittorrentApi(serverSettings);
         case 'qbittorrent_404':
             return new qBittorrentApi({
                 apiVersion: 1,
-                ...serverOptions
+                ...serverSettings
             });
     }
 

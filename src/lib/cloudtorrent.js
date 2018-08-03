@@ -1,13 +1,13 @@
 class CloudTorrentApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = serverOptions;
+        this.settings = serverSettings;
     }
 
     logIn() {
-        const {username, password} = this.options;
+        const {username, password} = this.settings;
 
         if (username && password)
             this.addAuthRequiredListener();
@@ -22,7 +22,7 @@ class CloudTorrentApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/torrentfile', {
@@ -54,7 +54,7 @@ class CloudTorrentApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/magnet', {

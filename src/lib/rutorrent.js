@@ -1,13 +1,13 @@
 class ruTorrentApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = serverOptions;
+        this.settings = serverSettings;
     }
 
     logIn() {
-        const {username, password} = this.options;
+        const {username, password} = this.settings;
 
         if (username && password)
             this.addAuthRequiredListener();
@@ -22,7 +22,7 @@ class ruTorrentApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -54,7 +54,7 @@ class ruTorrentApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'php/addtorrent.php?url=' + encodeURIComponent(url) + '&json=1', {

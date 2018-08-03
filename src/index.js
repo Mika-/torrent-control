@@ -5,7 +5,7 @@ browser.storage.onChanged.addListener((changes) => {
 
     removeContextMenu();
 
-    if (options.globals.showcontextmenu)
+    if (options.globals.showcontextmenu && options.servers[options.globals.currentServer].hostname !== '')
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -17,7 +17,7 @@ browser.storage.onChanged.addListener((changes) => {
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    if (options.globals.showcontextmenu)
+    if (options.globals.showcontextmenu && options.servers[options.globals.currentServer].hostname !== '')
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -28,8 +28,8 @@ loadOptions().then((newOptions) => {
 });
 
 const addTorrent = (url, referer = null) => {
-    const serverOptions = options.servers[options.globals.currentServer];
-    const connection = getClient(serverOptions);
+    const serverSettings = options.servers[options.globals.currentServer];
+    const connection = getClient(serverSettings);
     const networkErrors = [
         'NetworkError when attempting to fetch resource.',
     ];

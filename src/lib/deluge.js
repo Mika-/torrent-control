@@ -1,14 +1,14 @@
 class DelugeApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = serverOptions;
+        this.settings = serverSettings;
         this.cookie = null;
     }
 
     logIn() {
-        const {hostname, password} = this.options;
+        const {hostname, password} = this.settings;
 
         this._attachListeners();
 
@@ -44,7 +44,7 @@ class DelugeApi extends BaseClient {
     }
 
     logOut() {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'json', {
@@ -69,7 +69,7 @@ class DelugeApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             base64Encode(torrent).then((base64torrent) =>
@@ -106,7 +106,7 @@ class DelugeApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'json', {
@@ -141,7 +141,7 @@ class DelugeApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
         let sessionCookie = this.cookie;
 
         this.addHeadersReceivedEventListener((details) => {

@@ -1,18 +1,18 @@
 class qBittorrentApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = {
+        this.settings = {
             apiVersion: 2,
-            ...serverOptions
+            ...serverSettings
         };
         this.cookie = null;
     }
 
     logIn() {
-        const {hostname, username, password} = this.options;
-        const loginPath = this.options.apiVersion === 2 ? 'api/v2/auth/login' : 'login';
+        const {hostname, username, password, apiVersion} = this.settings;
+        const loginPath = apiVersion === 2 ? 'api/v2/auth/login' : 'login';
 
         this._attachListeners();
 
@@ -44,8 +44,8 @@ class qBittorrentApi extends BaseClient {
     }
 
     logOut() {
-        const {hostname} = this.options;
-        const logoutPath = this.options.apiVersion === 2 ? 'api/v2/auth/logout' : 'logout';
+        const {hostname, apiVersion} = this.settings;
+        const logoutPath = apiVersion === 2 ? 'api/v2/auth/logout' : 'logout';
 
         return new Promise((resolve, reject) => {
             fetch(hostname + logoutPath, {
@@ -61,13 +61,13 @@ class qBittorrentApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options
-        const addTorrentPath = this.options.apiVersion === 2 ? 'api/v2/torrents/add' : 'command/upload';
+        const {hostname, apiVersion} = this.settings;
+        const addTorrentPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/upload';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
 
-            if (this.options.apiVersion === 2)
+            if (apiVersion === 2)
                 form.append('fileselect', torrent, 'temp.torrent');
             else
                 form.append('torrents', torrent, 'temp.torrent');
@@ -87,8 +87,8 @@ class qBittorrentApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
-        const addTorrentUrlPath = this.options.apiVersion === 2 ? 'api/v2/torrents/add' : 'command/download';
+        const {hostname, apiVersion} = this.settings;
+        const addTorrentUrlPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/download';
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -109,7 +109,7 @@ class qBittorrentApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
         let sessionCookie = this.cookie;
 
         this.addHeadersReceivedEventListener((details) => {

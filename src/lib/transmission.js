@@ -1,14 +1,14 @@
 class TransmissionApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = serverOptions;
+        this.settings = serverSettings;
         this.session = null;
     }
 
     logIn() {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         this._attachListeners();
 
@@ -51,7 +51,7 @@ class TransmissionApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             base64Encode(torrent).then((base64torrent) =>
@@ -80,7 +80,7 @@ class TransmissionApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'transmission/rpc', {
@@ -108,7 +108,7 @@ class TransmissionApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {username, password} = this.options;
+        const {username, password} = this.settings;
         let session = this.session;
 
         if (username && password)

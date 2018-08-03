@@ -1,14 +1,14 @@
 class floodApi extends BaseClient {
 
-    constructor(serverOptions) {
+    constructor(serverSettings) {
         super();
 
-        this.options = serverOptions;
+        this.settings = serverSettings;
         this.cookie = null;
     }
 
     logIn() {
-        const {hostname, username, password} = this.options;
+        const {hostname, username, password} = this.settings;
 
         this._attachListeners();
 
@@ -47,7 +47,7 @@ class floodApi extends BaseClient {
     }
 
     addTorrent(torrent) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -70,7 +70,7 @@ class floodApi extends BaseClient {
     }
 
     addTorrentUrl(url) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'api/client/add', {

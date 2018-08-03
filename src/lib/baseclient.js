@@ -22,7 +22,7 @@ class BaseClient {
     }
 
     addHeadersReceivedEventListener(listener) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         this.listeners.onHeadersReceived = listener;
 
@@ -34,7 +34,7 @@ class BaseClient {
     }
 
     addBeforeSendHeadersEventListener(listener) {
-        const {hostname} = this.options;
+        const {hostname} = this.settings;
 
         this.listeners.onBeforeSendHeaders = listener;
 
@@ -46,7 +46,7 @@ class BaseClient {
     }
 
     addAuthRequiredListener() {
-        const {hostname, username, password} = this.options;
+        const {hostname, username, password} = this.settings;
 
         this.listeners.onAuthRequired = (details) => {
             if (this.pendingRequests.indexOf(details.requestId) !== -1)
