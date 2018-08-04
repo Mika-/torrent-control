@@ -46,14 +46,21 @@ class floodApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('torrents', torrent, 'temp.torrent');
-            form.append('start', 'true');
-            form.append('tags', '');
+
+            if (options.paused)
+                form.append('start', !options.paused);
+
+            if (options.path)
+                form.append('destination', options.path);
+
+            if (options.label)
+                form.append('tags', options.label);
 
             fetch(hostname + 'api/client/add-files', {
                 method: 'POST',
@@ -69,21 +76,31 @@ class floodApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
+            let request = {
+                urls: [
+                    url,
+                ]
+            };
+
+            if (options.paused)
+                request.start = !options.paused;
+
+            if (options.path)
+                request.destination = options.path;
+
+            if (options.label)
+                request.tags = options.label;
+
             fetch(hostname + 'api/client/add', {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json'
                 }),
-                body: JSON.stringify({
-                    start: true,
-                    urls: [
-                        url,
-                    ]
-                })
+                body: JSON.stringify(request)
             })
             .then((response) => {
                 if (response.ok)
