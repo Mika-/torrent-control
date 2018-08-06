@@ -15,6 +15,10 @@
     "message": "Lisää torrent",
     "description": "Context menu action"
   },
+  "addTorrentPausedAction": {
+    "message": "Lisää torrent (Keskeytettynä)",
+    "description": "Context menu action"
+  },
   "saveAction": {
     "message": "Tallenna",
     "description": "Save action"

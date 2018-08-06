@@ -15,6 +15,10 @@
     "message": "Add torrent",
     "description": "Context menu action"
   },
+  "addTorrentPausedAction": {
+    "message": "Add torrent (Paused)",
+    "description": "Context menu action"
+  },
   "saveAction": {
     "message": "Save",
     "description": "Save action"
