@@ -175,6 +175,16 @@ const createContextMenu = () => {
       title: browser.i18n.getMessage('addTorrentAction'),
       contexts: ['link']
     });
+
+    const client = clientList.find((client) => client.id === options.servers[options.globals.currentServer].application);
+
+    if (client.torrentOptions && client.torrentOptions.includes('paused')) {
+        browser.menus.create({
+          id: 'add-torrent-paused',
+          title: browser.i18n.getMessage('addTorrentPausedAction'),
+          contexts: ['link']
+        });
+    }
 }
 
 const removeContextMenu = () => {
@@ -191,6 +201,10 @@ const registerHandler = () => {
             toggleURLCatching();
         else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl);
+        else if (info.menuItemId === 'add-torrent-paused')
+            addTorrent(info.linkUrl, info.pageUrl, {
+                paused: true
+            });
         else if (currentServer)
             setCurrentServer(parseInt(currentServer[1]));
     });
