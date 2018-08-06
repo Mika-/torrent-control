@@ -17,12 +17,14 @@ const clientList = [
     {
         id: 'flood',
         name: 'Flood',
-        addressPlaceholder: 'http://127.0.0.1:3000/'
+        addressPlaceholder: 'http://127.0.0.1:3000/',
+        torrentOptions: ['paused']
     },
     {
         id: 'rutorrent',
         name: 'ruTorrent',
-        addressPlaceholder: 'http://127.0.0.1:80/'
+        addressPlaceholder: 'http://127.0.0.1:80/',
+        torrentOptions: ['paused']
     },
     {
         id: 'tixati',
@@ -42,7 +44,8 @@ const clientList = [
     {
         id: 'qbittorrent',
         name: 'qBittorrent',
-        addressPlaceholder: 'http://127.0.0.1:8080/'
+        addressPlaceholder: 'http://127.0.0.1:8080/',
+        torrentOptions: ['paused']
     },
     {
         id: 'qbittorrent_404',
