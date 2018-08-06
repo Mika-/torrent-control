@@ -27,16 +27,23 @@ loadOptions().then((newOptions) => {
     registerHandler();
 });
 
-const addTorrent = (url, referer = null) => {
+const addTorrent = (url, referer = null, torrentOptions = {}) => {
     const serverSettings = options.servers[options.globals.currentServer];
     const connection = getClient(serverSettings);
     const networkErrors = [
         'NetworkError when attempting to fetch resource.',
     ];
 
+    torrentOptions = {
+        paused: false,
+        path: null,
+        label: null,
+        ...torrentOptions
+    };
+
     if (isMagnetUrl(url)) {
         connection.logIn()
-            .then(() => connection.addTorrentUrl(url)
+            .then(() => connection.addTorrentUrl(url, torrentOptions)
                 .then(() => {
                     const torrentName = getMagnetUrlName(url);
                     notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
@@ -53,7 +60,7 @@ const addTorrent = (url, referer = null) => {
     } else {
         fetchTorrent(url, referer)
             .then(({torrent, torrentName}) => connection.logIn()
-                .then(() => connection.addTorrent(torrent)
+                .then(() => connection.addTorrent(torrent, torrentOptions)
                     .then(() => {
                         notification(browser.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                         connection.logOut();
