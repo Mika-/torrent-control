@@ -50,23 +50,31 @@ class TransmissionApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
-            base64Encode(torrent).then((base64torrent) =>
-                fetch(hostname + 'transmission/rpc', {
+            base64Encode(torrent).then((base64torrent) => {
+                let request = {
+                    method: 'torrent-add',
+                    arguments: {
+                        metainfo: base64torrent
+                    }
+                };
+
+                if (options.paused)
+                    request.arguments.paused = options.paused;
+
+                if (options.path)
+                    request.arguments['download-dir'] = options.path;
+
+                return fetch(hostname + 'transmission/rpc', {
                     method: 'POST',
                     credentials: 'include',
                     headers: new Headers({
                         'Content-Type': 'application/json'
                     }),
-                    body: JSON.stringify({
-                        method: 'torrent-add',
-                        arguments: {
-                            metainfo: base64torrent
-                        }
-                    })
+                    body: JSON.stringify(request)
                 })
                 .then((response) => response.json())
                 .then((json) => {
@@ -75,26 +83,34 @@ class TransmissionApi extends BaseClient {
                     else
                         throw new Error(browser.i18n.getMessage('torrentAddError'));
                 })
-            ).catch((error) => reject(error));
+            }).catch((error) => reject(error));
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
+            let request = {
+                method: 'torrent-add',
+                arguments: {
+                    filename: url
+                }
+            };
+
+            if (options.paused)
+                request.arguments.paused = options.paused;
+
+            if (options.path)
+                request.arguments['download-dir'] = options.path;
+            
             fetch(hostname + 'transmission/rpc', {
                 method: 'POST',
                 credentials: 'include',
                 headers: new Headers({
                     'Content-Type': 'application/json'
                 }),
-                body: JSON.stringify({
-                    method: 'torrent-add',
-                    arguments: {
-                        filename: url
-                    }
-                })
+                body: JSON.stringify(request)
             })
             .then((response) => response.json())
             .then((json) => {
