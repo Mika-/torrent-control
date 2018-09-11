@@ -156,11 +156,6 @@ const createServerSelectionContextMenu = () => {
 
 const createDefaultMenu = () => {
     browser.menus.create({
-        id: 'settings',
-        title: browser.i18n.getMessage('settingsAction'),
-        contexts: ['browser_action']
-    });
-    browser.menus.create({
         id: 'catch-urls',
         type: 'checkbox',
         checked: options.globals.catchUrls,
@@ -195,9 +190,7 @@ const registerHandler = () => {
     browser.menus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
 
-        if (info.menuItemId === 'settings')
-            browser.runtime.openOptionsPage();
-        else if (info.menuItemId === 'catch-urls')
+        if (info.menuItemId === 'catch-urls')
             toggleURLCatching();
         else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl);

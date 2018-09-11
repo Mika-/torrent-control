@@ -31,10 +31,6 @@
     "message": "Lisää uusi palvelin",
     "description": "Add server action"
   },
-  "settingsAction": {
-    "message": "Asetukset",
-    "description": "Settings action"
-  },
   "serverConfigurationTitle": {
     "message": "Palvelimen asetukset",
     "description": "Server configuration title"
