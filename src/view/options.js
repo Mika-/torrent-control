@@ -74,6 +74,8 @@ const restoreServerList = () => {
 const restoreServer = (id) => {
     const server = options.servers[~~id];
     serverSelect.value = id;
+    options.globals.currentServer = ~~id;
+    saveOptions(options);
 
     document.querySelector('#name').value = server.name;
     document.querySelector('#application').value = server.application;
