@@ -11,12 +11,20 @@
     "message": "Kaappaa torrent osoitteet",
     "description": "Catch torrent URLs"
   },
+  "torrentLabelsOption": {
+    "message": "Tunnisteet",
+    "description": "Label list option"
+  },
   "addTorrentAction": {
     "message": "Lisää torrent",
     "description": "Context menu action"
   },
   "addTorrentPausedAction": {
     "message": "Lisää torrent (Keskeytettynä)",
+    "description": "Context menu action"
+  },
+  "addTorrentLabelAction": {
+    "message": "Add torrent tunnisteella",
     "description": "Context menu action"
   },
   "saveAction": {

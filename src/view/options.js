@@ -6,6 +6,9 @@ const persistOptions = () => {
     options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
 
+    const labels = document.querySelector('#labels').value.split(/\n/g) || [];
+    options.globals.labels = labels.map((label) => label.trim());
+
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
@@ -23,11 +26,13 @@ const restoreOptions = () => {
 
     const saveButton = document.querySelector('#save-options');
 
-    document.querySelectorAll('input, select:not(#server-list)').forEach((element) => {
+    document.querySelectorAll('textarea, input, select:not(#server-list)').forEach((element) => {
         element.addEventListener('input', () => {
             saveButton.classList.remove('disabled');
         }, { passive: true });
     });
+
+    document.querySelector('#labels').placeholder = 'Label\nAnother label'.replace(/\\n/g, '\n');
 
     document.querySelectorAll('[data-i18n]').forEach((element) => {
         element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
@@ -45,6 +50,8 @@ const restoreOptions = () => {
 
         document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
         document.querySelector('#catchurls').checked = options.globals.catchUrls;
+
+        document.querySelector('#labels').value = options.globals.labels.join('\n');
 
         restoreServerList();
         restoreServer(serverSelect.value);

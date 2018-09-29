@@ -11,12 +11,20 @@
     "message": "Catch torrent URLs",
     "description": "Catch torrent URLs"
   },
+  "torrentLabelsOption": {
+    "message": "Labels",
+    "description": "Label list option"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"
   },
   "addTorrentPausedAction": {
     "message": "Add torrent (Paused)",
+    "description": "Context menu action"
+  },
+  "addTorrentLabelAction": {
+    "message": "Add torrent with label",
     "description": "Context menu action"
   },
   "saveAction": {

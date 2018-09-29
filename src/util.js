@@ -91,7 +91,8 @@ const loadOptions = () => {
         globals: {
             currentServer: 0,
             showcontextmenu: true,
-            catchUrls: true
+            catchUrls: true,
+            labels: []
         },
         servers: [
             {
