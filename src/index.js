@@ -179,6 +179,7 @@ const createContextMenu = () => {
           title: browser.i18n.getMessage('addTorrentPausedAction'),
           contexts: ['link']
         });
+    }
 
     if (client.torrentOptions && client.torrentOptions.includes('label') && options.globals.labels.length) {
         browser.menus.create({
