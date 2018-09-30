@@ -100,6 +100,24 @@ class BaseClient {
         }
     }
 
+    parseJsonResponse(response) {
+        const contentType = response.headers.get('content-type');
+        const isJson = !!contentType.match(/application\/json/)
+
+        if (response.ok && isJson)
+            return response.json();
+        else if (response.ok && !isJson)
+            return response.text().then((text) => {
+                throw new Error(browser.i18n.getMessage('apiError', text.trim().slice(0, 256)));
+            });
+        else if (response.status === 400)
+            throw new Error(browser.i18n.getMessage('torrentAddError'));
+        else if (response.status === 401)
+            throw new Error(browser.i18n.getMessage('loginError'));
+        else
+            throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+    }
+
     filterHeaders(headers, filters) {
         return headers.filter((header) => {
             return !filters.includes(header.name.toLowerCase());
