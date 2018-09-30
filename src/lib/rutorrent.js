@@ -42,21 +42,12 @@ class ruTorrentApi extends BaseClient {
                 credentials: 'include',
                 body: form
             })
-            .then((response) => {
-                if (response.ok)
-                    return response.json();
-                else if (response.status === 400)
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
-                else if (response.status === 401)
-                    throw new Error(browser.i18n.getMessage('loginError'));
-                else
-                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
-            })
+            .then(this.parseJsonResponse)
             .then((json) => {
-                if (json.result === 'Success')
+                if (json.result && json.result === 'Success')
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                    throw new Error(browser.i18n.getMessage('torrentAddError', json.result || ''));
             })
             .catch((error) => reject(error));
         });
@@ -83,21 +74,12 @@ class ruTorrentApi extends BaseClient {
                 method: 'GET',
                 credentials: 'include'
             })
-            .then((response) => {
-                if (response.ok)
-                    return response.json();
-                else if (response.status === 400)
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
-                else if (response.status === 401)
-                    throw new Error(browser.i18n.getMessage('loginError'));
-                else
-                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
-            })
+            .then(this.parseJsonResponse)
             .then((json) => {
-                if (json.result === 'Success')
+                if (json.result && json.result === 'Success')
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                    throw new Error(browser.i18n.getMessage('torrentAddError', json.result || ''));
             })
             .catch((error) => reject(error));
         });
