@@ -68,12 +68,20 @@ class DelugeApi extends BaseClient {
         });
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
-            base64Encode(torrent).then((base64torrent) =>
-                fetch(hostname + 'json', {
+            base64Encode(torrent).then((base64torrent) => {
+                let opts = {};
+
+                if (options.paused)
+                    opts['add_paused'] = options.paused;
+
+                if (options.path)
+                    opts['download_location'] = options.path;
+            
+                return fetch(hostname + 'json', {
                     method: 'POST',
                     headers: new Headers({
                         'Content-Type': 'application/json',
@@ -84,7 +92,7 @@ class DelugeApi extends BaseClient {
                         params: [
                             'temp.torrent',
                             base64torrent,
-                            {}
+                            opts
                         ],
                         id: 2
                     })
@@ -101,14 +109,22 @@ class DelugeApi extends BaseClient {
                     else
                         throw new Error(browser.i18n.getMessage('torrentAddError'));
                 })
-            ).catch((error) => reject(error));
+            }).catch((error) => reject(error));
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
+            let opts = {};
+
+            if (options.paused)
+                opts['add_paused'] = options.paused;
+
+            if (options.path)
+                opts['download_location'] = options.path;
+
             fetch(hostname + 'json', {
                 method: 'POST',
                 headers: new Headers({
@@ -119,7 +135,7 @@ class DelugeApi extends BaseClient {
                     method: 'core.add_torrent_magnet',
                     params: [
                         url,
-                        {}
+                        opts
                     ],
                     id: 2
                 })
