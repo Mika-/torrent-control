@@ -7,7 +7,7 @@ const persistOptions = () => {
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
 
     const labels = document.querySelector('#labels').value.split(/\n/g) || [];
-    options.globals.labels = labels.map((label) => label.trim());
+    options.globals.labels = labels.map((label) => label.trim()).filter((label) => label.length);
 
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
