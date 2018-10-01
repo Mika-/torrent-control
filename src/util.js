@@ -3,7 +3,7 @@ const clientList = [
         id: 'biglybt',
         name: 'BiglyBT',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused', 'label']
+        torrentOptions: ['paused']
     },
     {
         id: 'cloudtorrent',
@@ -36,7 +36,7 @@ const clientList = [
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused', 'label']
+        torrentOptions: ['paused']
     },
     {
         id: 'utorrent',
