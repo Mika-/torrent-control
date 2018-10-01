@@ -24,7 +24,7 @@
     "description": "Context menu action"
   },
   "addTorrentLabelAction": {
-    "message": "Add torrent tunnisteella",
+    "message": "Lisää torrent tunnisteella",
     "description": "Context menu action"
   },
   "saveAction": {
