@@ -11,6 +11,10 @@
     "message": "Kaappaa torrent osoitteet",
     "description": "Catch torrent URLs"
   },
+  "addPausedOption": {
+    "message": "Lisää torrentit keskeytettynä",
+    "description": "Add as paused by default"
+  },
   "torrentLabelsOption": {
     "message": "Tunnisteet",
     "description": "Label list option"

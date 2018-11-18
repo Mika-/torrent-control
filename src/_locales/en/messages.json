@@ -11,6 +11,10 @@
     "message": "Catch torrent URLs",
     "description": "Catch torrent URLs"
   },
+  "addPausedOption": {
+    "message": "Add torrents as paused",
+    "description": "Add as paused by default"
+  },
   "torrentLabelsOption": {
     "message": "Labels",
     "description": "Label list option"

@@ -5,6 +5,7 @@ const serverSelect = document.querySelector('#server-list');
 const persistOptions = () => {
     options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
+    options.globals.addPaused = document.querySelector('#addpaused').checked;
 
     const labels = document.querySelector('#labels').value.split(/\n/g) || [];
     options.globals.labels = labels.map((label) => label.trim()).filter((label) => label.length);
@@ -50,6 +51,7 @@ const restoreOptions = () => {
 
         document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
         document.querySelector('#catchurls').checked = options.globals.catchUrls;
+        document.querySelector('#addpaused').checked = options.globals.addPaused;
 
         document.querySelector('#labels').value = options.globals.labels.join('\n');
 

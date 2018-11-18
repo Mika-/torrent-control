@@ -162,6 +162,13 @@ const createDefaultMenu = () => {
         title: browser.i18n.getMessage('catchUrlsOption'),
         contexts: ['browser_action']
     });
+    browser.menus.create({
+        id: 'add-paused',
+        type: 'checkbox',
+        checked: options.globals.addPaused,
+        title: browser.i18n.getMessage('addPausedOption'),
+        contexts: ['browser_action']
+    });
 }
 
 const createContextMenu = () => {
@@ -210,14 +217,19 @@ const registerHandler = () => {
 
         if (info.menuItemId === 'catch-urls')
             toggleURLCatching();
+        if (info.menuItemId === 'add-paused')
+            toggleAddPaused();
         else if (info.menuItemId === 'add-torrent')
-            addTorrent(info.linkUrl, info.pageUrl);
+            addTorrent(info.linkUrl, info.pageUrl, {
+                paused: options.globals.addPaused
+            });
         else if (info.menuItemId === 'add-torrent-paused')
             addTorrent(info.linkUrl, info.pageUrl, {
                 paused: true
             });
         else if (labelId)
             addTorrent(info.linkUrl, info.pageUrl, {
+                paused: options.globals.addPaused,
                 label: options.globals.labels[~~labelId[1]]
             });
         else if (currentServer)
@@ -239,7 +251,9 @@ const registerHandler = () => {
             let parser = document.createElement('a');
             parser.href = details.url;
             let magnetUri = decodeURIComponent(parser.pathname).substr(1);
-            addTorrent(magnetUri);
+            addTorrent(magnetUri, null, {
+                paused: options.globals.addPaused
+            });
             return {cancel: true}
         },
         {urls: ['https://torrent-control.invalid/*']},
@@ -249,7 +263,9 @@ const registerHandler = () => {
     browser.webRequest.onBeforeRequest.addListener(
         (details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
-                addTorrent(details.url, details.originUrl);
+                addTorrent(details.url, details.originUrl, {
+                    paused: options.globals.addPaused
+                });
                 return {cancel: true};
             }
 
@@ -276,5 +292,10 @@ const setCurrentServer = (id) => {
 
 const toggleURLCatching = () => {
     options.globals.catchUrls = !options.globals.catchUrls;
+    saveOptions(options);
+}
+
+const toggleAddPaused = () => {
+    options.globals.addPaused = !options.globals.addPaused;
     saveOptions(options);
 }
