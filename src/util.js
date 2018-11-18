@@ -31,7 +31,8 @@ const clientList = [
     {
         id: 'tixati',
         name: 'Tixati',
-        addressPlaceholder: 'http://127.0.0.1:8888/'
+        addressPlaceholder: 'http://127.0.0.1:8888/',
+        torrentOptions: ['paused']
     },
     {
         id: 'transmission',

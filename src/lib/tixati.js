@@ -21,14 +21,14 @@ class TixatiApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('metafile', torrent, 'temp.torrent');
             form.append('addmetafile', 'Add');
-            form.append('noautostart', 0);
+            form.append('noautostart', options.paused ? 1 : 0);
 
             fetch(hostname + 'transfers/action', {
                 method: 'POST',
@@ -49,14 +49,14 @@ class TixatiApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options = {}) {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('addlinktext', url);
             form.append('addlink', 'Add');
-            form.append('noautostart', 0);
+            form.append('noautostart', options.paused ? 1 : 0);
 
             fetch(hostname + 'transfers/action', {
                 method: 'POST',
