@@ -45,8 +45,8 @@ class BaseClient {
         );
     }
 
-    addAuthRequiredListener() {
-        const {hostname, username, password} = this.settings;
+    addAuthRequiredListener(username, password) {
+        const {hostname} = this.settings;
 
         this.listeners.onAuthRequired = (details) => {
             if (this.pendingRequests.indexOf(details.requestId) !== -1)

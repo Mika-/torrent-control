@@ -98,7 +98,7 @@ class uTorrentApi extends BaseClient {
         let sessionCookie = this.cookie;
 
         if (username && password)
-            this.addAuthRequiredListener();
+            this.addAuthRequiredListener(username, password);
 
         this.addHeadersReceivedEventListener((details) => {
             const cookie = this.getCookie(details.responseHeaders, 'GUID');

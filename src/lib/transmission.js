@@ -128,7 +128,7 @@ class TransmissionApi extends BaseClient {
         let session = this.session;
 
         if (username && password)
-            this.addAuthRequiredListener();
+            this.addAuthRequiredListener(username, password);
 
         this.addHeadersReceivedEventListener((details) => {
             const sessionHeader = details.responseHeaders.find((header) => header.name.toLowerCase() === 'x-transmission-session-id');

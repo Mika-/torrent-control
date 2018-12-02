@@ -10,7 +10,7 @@ class CloudTorrentApi extends BaseClient {
         const {username, password} = this.settings;
 
         if (username && password)
-            this.addAuthRequiredListener();
+            this.addAuthRequiredListener(username, password);
 
         return Promise.resolve();
     }
