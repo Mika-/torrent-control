@@ -10,12 +10,15 @@ const persistOptions = () => {
     const labels = document.querySelector('#labels').value.split(/\n/g) || [];
     options.globals.labels = labels.map((label) => label.trim()).filter((label) => label.length);
 
+    const directories = document.querySelector('#directories').value.split(/\n/g) || [];
+
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/'),
         username: document.querySelector('#username').value,
-        password: document.querySelector('#password').value
+        password: document.querySelector('#password').value,
+        directories: directories.map((directory) => directory.trim()).filter((directory) => directory.length)
     };
 
     saveOptions(options);
@@ -34,6 +37,7 @@ const restoreOptions = () => {
     });
 
     document.querySelector('#labels').placeholder = 'Label\nAnother label'.replace(/\\n/g, '\n');
+    document.querySelector('#directories').placeholder = '/home/user/downloads\n/data/incomplete'.replace(/\\n/g, '\n');
 
     document.querySelectorAll('[data-i18n]').forEach((element) => {
         element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
@@ -91,6 +95,7 @@ const restoreServer = (id) => {
     document.querySelector('#hostname').value = server.hostname;
     document.querySelector('#username').value = server.username;
     document.querySelector('#password').value = server.password;
+    document.querySelector('#directories').value = server.directories.join('\n');
 
     document.querySelector('#application').dispatchEvent(new Event('change'));
 
@@ -106,7 +111,8 @@ const addServer = () => {
         application: clientList[0].id,
         hostname: '',
         username: '',
-        password: ''
+        password: '',
+        directories: []
     });
 
     restoreServerList();
@@ -164,6 +170,9 @@ document.querySelector('#application').addEventListener('change', (e) => {
 
         if (currentAddress === '' || clientList.find((client) => client.addressPlaceholder === currentAddress))
             document.querySelector('#hostname').value = client.addressPlaceholder;
+
+        document.querySelector('[data-panel="directories"]').style.display =
+            client.torrentOptions && client.torrentOptions.includes('path') ? 'flex' : 'none';
 
         if (client.id === 'deluge')
             document.querySelector('#username').setAttribute('disabled', 'true');

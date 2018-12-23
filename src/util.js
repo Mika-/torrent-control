@@ -103,7 +103,8 @@ const loadOptions = () => {
                 application: clientList[0].id,
                 hostname: '',
                 username: '',
-                password: ''
+                password: '',
+                directories: []
             }
         ]
     };

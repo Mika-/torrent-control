@@ -31,6 +31,10 @@
     "message": "Lisää torrent tunnisteella",
     "description": "Context menu action"
   },
+  "addTorrentPathAction": {
+    "message": "Lisää torrent polulla",
+    "description": "Context menu action"
+  },
   "saveAction": {
     "message": "Tallenna",
     "description": "Save action"
@@ -70,6 +74,10 @@
   "passwordOption": {
     "message": "Salasana",
     "description": "Password option"
+  },
+  "serverDirectoriesOption": {
+    "message": "Hakemistot",
+    "description": "Server directories option"
   },
   "torrentAddedNotification": {
     "message": "Torrentti lisätty",
