@@ -3,9 +3,21 @@
     "message": "Lisäosan asetukset",
     "description": "Addon configuration"
   },
-  "contextmenuOption": {
-    "message": "Näytä kontekstivalikko",
-    "description": "Show context menu"
+  "contextMenuOption": {
+    "message": "Kontekstivalikko",
+    "description": "Context menu"
+  },
+  "contextMenuDefaultOption": {
+    "message": "Oletus",
+    "description": "Context menu default"
+  },
+  "contextMenuSimpleOption": {
+    "message": "Yksinkertainen",
+    "description": "Context menu simple"
+  },
+  "contextMenuHiddenOption": {
+    "message": "Piilotettu",
+    "description": "Context menu hidden"
   },
   "catchUrlsOption": {
     "message": "Kaappaa torrent osoitteet",

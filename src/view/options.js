@@ -3,7 +3,7 @@ var options;
 const serverSelect = document.querySelector('#server-list');
 
 const persistOptions = () => {
-    options.globals.showcontextmenu = document.querySelector('#contextmenu').checked;
+    options.globals.contextMenu = ~~document.querySelector('[name="contextmenu"]:checked').value;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
     options.globals.addPaused = document.querySelector('#addpaused').checked;
 
@@ -53,7 +53,7 @@ const restoreOptions = () => {
     loadOptions().then((newOptions) => {
         options = newOptions;
 
-        document.querySelector('#contextmenu').checked = options.globals.showcontextmenu;
+        document.querySelector('[name="contextmenu"][value="' + options.globals.contextMenu + '"]').checked = true;
         document.querySelector('#catchurls').checked = options.globals.catchUrls;
         document.querySelector('#addpaused').checked = options.globals.addPaused;
 

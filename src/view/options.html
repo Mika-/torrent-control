@@ -12,10 +12,17 @@
     </div>
 
     <div class="panel-section panel-section-formElements">
-
         <div class="panel-formElements-item browser-style">
-            <input type="checkbox" id="contextmenu" />
-            <label for="contextmenu" data-i18n="contextmenuOption"></label>
+            <label data-i18n="contextMenuOption"></label>
+
+            <input type="radio" name="contextmenu" value="1" id="contextmenuDefault">
+            <label data-i18n="contextMenuDefaultOption" for="contextmenuDefault"></label>
+
+            <input type="radio" name="contextmenu" value="2" id="contextmenuSimple">
+            <label data-i18n="contextMenuSimpleOption" for="contextmenuSimple"></label>
+
+            <input type="radio" name="contextmenu" value="0" id="contextmenuHidden">
+            <label data-i18n="contextMenuHiddenOption" for="contextmenuHidden"></label>
         </div>
 
         <div class="panel-formElements-item browser-style">

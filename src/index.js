@@ -5,7 +5,7 @@ browser.storage.onChanged.addListener((changes) => {
 
     removeContextMenu();
 
-    if (options.globals.showcontextmenu && options.servers[options.globals.currentServer].hostname !== '')
+    if (options.globals.contextMenu && options.servers[options.globals.currentServer].hostname !== '')
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -17,7 +17,7 @@ browser.storage.onChanged.addListener((changes) => {
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    if (options.globals.showcontextmenu && options.servers[options.globals.currentServer].hostname !== '')
+    if (options.globals.contextMenu && options.servers[options.globals.currentServer].hostname !== '')
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -140,7 +140,7 @@ const createBrowserRequest = (url, referer) => {
 const createServerSelectionContextMenu = () => {
     let context = ['browser_action'];
 
-    if (options.globals.showcontextmenu)
+    if (options.globals.contextMenu)
         context.push('page');
 
     options.servers.forEach((server, id) => {
@@ -182,46 +182,48 @@ const createContextMenu = () => {
 
     const client = clientList.find((client) => client.id === serverOptions.application);
 
-    if (client.torrentOptions && client.torrentOptions.includes('paused')) {
-        browser.menus.create({
-          id: 'add-torrent-paused',
-          title: browser.i18n.getMessage('addTorrentPausedAction'),
-          contexts: ['link']
-        });
-    }
-
-    if (client.torrentOptions && client.torrentOptions.includes('label') && options.globals.labels.length) {
-        browser.menus.create({
-            id: 'add-torrent-label',
-            title: browser.i18n.getMessage('addTorrentLabelAction'),
-            contexts: ['link']
-        });
-
-        options.globals.labels.forEach((label, i) => {
+    if (options.globals.contextMenu === 1 && client.torrentOptions) {
+        if (client.torrentOptions.includes('paused')) {
             browser.menus.create({
-                id: 'add-torrent-label-' + i,
-                parentId: 'add-torrent-label',
-                title: label,
+              id: 'add-torrent-paused',
+              title: browser.i18n.getMessage('addTorrentPausedAction'),
+              contexts: ['link']
+            });
+        }
+
+        if (client.torrentOptions.includes('label') && options.globals.labels.length) {
+            browser.menus.create({
+                id: 'add-torrent-label',
+                title: browser.i18n.getMessage('addTorrentLabelAction'),
                 contexts: ['link']
             });
-        });
-    }
 
-    if (client.torrentOptions && client.torrentOptions.includes('path') && serverOptions.directories.length) {
-        browser.menus.create({
-            id: 'add-torrent-path',
-            title: browser.i18n.getMessage('addTorrentPathAction'),
-            contexts: ['link']
-        });
+            options.globals.labels.forEach((label, i) => {
+                browser.menus.create({
+                    id: 'add-torrent-label-' + i,
+                    parentId: 'add-torrent-label',
+                    title: label,
+                    contexts: ['link']
+                });
+            });
+        }
 
-        serverOptions.directories.forEach((directory, i) => {
+        if (client.torrentOptions.includes('path') && serverOptions.directories.length) {
             browser.menus.create({
-                id: 'add-torrent-path-' + i,
-                parentId: 'add-torrent-path',
-                title: directory,
+                id: 'add-torrent-path',
+                title: browser.i18n.getMessage('addTorrentPathAction'),
                 contexts: ['link']
             });
-        });
+
+            serverOptions.directories.forEach((directory, i) => {
+                browser.menus.create({
+                    id: 'add-torrent-path-' + i,
+                    parentId: 'add-torrent-path',
+                    title: directory,
+                    contexts: ['link']
+                });
+            });
+        }
     }
 }
 
