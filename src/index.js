@@ -172,13 +172,15 @@ const createDefaultMenu = () => {
 }
 
 const createContextMenu = () => {
+    const serverOptions = options.servers[options.globals.currentServer];
+
     browser.menus.create({
       id: 'add-torrent',
       title: browser.i18n.getMessage('addTorrentAction'),
       contexts: ['link']
     });
 
-    const client = clientList.find((client) => client.id === options.servers[options.globals.currentServer].application);
+    const client = clientList.find((client) => client.id === serverOptions.application);
 
     if (client.torrentOptions && client.torrentOptions.includes('paused')) {
         browser.menus.create({
@@ -204,6 +206,23 @@ const createContextMenu = () => {
             });
         });
     }
+
+    if (client.torrentOptions && client.torrentOptions.includes('path') && serverOptions.directories.length) {
+        browser.menus.create({
+            id: 'add-torrent-path',
+            title: browser.i18n.getMessage('addTorrentPathAction'),
+            contexts: ['link']
+        });
+
+        serverOptions.directories.forEach((directory, i) => {
+            browser.menus.create({
+                id: 'add-torrent-path-' + i,
+                parentId: 'add-torrent-path',
+                title: directory,
+                contexts: ['link']
+            });
+        });
+    }
 }
 
 const removeContextMenu = () => {
@@ -214,6 +233,7 @@ const registerHandler = () => {
     browser.menus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
         const labelId = info.menuItemId.match(/^add\-torrent\-label\-(\d+)$/);
+        const pathId = info.menuItemId.match(/^add\-torrent\-path\-(\d+)$/);
 
         if (info.menuItemId === 'catch-urls')
             toggleURLCatching();
@@ -231,6 +251,11 @@ const registerHandler = () => {
             addTorrent(info.linkUrl, info.pageUrl, {
                 paused: options.globals.addPaused,
                 label: options.globals.labels[~~labelId[1]]
+            });
+        else if (pathId)
+            addTorrent(info.linkUrl, info.pageUrl, {
+                paused: options.globals.addPaused,
+                path: options.servers[options.globals.currentServer].directories[~~pathId[1]]
             });
         else if (currentServer)
             setCurrentServer(parseInt(currentServer[1]));
