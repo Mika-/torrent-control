@@ -3,7 +3,7 @@ const clientList = [
         id: 'biglybt',
         name: 'BiglyBT',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused']
+        torrentOptions: ['paused', 'path']
     },
     {
         id: 'cloudtorrent',
@@ -14,19 +14,19 @@ const clientList = [
         id: 'deluge',
         name: 'Deluge Web UI',
         addressPlaceholder: 'http://127.0.0.1:8112/',
-        torrentOptions: ['paused']
+        torrentOptions: ['paused', 'path']
     },
     {
         id: 'flood',
         name: 'Flood',
         addressPlaceholder: 'http://127.0.0.1:3000/',
-        torrentOptions: ['paused', 'label']
+        torrentOptions: ['paused', 'label', 'path']
     },
     {
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
-        torrentOptions: ['paused', 'label']
+        torrentOptions: ['paused', 'label', 'path']
     },
     {
         id: 'tixati',
@@ -38,7 +38,7 @@ const clientList = [
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused']
+        torrentOptions: ['paused', 'path']
     },
     {
         id: 'utorrent',
@@ -49,7 +49,7 @@ const clientList = [
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/',
-        torrentOptions: ['paused', 'label']
+        torrentOptions: ['paused', 'label', 'path']
     },
     {
         id: 'qbittorrent_404',
