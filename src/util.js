@@ -125,13 +125,21 @@ const isMagnetUrl = (url) => {
     return !!url.match(/^magnet:/);
 }
 
-const isTorrentUrl = (url) => {
-    if (url.match(/\.torrent$/))
-        return true;
-    else if (url.match(/torrents\.php\?action=download&id=\d+/)) // gazelle
-        return true;
+const whitelist = [
+    // Generic
+    /\.torrent$/,
+    /\.torrent\?/,
 
-    return false;
+    // Software specific
+    /\/torrents\.php\?action=download&id=\d+/, // Gazelle
+
+    // Site specific
+    /^https:\/\/anidex\.info\/dl\/\d+$/,
+    /^https:\/\/animebytes\.tv\/torrent\/\d+\/download\/$/,
+];
+
+const isTorrentUrl = (url) => {
+    return whitelist.some((regexp) => !!url.match(regexp));
 }
 
 const getMagnetUrlName = (url) => {
