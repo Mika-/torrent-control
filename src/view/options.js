@@ -2,6 +2,15 @@ var options;
 
 const serverSelect = document.querySelector('#server-list');
 
+const isLabelsSupported = (servers) => servers.some((server) => {
+    const client = clientList.find((client) => client.id === server.application);
+
+    if (client && client.torrentOptions.includes('label')) {
+        return true;
+    }
+    return false;
+});
+
 const persistOptions = () => {
     options.globals.contextMenu = ~~document.querySelector('[name="contextmenu"]:checked').value;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
@@ -173,6 +182,9 @@ document.querySelector('#application').addEventListener('change', (e) => {
 
         document.querySelector('[data-panel="directories"]').style.display =
             client.torrentOptions && client.torrentOptions.includes('path') ? 'flex' : 'none';
+
+        document.querySelector('[data-panel="labels"]').style.display =
+            isLabelsSupported(options.servers) || (client.torrentOptions && client.torrentOptions.includes('label')) ? 'flex' : 'none';
 
         if (client.id === 'deluge')
             document.querySelector('#username').setAttribute('disabled', 'true');
