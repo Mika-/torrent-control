@@ -22,7 +22,7 @@
     }]
   },
   "permissions": [
-    "menus",
+    "contextMenus",
     "notifications",
     "storage",
     "webRequest",

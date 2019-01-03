@@ -144,7 +144,7 @@ const createServerSelectionContextMenu = () => {
         context.push('page');
 
     options.servers.forEach((server, id) => {
-        browser.menus.create({
+        browser.contextMenus.create({
             id: 'current-server-' + id.toString(),
             type: 'radio',
             checked: id === options.globals.currentServer,
@@ -155,14 +155,14 @@ const createServerSelectionContextMenu = () => {
 }
 
 const createDefaultMenu = () => {
-    browser.menus.create({
+    browser.contextMenus.create({
         id: 'catch-urls',
         type: 'checkbox',
         checked: options.globals.catchUrls,
         title: browser.i18n.getMessage('catchUrlsOption'),
         contexts: ['browser_action']
     });
-    browser.menus.create({
+    browser.contextMenus.create({
         id: 'add-paused',
         type: 'checkbox',
         checked: options.globals.addPaused,
@@ -174,7 +174,7 @@ const createDefaultMenu = () => {
 const createContextMenu = () => {
     const serverOptions = options.servers[options.globals.currentServer];
 
-    browser.menus.create({
+    browser.contextMenus.create({
       id: 'add-torrent',
       title: browser.i18n.getMessage('addTorrentAction'),
       contexts: ['link']
@@ -184,7 +184,7 @@ const createContextMenu = () => {
 
     if (options.globals.contextMenu === 1 && client.torrentOptions) {
         if (client.torrentOptions.includes('paused')) {
-            browser.menus.create({
+            browser.contextMenus.create({
               id: 'add-torrent-paused',
               title: browser.i18n.getMessage('addTorrentPausedAction'),
               contexts: ['link']
@@ -192,14 +192,14 @@ const createContextMenu = () => {
         }
 
         if (client.torrentOptions.includes('label') && options.globals.labels.length) {
-            browser.menus.create({
+            browser.contextMenus.create({
                 id: 'add-torrent-label',
                 title: browser.i18n.getMessage('addTorrentLabelAction'),
                 contexts: ['link']
             });
 
             options.globals.labels.forEach((label, i) => {
-                browser.menus.create({
+                browser.contextMenus.create({
                     id: 'add-torrent-label-' + i,
                     parentId: 'add-torrent-label',
                     title: label,
@@ -209,14 +209,14 @@ const createContextMenu = () => {
         }
 
         if (client.torrentOptions.includes('path') && serverOptions.directories.length) {
-            browser.menus.create({
+            browser.contextMenus.create({
                 id: 'add-torrent-path',
                 title: browser.i18n.getMessage('addTorrentPathAction'),
                 contexts: ['link']
             });
 
             serverOptions.directories.forEach((directory, i) => {
-                browser.menus.create({
+                browser.contextMenus.create({
                     id: 'add-torrent-path-' + i,
                     parentId: 'add-torrent-path',
                     title: directory,
@@ -228,11 +228,11 @@ const createContextMenu = () => {
 }
 
 const removeContextMenu = () => {
-    browser.menus.removeAll();
+    browser.contextMenus.removeAll();
 }
 
 const registerHandler = () => {
-    browser.menus.onClicked.addListener((info, tab) => {
+    browser.contextMenus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
         const labelId = info.menuItemId.match(/^add\-torrent\-label\-(\d+)$/);
         const pathId = info.menuItemId.match(/^add\-torrent\-path\-(\d+)$/);
