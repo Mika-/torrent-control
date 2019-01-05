@@ -104,7 +104,8 @@ const loadOptions = () => {
                 hostname: '',
                 username: '',
                 password: '',
-                directories: []
+                directories: [],
+                clientOptions: {}
             }
         ]
     };

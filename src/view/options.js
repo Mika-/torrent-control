@@ -21,13 +21,19 @@ const persistOptions = () => {
 
     const directories = document.querySelector('#directories').value.split(/\n/g) || [];
 
+    let clientOptions = {};
+    Array.from(document.querySelectorAll('*[id^="clientOptions"]')).forEach((element) => {
+        clientOptions[element.id.match(/\[(.+?)\]$/)[1]] = element.checked;
+    });
+
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/'),
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value,
-        directories: directories.map((directory) => directory.trim()).filter((directory) => directory.length)
+        directories: directories.map((directory) => directory.trim()).filter((directory) => directory.length),
+        clientOptions: clientOptions
     };
 
     saveOptions(options);
@@ -36,7 +42,6 @@ const persistOptions = () => {
 }
 
 const restoreOptions = () => {
-
     const saveButton = document.querySelector('#save-options');
 
     document.querySelectorAll('textarea, input, select:not(#server-list)').forEach((element) => {
@@ -71,7 +76,6 @@ const restoreOptions = () => {
         restoreServerList();
         restoreServer(serverSelect.value);
     });
-
 }
 
 const restoreServerList = () => {
@@ -190,6 +194,32 @@ document.querySelector('#application').addEventListener('change', (e) => {
             document.querySelector('#username').setAttribute('disabled', 'true');
         else
             document.querySelector('#username').removeAttribute('disabled');
+
+        let clientOptionsPanel = document.querySelector('[data-panel="clientOptions"]');
+        Array.from(clientOptionsPanel.childNodes).forEach((element) =>
+            element.parentNode.removeChild(element));
+
+        if (client.clientOptions) {
+            const server = options.servers[options.globals.currentServer];
+
+            client.clientOptions.forEach((option) => {
+                let container = document.createElement('div');
+                container.className = 'panel-formElements-item browser-style';
+
+                let input = document.createElement('input');
+                input.type = 'checkbox';
+                input.id = 'clientOptions[' + option.name + ']';
+                input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
+                container.appendChild(input);
+
+                let label = document.createElement('label');
+                label.htmlFor = 'clientOptions[' + option.name + ']';
+                label.textContent = option.description;
+                container.appendChild(label);
+
+                clientOptionsPanel.appendChild(container);
+            });
+        }
     }
 });
 document.querySelector('#hostname').addEventListener('input', (e) => {
