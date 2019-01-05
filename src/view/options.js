@@ -1,6 +1,7 @@
 var options;
 
 const serverSelect = document.querySelector('#server-list');
+const saveButton = document.querySelector('#save-options');
 
 const isLabelsSupported = (servers) => servers.some((server) => {
     const client = clientList.find((client) => client.id === server.application);
@@ -38,15 +39,13 @@ const persistOptions = () => {
 
     saveOptions(options);
 
-    document.querySelector('#save-options').classList.add('disabled');
+    saveButton.setAttribute('disabled', true);
 }
 
 const restoreOptions = () => {
-    const saveButton = document.querySelector('#save-options');
-
     document.querySelectorAll('textarea, input, select:not(#server-list)').forEach((element) => {
         element.addEventListener('input', () => {
-            saveButton.classList.remove('disabled');
+            saveButton.removeAttribute('disabled');
         }, { passive: true });
     });
 
@@ -76,6 +75,8 @@ const restoreOptions = () => {
         restoreServerList();
         restoreServer(serverSelect.value);
     });
+
+    saveButton.setAttribute('disabled', true);
 }
 
 const restoreServerList = () => {
@@ -113,9 +114,9 @@ const restoreServer = (id) => {
     document.querySelector('#application').dispatchEvent(new Event('change'));
 
     if (options.servers.length > 1)
-        document.querySelector('#remove-server').classList.remove('disabled');
+        document.querySelector('#remove-server').removeAttribute('disabled');
     else
-        document.querySelector('#remove-server').classList.add('disabled');
+        document.querySelector('#remove-server').setAttribute('disabled', true);
 }
 
 const addServer = () => {
@@ -210,6 +211,9 @@ document.querySelector('#application').addEventListener('change', (e) => {
                 input.type = 'checkbox';
                 input.id = 'clientOptions[' + option.name + ']';
                 input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
+                input.addEventListener('input', () => {
+                    saveButton.removeAttribute('disabled');
+                }, { passive: true });
                 container.appendChild(input);
 
                 let label = document.createElement('label');
