@@ -237,30 +237,36 @@ const registerHandler = () => {
         const labelId = info.menuItemId.match(/^add\-torrent\-label\-(\d+)$/);
         const pathId = info.menuItemId.match(/^add\-torrent\-path\-(\d+)$/);
 
+        const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+
         if (info.menuItemId === 'catch-urls')
             toggleURLCatching();
         if (info.menuItemId === 'add-paused')
             toggleAddPaused();
         else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, info.pageUrl, {
-                paused: options.globals.addPaused
+                paused: options.globals.addPaused,
+                ...clientOptions
             });
         else if (info.menuItemId === 'add-torrent-paused')
             addTorrent(info.linkUrl, info.pageUrl, {
-                paused: true
+                paused: true,
+                ...clientOptions
             });
         else if (labelId)
             addTorrent(info.linkUrl, info.pageUrl, {
                 paused: options.globals.addPaused,
-                label: options.globals.labels[~~labelId[1]]
+                label: options.globals.labels[~~labelId[1]],
+                ...clientOptions
             });
         else if (pathId)
             addTorrent(info.linkUrl, info.pageUrl, {
                 paused: options.globals.addPaused,
-                path: options.servers[options.globals.currentServer].directories[~~pathId[1]]
+                path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
+                ...clientOptions
             });
         else if (currentServer)
-            setCurrentServer(parseInt(currentServer[1]));
+            setCurrentServer(~~currentServer[1]);
     });
 
     browser.browserAction.onClicked.addListener(() => {
