@@ -114,5 +114,13 @@
   "torrentParseError": {
     "message": "Torrentin lukeminen epäonnistui. ($1)",
     "description": "Parse error."
+  },
+  "sequentialDownloadOption": {
+    "message": "Lataa järjestyksessä",
+    "description": "Client option"
+  },
+  "firstLastPiecePriorityOption": {
+    "message": "Lataa ensin ensimmäinen ja viimeinen osa",
+    "description": "Client option"
   }
 }

@@ -78,6 +78,12 @@ class qBittorrentApi extends BaseClient {
 
                 if (options.label)
                     form.append('category', options.label);
+
+                if (options.sequentialDownload)
+                    form.append('sequentialDownload', true);
+
+                if (options.firstLastPiecePrio)
+                    form.append('firstLastPiecePrio', true);
             } else {
                 form.append('torrents', torrent, 'temp.torrent');
             }
@@ -113,6 +119,12 @@ class qBittorrentApi extends BaseClient {
 
                 if (options.label)
                     form.append('category', options.label);
+
+                if (options.sequentialDownload)
+                    form.append('sequentialDownload', true);
+
+                if (options.firstLastPiecePrio)
+                    form.append('firstLastPiecePrio', true);
             }
 
             fetch(hostname + addTorrentUrlPath, {

@@ -49,7 +49,17 @@ const clientList = [
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/',
-        torrentOptions: ['paused', 'label', 'path']
+        torrentOptions: ['paused', 'label', 'path'],
+        clientOptions: [
+            {
+                name: 'sequentialDownload',
+                description: browser.i18n.getMessage('sequentialDownloadOption')
+            },
+            {
+                name: 'firstLastPiecePrio',
+                description: browser.i18n.getMessage('firstLastPiecePriorityOption')
+            }
+        ]
     },
     {
         id: 'qbittorrent_404',
