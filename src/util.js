@@ -26,7 +26,13 @@ const clientList = [
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
-        torrentOptions: ['paused', 'label', 'path']
+        torrentOptions: ['paused', 'label', 'path'],
+        clientOptions: [
+            {
+                name: 'fast_resume',
+                description: browser.i18n.getMessage('skipHashCheckOption')
+            }
+        ]
     },
     {
         id: 'tixati',

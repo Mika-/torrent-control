@@ -122,5 +122,9 @@
   "firstLastPiecePriorityOption": {
     "message": "Prioritize first and last piece",
     "description": "Client option"
+  },
+  "skipHashCheckOption": {
+    "message": "Skip hash check",
+    "description": "Client option"
   }
 }

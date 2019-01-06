@@ -122,5 +122,9 @@
   "firstLastPiecePriorityOption": {
     "message": "Lataa ensin ensimmäinen ja viimeinen osa",
     "description": "Client option"
+  },
+  "skipHashCheckOption": {
+    "message": "Ohita tarkistelaskenta",
+    "description": "Client option"
   }
 }
