@@ -53,9 +53,9 @@ class floodApi extends BaseClient {
             let form = new FormData();
             form.append('torrents', torrent, 'temp.torrent');
             form.append('start', !options.paused);
-            form.append('destination', options.path);
+            form.append('destination', options.path || '');
             form.append('isBasePath', false);
-            form.append('tags', options.label);
+            form.append('tags', options.label || '');
 
             fetch(hostname + 'api/client/add-files', {
                 method: 'POST',
