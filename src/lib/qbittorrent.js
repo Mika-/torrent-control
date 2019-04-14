@@ -29,15 +29,15 @@ class qBittorrentApi extends BaseClient {
                 if (response.ok)
                     return response.text();
                 else
-                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+                    throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
             .then((text) => {
                 if (text === 'Ok.')
                     resolve();
                 else if (text === 'Fails.')
-                    throw new Error(browser.i18n.getMessage('loginError'));
+                    throw new Error(chrome.i18n.getMessage('loginError'));
                 else
-                    throw new Error(browser.i18n.getMessage('apiError', text));
+                    throw new Error(chrome.i18n.getMessage('apiError', text));
             })
             .catch((error) => reject(error));
         });
@@ -96,7 +96,7 @@ class qBittorrentApi extends BaseClient {
                 if (response.ok)
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                    throw new Error(chrome.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });
@@ -135,7 +135,7 @@ class qBittorrentApi extends BaseClient {
                 if (response.ok)
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                    throw new Error(chrome.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });

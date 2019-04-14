@@ -53,7 +53,7 @@ const restoreOptions = () => {
     document.querySelector('#directories').placeholder = '/home/user/downloads\n/data/incomplete'.replace(/\\n/g, '\n');
 
     document.querySelectorAll('[data-i18n]').forEach((element) => {
-        element.textContent = browser.i18n.getMessage(element.getAttribute('data-i18n'));
+        element.textContent = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
     });
 
     clientList.forEach((client) => {
@@ -92,7 +92,7 @@ const restoreServerList = () => {
 
     let element = document.createElement('option');
     element.setAttribute('value', 'add');
-    element.textContent = browser.i18n.getMessage('addServerAction');
+    element.textContent = chrome.i18n.getMessage('addServerAction');
     serverSelect.appendChild(element);
 
     serverSelect.value = selectedServer;

@@ -30,7 +30,7 @@ const clientList = [
         clientOptions: [
             {
                 name: 'fast_resume',
-                description: browser.i18n.getMessage('skipHashCheckOption')
+                description: chrome.i18n.getMessage('skipHashCheckOption')
             }
         ]
     },
@@ -59,11 +59,11 @@ const clientList = [
         clientOptions: [
             {
                 name: 'sequentialDownload',
-                description: browser.i18n.getMessage('sequentialDownloadOption')
+                description: chrome.i18n.getMessage('sequentialDownloadOption')
             },
             {
                 name: 'firstLastPiecePrio',
-                description: browser.i18n.getMessage('firstLastPiecePriorityOption')
+                description: chrome.i18n.getMessage('firstLastPiecePriorityOption')
             }
         ]
     },
@@ -127,7 +127,7 @@ const loadOptions = () => {
     };
 
     return new Promise((resolve, reject) => {
-        browser.storage.local.get(defaults).then((options) => {
+        chrome.storage.local.get(['globals', 'servers'], (options) => {
             mergeObjects(defaults, options);
             resolve(defaults);
         });
@@ -135,7 +135,7 @@ const loadOptions = () => {
 }
 
 const saveOptions = (options) => {
-    return browser.storage.local.set(options);
+    return chrome.storage.local.set(options);
 }
 
 const isMagnetUrl = (url) => {

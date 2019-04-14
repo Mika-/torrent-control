@@ -27,17 +27,17 @@ class TransmissionApi extends BaseClient {
                 if (response.status === 200)
                     return response.json();
                 else if (response.status === 401)
-                    throw new Error(browser.i18n.getMessage('loginError'));
+                    throw new Error(chrome.i18n.getMessage('loginError'));
                 else if (response.status === 409 && response.headers.has('X-Transmission-Session-Id'))
                     return this.logIn().then(() => resolve());
                 else
-                    throw new Error(browser.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+                    throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
             .then((json) => {
                 if (json.result === 'success')
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('loginError'));
+                    throw new Error(chrome.i18n.getMessage('loginError'));
             })
             .catch((error) => reject(error));
         });
@@ -81,7 +81,7 @@ class TransmissionApi extends BaseClient {
                     if (json.result === 'success')
                         resolve();
                     else
-                        throw new Error(browser.i18n.getMessage('torrentAddError'));
+                        throw new Error(chrome.i18n.getMessage('torrentAddError'));
                 })
             }).catch((error) => reject(error));
         });
@@ -117,7 +117,7 @@ class TransmissionApi extends BaseClient {
                 if (json.result === 'success')
                     resolve();
                 else
-                    throw new Error(browser.i18n.getMessage('torrentAddError'));
+                    throw new Error(chrome.i18n.getMessage('torrentAddError'));
             })
             .catch((error) => reject(error));
         });
