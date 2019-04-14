@@ -9,6 +9,6 @@
     "build": "web-ext build --source-dir ./src/"
   },
   "devDependencies": {
-    "web-ext": "^2.6.0"
+    "web-ext": "^3.0.0"
   }
 }
