@@ -88,7 +88,7 @@
     "description": "Password option"
   },
   "serverDirectoriesOption": {
-    "message": "Hakemistot",
+    "message": "Lataushakemistot",
     "description": "Server directories option"
   },
   "torrentAddedNotification": {

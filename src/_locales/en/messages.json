@@ -88,7 +88,7 @@
     "description": "Password option"
   },
   "serverDirectoriesOption": {
-    "message": "Directories",
+    "message": "Download directories",
     "description": "Server directories option"
   },
   "torrentAddedNotification": {
