@@ -317,7 +317,7 @@ const notification = (message) => {
         iconUrl: chrome.extension.getURL('icon/default-48.png'),
         title: 'Torrent Control',
         message: message
-    }).then((id) => setTimeout(() => chrome.notifications.clear(id), 3000));
+    }, (id) => setTimeout(() => chrome.notifications.clear(id), 3000));
 }
 
 const setCurrentServer = (id) => {
