@@ -117,10 +117,12 @@ const createBrowserRequest = (url, referer) => {
                 ].includes(header.name.toLowerCase());
             });
 
-            requestHeaders.push({
-                name: 'Referer',
-                value: referer
-            });
+            if (referer) {
+                requestHeaders.push({
+                    name: 'Referer',
+                    value: referer
+                });
+            }
 
             return {
                 requestHeaders: requestHeaders
