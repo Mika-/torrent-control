@@ -227,6 +227,18 @@ const createContextMenu = () => {
             });
         }
     }
+    else {
+        if (client.torrentOptions.includes('label') && options.globals.labels.length) {
+            options.globals.labels.forEach((label, i) => {
+                chrome.contextMenus.create({
+                    id: 'add-torrent-label-' + i,
+                    parentId: 'add-torrent',
+                    title: label,
+                    contexts: ['link']
+                });
+            });
+        }
+    }
 }
 
 const removeContextMenu = () => {
