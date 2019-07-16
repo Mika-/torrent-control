@@ -226,14 +226,32 @@ const createContextMenu = () => {
                 });
             });
         }
-    }
-    else {
+    } else {
         if (client.torrentOptions.includes('label') && options.globals.labels.length) {
+            chrome.contextMenus.create({
+                contexts: ['link'],
+                type: 'separator'
+            });
+
             options.globals.labels.forEach((label, i) => {
                 chrome.contextMenus.create({
                     id: 'add-torrent-label-' + i,
-                    parentId: 'add-torrent',
                     title: label,
+                    contexts: ['link']
+                });
+            });
+        }
+
+        if (client.torrentOptions.includes('path') && serverOptions.directories.length) {
+            chrome.contextMenus.create({
+                contexts: ['link'],
+                type: 'separator'
+            });
+
+            serverOptions.directories.forEach((directory, i) => {
+                chrome.contextMenus.create({
+                    id: 'add-torrent-path-' + i,
+                    title: directory,
                     contexts: ['link']
                 });
             });
