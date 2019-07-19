@@ -9,12 +9,16 @@ Features:
 - HTTP Digest authentication
 
 Supported clients:
-- BiglyBT
+- BiglyBT<sup>1</sup>
 - Cloud Torrent
-- Deluge
-- Flood
-- ruTorrent
+- Deluge<sup>1</sup>
+- Flood<sup>1,2</sup>
+- ruTorrent<sup>1,2,3</sup>
 - Tixati
-- Transmission
+- Transmission<sup>1</sup>
 - µTorrent
-- qBittorrent
+- qBittorrent<sup>1,2,3</sup>
+
+<sup>1</sup> Supports download directories/paths
+<sup>2</sup> Supports labels/categories
+<sup>3</sup> Supports client specific extra options (sequential download, etc.)
