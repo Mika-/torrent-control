@@ -21,6 +21,11 @@
       "size": 64
     }]
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "57.0"
+    }
+  },
   "permissions": [
     "contextMenus",
     "cookies",
