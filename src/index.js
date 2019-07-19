@@ -83,8 +83,7 @@ const fetchTorrent = (url, referer) => {
             fetch(url, {
                 headers: new Headers({
                     'Accept': 'application/x-bittorrent,*/*;q=0.9'
-                }),
-                credentials: 'include'
+                })
             }).then((response) => {
                 if (!response.ok)
                     throw new Error(chrome.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
@@ -107,15 +106,26 @@ const fetchTorrent = (url, referer) => {
 
 const createBrowserRequest = (url, referer) => {
     return new Promise((resolve, reject) => {
-        const listener = (details) => {
+        const listener = async (details) => {
             let requestHeaders = details.requestHeaders;
+
+            const currentTab = await getCurrentTab();
+            const cookies = currentTab ? await getCookies(currentTab.cookieStoreId, url) : [];
 
             requestHeaders = requestHeaders.filter((header) => {
                 return ![
+                    'cookie',
                     'origin',
                     'referer',
                 ].includes(header.name.toLowerCase());
             });
+
+            if (cookies.length) {
+                requestHeaders.push({
+                    name: 'Cookie',
+                    value: cookies.map((cookie) => [cookie.name, cookie.value].join('=')).join('; ')
+                });
+            }
 
             if (referer) {
                 requestHeaders.push({
@@ -363,4 +373,27 @@ const toggleURLCatching = () => {
 const toggleAddPaused = () => {
     options.globals.addPaused = !options.globals.addPaused;
     saveOptions(options);
+}
+
+const getCurrentTab = async () => {
+    const activeTabs = await new Promise((resolve) => {
+        chrome.tabs.query({
+            active: true,
+            windowId: chrome.windows.WINDOW_ID_CURRENT
+        }, (activeTabs) => resolve(activeTabs))
+    });
+
+    if (activeTabs.length > 0)
+      return activeTabs[0];
+
+    return null;
+}
+
+const getCookies = async (cookieStoreId, torrentUrl) => {
+    return await new Promise((resolve) => {
+        chrome.cookies.getAll({
+            url: torrentUrl,
+            storeId: cookieStoreId 
+        }, (cookies) => resolve(cookies))
+    });
 }
