@@ -6,7 +6,7 @@ const saveButton = document.querySelector('#save-options');
 const isLabelsSupported = (servers) => servers.some((server) => {
     const client = clientList.find((client) => client.id === server.application);
 
-    if (client && client.torrentOptions.includes('label')) {
+    if (client && client.torrentOptions && client.torrentOptions.includes('label')) {
         return true;
     }
     return false;

@@ -241,7 +241,7 @@ const createContextMenu = () => {
                 });
             });
         }
-    } else {
+    } else if (client.torrentOptions) {
         if (client.torrentOptions.includes('label') && options.globals.labels.length) {
             chrome.contextMenus.create({
                 contexts: ['link'],
