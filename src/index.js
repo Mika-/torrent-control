@@ -164,6 +164,11 @@ const createServerSelectionContextMenu = () => {
             contexts: context
         });
     });
+
+    chrome.contextMenus.create({
+        type: 'separator',
+        contexts: ['browser_action'],
+    });
 }
 
 const createDefaultMenu = () => {
