@@ -42,3 +42,84 @@ describe('Test helpers', () => {
         expect(getMagnetUrlName('https://example.com/file.torrent')).to.equal(false);
     });
 });
+
+describe('Test options', () => {
+    before(() => {
+        global.chrome = chrome;
+    });
+
+    beforeEach(() => {
+        chrome.flush();
+    });
+
+    it('Load default options', async () => {
+        const util = rewire('./../src/util');
+
+        const loadOptions = util.__get__('loadOptions');
+
+        chrome.storage.local.get.withArgs(['globals', 'servers']).yields({});
+
+        expect(chrome.storage.local.set.notCalled).to.equal(true);
+        const loadedOptions = await loadOptions();
+        expect(chrome.storage.local.get.calledOnce).to.equal(true);
+        expect(loadedOptions).to.deep.equal({
+            globals: {
+                currentServer: 0,
+                addPaused: false,
+                contextMenu: 1,
+                catchUrls: true,
+                labels: []
+            },
+            servers: [
+                {
+                    name: 'Default',
+                    application: 'biglybt',
+                    hostname: '',
+                    username: '',
+                    password: '',
+                    directories: [],
+                    clientOptions: {}
+                }
+            ]
+        });
+    });
+
+    it('Save and load custom options', async () => {
+        const util = rewire('./../src/util');
+
+        const loadOptions = util.__get__('loadOptions');
+        const saveOptions = util.__get__('saveOptions');
+
+        const modifiedOptions = {
+            globals: {
+                currentServer: 0,
+                addPaused: true,
+                contextMenu: 0,
+                catchUrls: false,
+                labels: []
+            },
+            servers: [
+                {
+                    name: 'My client',
+                    application: 'cloudtorrent',
+                    hostname: 'https://127.0.0.1/',
+                    username: '',
+                    password: '',
+                    directories: [],
+                    clientOptions: {}
+                }
+            ]
+        };
+
+        expect(chrome.storage.local.set.notCalled).to.equal(true);
+        saveOptions(modifiedOptions);
+        expect(chrome.storage.local.set.calledOnce).to.equal(true);
+
+        chrome.storage.local.get.withArgs(['globals', 'servers']).yields(modifiedOptions);
+
+        expect(chrome.storage.local.get.notCalled).to.equal(true);
+        const loadedOptions = await loadOptions();
+        expect(chrome.storage.local.get.calledOnce).to.equal(true);
+        expect(loadedOptions).to.deep.equal(modifiedOptions);
+    });
+});
