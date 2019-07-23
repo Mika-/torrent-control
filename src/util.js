@@ -160,7 +160,8 @@ const isTorrentUrl = (url) => {
 }
 
 const getMagnetUrlName = (url) => {
-    const params = new URLSearchParams(url.match(/^magnet:(.+)$/)[1]);
+    const match = url.match(/^magnet:(.+)$/);
+    const params = new URLSearchParams(match ? match[1] : '');
 
     return (params.has('dn') ? params.get('dn') : false);
 }
