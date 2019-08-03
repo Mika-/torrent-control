@@ -30,6 +30,22 @@ describe('Test helpers', () => {
         invalidUrls.forEach((url) => expect(isTorrentUrl(url)).to.equal(false));
     });
 
+    it('isMagnetUrl(url)', () => {
+        const util = rewire('./../src/util');
+
+        const isMagnetUrl = util.__get__('isMagnetUrl');
+
+        const validUrls = [
+            'magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn=Test Torrent',
+        ];
+        validUrls.forEach((url) => expect(isMagnetUrl(url)).to.equal(true));
+
+        const invalidUrls = [
+            'https://example.com/file.torrent',
+        ];
+        invalidUrls.forEach((url) => expect(isMagnetUrl(url)).to.equal(false));
+    });
+
     it('getMagnetUrlName(url)', () => {
         const util = rewire('./../src/util');
 
