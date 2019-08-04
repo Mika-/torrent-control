@@ -7,6 +7,7 @@ Features:
 - Supports private trackers
 - Supports multiple servers
 - HTTP Digest authentication
+- Private mode and Multi-Account Container support
 
 Supported clients:
 - BiglyBT<sup>1</sup>
