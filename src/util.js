@@ -149,6 +149,7 @@ const whitelist = [
 
     // Software specific
     /\/torrents\.php\?action=download&id=\d+/, // Gazelle
+    /\/dl\/.+?\/\?jackett_apikey=[a-z0-9]{32}&path=/, // Jackett
 
     // Site specific
     /^https:\/\/anidex\.info\/dl\/\d+$/,
