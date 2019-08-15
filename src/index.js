@@ -326,13 +326,15 @@ const registerHandler = () => {
         }
     });
 
-    chrome.webRequest.onBeforeRequest.addListener(
-        (details) => {
+    chrome.webRequest.onBeforeRequest.addListener((details) => {
+            const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+
             let parser = document.createElement('a');
             parser.href = details.url;
             let magnetUri = decodeURIComponent(parser.pathname).substr(1);
             addTorrent(magnetUri, null, {
-                paused: options.globals.addPaused
+                paused: options.globals.addPaused,
+                ...clientOptions
             });
             return {cancel: true}
         },
@@ -340,11 +342,13 @@ const registerHandler = () => {
         ['blocking']
     );
 
-    chrome.webRequest.onBeforeRequest.addListener(
-        (details) => {
+    chrome.webRequest.onBeforeRequest.addListener((details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
+                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+
                 addTorrent(details.url, details.originUrl, {
-                    paused: options.globals.addPaused
+                    paused: options.globals.addPaused,
+                    ...clientOptions
                 });
                 return {cancel: true};
             }
