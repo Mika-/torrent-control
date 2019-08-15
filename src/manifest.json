@@ -18,6 +18,10 @@
     "theme_icons": [{
       "light": "icon/default-light.svg",
       "dark": "icon/default.svg",
+      "size": 32
+    }, {
+      "light": "icon/default-light.svg",
+      "dark": "icon/default.svg",
       "size": 64
     }]
   },
