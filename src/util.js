@@ -14,7 +14,7 @@ const clientList = [
         id: 'deluge',
         name: 'Deluge Web UI',
         addressPlaceholder: 'http://127.0.0.1:8112/',
-        torrentOptions: ['paused', 'path']
+        torrentOptions: ['paused', 'label', 'path']
     },
     {
         id: 'flood',

@@ -115,6 +115,10 @@
     "message": "Failed to read torrent. ($1)",
     "description": "Parse error."
   },
+  "torrentLabelAddError": {
+    "message": "Failed to add label for torrent.",
+    "description": "Add error."
+  },
   "sequentialDownloadOption": {
     "message": "Sequential download",
     "description": "Client option"

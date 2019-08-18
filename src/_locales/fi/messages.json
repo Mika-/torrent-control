@@ -115,6 +115,10 @@
     "message": "Torrentin lukeminen epäonnistui. ($1)",
     "description": "Parse error."
   },
+  "torrentLabelAddError": {
+    "message": "Kategorian asetus epäonnistui.",
+    "description": "Add error."
+  },
   "sequentialDownloadOption": {
     "message": "Lataa järjestyksessä",
     "description": "Client option"

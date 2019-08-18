@@ -66,7 +66,7 @@ class DelugeApi extends BaseClient {
                 body: JSON.stringify({
                     method: 'auth.delete_session',
                     params: [],
-                    id: 3
+                    id: 4
                 })
             })
             .finally((response) => {
@@ -114,7 +114,10 @@ class DelugeApi extends BaseClient {
                         throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
                 })
                 .then((json) => {
-                    if (json.error === null)
+                    if (json.error === null && options.label)
+                        return this.addLabel(json.result, options.label)
+                            .then(() => resolve());
+                    else if (json.error === null)
                         resolve();
                     else
                         throw new Error(chrome.i18n.getMessage('torrentAddError'));
@@ -157,10 +160,48 @@ class DelugeApi extends BaseClient {
                     throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
             .then((json) => {
-                if (json.error === null)
+                if (json.error === null && options.label)
+                    return this.addLabel(json.result, options.label)
+                        .then(() => resolve());
+                else if (json.error === null)
                     resolve();
                 else
                     throw new Error(chrome.i18n.getMessage('torrentAddError'));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
+    addLabel(torrentId, label) {
+        const {hostname} = this.settings;
+
+        return new Promise((resolve, reject) => {
+            fetch(hostname + 'json', {
+                method: 'POST',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'X-Internal': true
+                }),
+                body: JSON.stringify({
+                    method: 'label.set_torrent',
+                    params: [
+                        torrentId,
+                        label.toLowerCase()
+                    ],
+                    id: 3
+                })
+            })
+            .then((response) => {
+                if (response.ok)
+                    return response.json();
+                else
+                    throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .then((json) => {
+                if (json.error === null)
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('torrentLabelAddError'));
             })
             .catch((error) => reject(error));
         });
