@@ -12,7 +12,7 @@ Features:
 Supported clients:
 - BiglyBT<sup>1</sup>
 - Cloud Torrent
-- Deluge<sup>1</sup>
+- Deluge<sup>1,2</sup>
 - Flood<sup>1,2</sup>
 - ruTorrent<sup>1,2,3</sup>
 - Tixati
