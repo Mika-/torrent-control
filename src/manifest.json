@@ -49,6 +49,7 @@
       "lib/tixati.js",
       "lib/transmission.js",
       "lib/utorrent.js",
+      "lib/vuze_webui.js",
       "lib/qbittorrent.js",
       "util.js",
       "index.js"
