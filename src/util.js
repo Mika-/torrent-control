@@ -52,6 +52,22 @@ const clientList = [
         addressPlaceholder: 'http://127.0.0.1:8112/gui/'
     },
     {
+        id: 'vuze_remoteui',
+        name: 'Vuze Web Remote',
+        addressPlaceholder: 'http://127.0.0.1:9091/',
+        torrentOptions: ['paused', 'path']
+    },
+    {
+        id: 'vuze_webui',
+        name: 'Vuze HTML Web UI',
+        addressPlaceholder: 'http://127.0.0.1:6886/'
+    },
+    {
+        id: 'vuze_webui_100',
+        name: 'Vuze HTML Web UI (<1.0.0)',
+        addressPlaceholder: 'http://127.0.0.1:6886/'
+    },
+    {
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/',
@@ -92,6 +108,15 @@ const getClient = (serverSettings) => {
             return new TransmissionApi(serverSettings);
         case 'utorrent':
             return new uTorrentApi(serverSettings);
+        case 'vuze_remoteui':
+            return new TransmissionApi(serverSettings);
+        case 'vuze_webui':
+            return new VuzeWebUIApi(serverSettings);
+        case 'vuze_webui_100':
+            return new VuzeWebUIApi({
+                apiVersion: 1,
+                ...serverSettings
+            });
         case 'qbittorrent':
             return new qBittorrentApi(serverSettings);
         case 'qbittorrent_404':
