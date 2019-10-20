@@ -8,22 +8,34 @@ const restoreOptions = () => {
 
     loadOptions().then((options) => {
         const serverOptions = options.servers[options.globals.currentServer];
+        const client = clientList.find((client) => client.id === serverOptions.application);
 
         document.querySelector('#addpaused').checked = options.globals.addPaused;
 
-        serverOptions.directories.forEach((directory) => {
-            let element = document.createElement('option');
-            element.setAttribute('value', directory);
-            element.textContent = directory;
-            document.querySelector('#downloadLocation').appendChild(element);
-        });
+        if (client.torrentOptions && client.torrentOptions.includes('path')) {
+            serverOptions.directories.forEach((directory) => {
+                let element = document.createElement('option');
+                element.setAttribute('value', directory);
+                element.textContent = directory;
+                document.querySelector('#downloadLocation').appendChild(element);
+            });
+        } else {
+            document.querySelector('#downloadLocation').disabled = true;
+        }
 
-        options.globals.labels.forEach((label) => {
-            let element = document.createElement('option');
-            element.setAttribute('value', label);
-            element.textContent = label;
-            document.querySelector('#labels').appendChild(element);
-        });
+        if (client.torrentOptions && client.torrentOptions.includes('label')) {
+            options.globals.labels.forEach((label) => {
+                let element = document.createElement('option');
+                element.setAttribute('value', label);
+                element.textContent = label;
+                document.querySelector('#labels').appendChild(element);
+            });
+        } else {
+            document.querySelector('#labels').disabled = true;
+        }
+
+        if (!client.torrentOptions || !client.torrentOptions.includes('paused'))
+            document.querySelector('#addpaused').disabled = true;
     });
 }
 

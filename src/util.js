@@ -134,6 +134,7 @@ const loadOptions = () => {
         globals: {
             currentServer: 0,
             addPaused: false,
+            addAdvanced: false,
             contextMenu: 1,
             catchUrls: true,
             labels: []

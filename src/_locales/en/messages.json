@@ -23,6 +23,10 @@
     "message": "Catch torrent URLs",
     "description": "Catch torrent URLs"
   },
+  "addAdvancedOption": {
+    "message": "Add via advanced dialog",
+    "description": "Add torrents via advanced dialog"
+  },
   "addPausedOption": {
     "message": "Add torrents as paused",
     "description": "Add as paused by default"

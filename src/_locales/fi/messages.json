@@ -23,6 +23,10 @@
     "message": "Kaappaa torrent osoitteet",
     "description": "Catch torrent URLs"
   },
+  "addAdvancedOption": {
+    "message": "Lisää kehittyneellä dialogilla",
+    "description": "Add torrents via advanced dialog"
+  },
   "addPausedOption": {
     "message": "Lisää torrentit keskeytettynä",
     "description": "Add as paused by default"

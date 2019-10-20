@@ -320,32 +320,8 @@ const registerHandler = () => {
                 path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
                 ...clientOptions
             });
-        else if (info.menuItemId === 'add-torrent-advanced') {
-            const client = clientList.find((client) => client.id === options.servers[options.globals.currentServer].application);
-
-            let params = new URLSearchParams();
-            params.append('url', info.linkUrl);
-
-            if (!isMagnetUrl(info.linkUrl)) {
-                params.append('referer', info.pageUrl);
-            }
-
-            const height = 305;
-            const width = 500;
-            const top = Math.round((screen.height / 2) - (height / 2));
-            const left = Math.round((screen.width / 2) - (width / 2));
-
-            chrome.windows.create({
-                url: 'view/add_torrent.html?' + params.toString(),
-                titlePreface: chrome.i18n.getMessage('addTorrentAction'),
-                type: 'panel',
-                allowScriptsToClose: true,
-                top: top,
-                left: left,
-                height: height,
-                width: width
-            });
-        }
+        else if (info.menuItemId === 'add-torrent-advanced')
+            addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? info.pageUrl : null);
         else if (currentServer)
             setCurrentServer(~~currentServer[1]);
     });
@@ -360,16 +336,20 @@ const registerHandler = () => {
         }
     });
 
-    chrome.webRequest.onBeforeRequest.addListener((details) => {
-            const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
-
+    chrome.webRequest.onBeforeRequest.addListener((details) => {        
             let parser = document.createElement('a');
             parser.href = details.url;
             let magnetUri = decodeURIComponent(parser.pathname).substr(1);
-            addTorrent(magnetUri, null, {
-                paused: options.globals.addPaused,
-                ...clientOptions
-            });
+
+            if (options.globals.addAdvanced) {
+                addAdvancedDialog(magnetUri);
+            } else {
+                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+                addTorrent(magnetUri, null, {
+                    paused: options.globals.addPaused,
+                    ...clientOptions
+                });
+            }
             return {cancel: true}
         },
         {urls: ['https://torrent-control.invalid/*']},
@@ -378,12 +358,16 @@ const registerHandler = () => {
 
     chrome.webRequest.onBeforeRequest.addListener((details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
-                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+                if (options.globals.addAdvanced) {
+                    addAdvancedDialog(details.url, details.originUrl);
+                } else {
+                    const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
-                addTorrent(details.url, details.originUrl, {
-                    paused: options.globals.addPaused,
-                    ...clientOptions
-                });
+                    addTorrent(details.url, details.originUrl, {
+                        paused: options.globals.addPaused,
+                        ...clientOptions
+                    });
+                }
                 return {cancel: true};
             }
 
@@ -400,6 +384,31 @@ const registerHandler = () => {
             }
         }
     );
+}
+
+const addAdvancedDialog = (url, referer = null) => {
+    let params = new URLSearchParams();
+    params.append('url', url);
+
+    if (referer) {
+        params.append('referer', referer);
+    }
+
+    const height = 305;
+    const width = 500;
+    const top = Math.round((screen.height / 2) - (height / 2));
+    const left = Math.round((screen.width / 2) - (width / 2));
+
+    chrome.windows.create({
+        url: 'view/add_torrent.html?' + params.toString(),
+        titlePreface: chrome.i18n.getMessage('addTorrentAction'),
+        type: 'panel',
+        allowScriptsToClose: true,
+        top: top,
+        left: left,
+        height: height,
+        width: width
+    });
 }
 
 const notification = (message) => {
