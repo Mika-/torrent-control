@@ -47,6 +47,10 @@
     "message": "Add torrent with path",
     "description": "Context menu action"
   },
+  "advancedModifier": {
+    "message": "Advanced",
+    "description": "Advanced modifier"
+  },
   "saveAction": {
     "message": "Save",
     "description": "Save action"
@@ -130,5 +134,37 @@
   "skipHashCheckOption": {
     "message": "Skip hash check",
     "description": "Client option"
+  },
+  "addTorrentTitle": {
+    "message": "Add torrent",
+    "description": "Add torrent"
+  },
+  "torrentUrl": {
+    "message": "Torrent url",
+    "description": "Torrent url"
+  },
+  "labelSelect": {
+    "message": "Label",
+    "description": "Label select"
+  },
+  "downloadLocationSelect": {
+    "message": "Download location",
+    "description": "Download location select"
+  },
+  "defaultOption": {
+    "message": "Default",
+    "description": "Default option"
+  },
+  "noneOption": {
+    "message": "None",
+    "description": "None option"
+  },
+  "addAsPausedOption": {
+    "message": "Add as paused",
+    "description": "Add as paused"
+  },
+  "addTorrentAction": {
+    "message": "Add torrent",
+    "description": "Add torrent action"
   }
 }

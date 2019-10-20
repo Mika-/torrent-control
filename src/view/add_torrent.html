@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="chrome://browser/content/extension.css">
+</head>
+<body>
+
+<section id="options-section" class="panel">
+
+    <div class="panel-section panel-section-header">
+        <span class="text-section-header" data-i18n="addTorrentTitle"></span>
+    </div>
+
+    <div class="panel-section panel-section-formElements">
+        <div class="panel-formElements-item browser-style">
+            <label data-i18n="torrentUrl"></label>
+            <input type="text" id="url" disabled />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label data-i18n="downloadLocationSelect"></label>
+            <select id="downloadLocation" class="browser-style">
+                <option data-i18n="defaultOption" value=""></option>
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label data-i18n="labelSelect"></label>
+            <select id="labels" class="browser-style">
+                <option data-i18n="noneOption" value=""></option>
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="addpaused" />
+            <label for="addpaused" data-i18n="addAsPausedOption"></label>
+        </div>
+    </div>
+
+</section>
+
+<div class="panel-formElements-item">
+    <button id="add-torrent" class="browser-style default" data-i18n="addTorrentAction" style="margin: 0 16px 0 auto"></button>
+</div>
+
+<script src="../util.js"></script>
+<script src="add_torrent.js"></script>
+</body>
+</html>

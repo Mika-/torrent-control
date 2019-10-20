@@ -200,6 +200,14 @@ const createContextMenu = () => {
     const client = clientList.find((client) => client.id === serverOptions.application);
 
     if (options.globals.contextMenu === 1 && client.torrentOptions) {
+        if (client.torrentOptions.length > 1) {
+            chrome.contextMenus.create({
+              id: 'add-torrent-advanced',
+              title: browser.i18n.getMessage('addTorrentAction') + ' (' + browser.i18n.getMessage('advancedModifier') + ')',
+              contexts: ['link']
+            });
+        }
+
         if (client.torrentOptions.includes('paused')) {
             chrome.contextMenus.create({
               id: 'add-torrent-paused',
@@ -312,6 +320,32 @@ const registerHandler = () => {
                 path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
                 ...clientOptions
             });
+        else if (info.menuItemId === 'add-torrent-advanced') {
+            const client = clientList.find((client) => client.id === options.servers[options.globals.currentServer].application);
+
+            let params = new URLSearchParams();
+            params.append('url', info.linkUrl);
+
+            if (!isMagnetUrl(info.linkUrl)) {
+                params.append('referer', info.pageUrl);
+            }
+
+            const height = 305;
+            const width = 500;
+            const top = Math.round((screen.height / 2) - (height / 2));
+            const left = Math.round((screen.width / 2) - (width / 2));
+
+            chrome.windows.create({
+                url: 'view/add_torrent.html?' + params.toString(),
+                titlePreface: chrome.i18n.getMessage('addTorrentAction'),
+                type: 'panel',
+                allowScriptsToClose: true,
+                top: top,
+                left: left,
+                height: height,
+                width: width
+            });
+        }
         else if (currentServer)
             setCurrentServer(~~currentServer[1]);
     });
@@ -357,6 +391,14 @@ const registerHandler = () => {
         },
         {urls: ['<all_urls>']},
         ['blocking']
+    );
+
+    chrome.runtime.onMessage.addListener(
+        (request, sender, sendResponse) => {
+            if (request.type === 'addTorrent') {
+                addTorrent(request.url, request.referer, request.options);
+            }
+        }
     );
 }
 

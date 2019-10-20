@@ -47,6 +47,10 @@
     "message": "Lisää torrent polulla",
     "description": "Context menu action"
   },
+  "advancedModifier": {
+    "message": "Edistynyt",
+    "description": "Advanced modifier"
+  },
   "saveAction": {
     "message": "Tallenna",
     "description": "Save action"
@@ -130,5 +134,37 @@
   "skipHashCheckOption": {
     "message": "Ohita tarkistelaskenta",
     "description": "Client option"
+  },
+  "addTorrentTitle": {
+    "message": "Lisää torrentti",
+    "description": "Add torrent"
+  },
+  "torrentUrl": {
+    "message": "Torrentin url",
+    "description": "Torrent url"
+  },
+  "labelSelect": {
+    "message": "Tunniste",
+    "description": "Label select"
+  },
+  "downloadLocationSelect": {
+    "message": "Lataushakemisto",
+    "description": "Download location select"
+  },
+  "defaultOption": {
+    "message": "Oletus",
+    "description": "Default option"
+  },
+  "noneOption": {
+    "message": "Ei valittu",
+    "description": "None option"
+  },
+  "addAsPausedOption": {
+    "message": "Lisää keskeytettynä",
+    "description": "Add as paused"
+  },
+  "addTorrentAction": {
+    "message": "Lisää torrentti",
+    "description": "Add torrent action"
   }
 }
