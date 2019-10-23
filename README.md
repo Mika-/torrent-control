@@ -18,6 +18,7 @@ Supported clients:
 - Tixati
 - Transmission<sup>1</sup>
 - µTorrent
+- Vuze<sup>1</sup>
 - qBittorrent<sup>1,2,3</sup>
 
 <sup>1</sup> Supports download directories/paths
