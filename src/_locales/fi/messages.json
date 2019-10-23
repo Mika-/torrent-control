@@ -166,9 +166,5 @@
   "addAsPausedOption": {
     "message": "Lisää keskeytettynä",
     "description": "Add as paused"
-  },
-  "addTorrentAction": {
-    "message": "Lisää torrentti",
-    "description": "Add torrent action"
   }
 }

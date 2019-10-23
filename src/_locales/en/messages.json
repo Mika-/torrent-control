@@ -166,9 +166,5 @@
   "addAsPausedOption": {
     "message": "Add as paused",
     "description": "Add as paused"
-  },
-  "addTorrentAction": {
-    "message": "Add torrent",
-    "description": "Add torrent action"
   }
 }
