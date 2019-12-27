@@ -27,6 +27,10 @@
     "message": "Add via advanced dialog",
     "description": "Add torrents via advanced dialog"
   },
+  "enableNotificationsOption": {
+    "message": "Show notifications",
+    "description": "Enable notifications option"
+  },
   "addPausedOption": {
     "message": "Add torrents as paused",
     "description": "Add as paused by default"

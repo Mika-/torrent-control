@@ -417,6 +417,10 @@ const addAdvancedDialog = (url, referer = null) => {
 }
 
 const notification = (message) => {
+    if (!options.globals.enableNotifications) {
+        return;
+    }
+
     chrome.notifications.create({
         type: 'basic',
         iconUrl: chrome.extension.getURL('icon/default-48.png'),

@@ -27,6 +27,10 @@
     "message": "Lisää kehittyneellä dialogilla",
     "description": "Add torrents via advanced dialog"
   },
+  "enableNotificationsOption": {
+    "message": "Näytä ilmoitukset",
+    "description": "Enable notifications option"
+  },
   "addPausedOption": {
     "message": "Lisää torrentit keskeytettynä",
     "description": "Add as paused by default"

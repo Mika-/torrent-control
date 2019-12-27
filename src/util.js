@@ -137,6 +137,7 @@ const loadOptions = () => {
             addAdvanced: false,
             contextMenu: 1,
             catchUrls: true,
+            enableNotifications: true,
             labels: []
         },
         servers: [
