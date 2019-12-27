@@ -380,7 +380,12 @@ const registerHandler = () => {
     chrome.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             if (request.type === 'addTorrent') {
-                addTorrent(request.url, request.referer, request.options);
+                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
+
+                addTorrent(request.url, request.referer, {
+                    ...clientOptions,
+                    ...request.options
+                });
             }
         }
     );
