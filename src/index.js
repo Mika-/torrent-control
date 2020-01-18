@@ -417,7 +417,7 @@ const addAdvancedDialog = (url, referer = null) => {
 }
 
 const notification = (message) => {
-    if (!options.globals.enableNotifications) {
+    if (options && !options.globals.enableNotifications) {
         return;
     }
 

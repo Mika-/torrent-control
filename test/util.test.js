@@ -80,10 +80,12 @@ describe('Test options', () => {
         expect(chrome.storage.local.get.calledOnce).to.equal(true);
         expect(loadedOptions).to.deep.equal({
             globals: {
+                addAdvanced: false,
                 currentServer: 0,
                 addPaused: false,
                 contextMenu: 1,
                 catchUrls: true,
+                enableNotifications: true,
                 labels: []
             },
             servers: [
@@ -108,10 +110,12 @@ describe('Test options', () => {
 
         const modifiedOptions = {
             globals: {
+                addAdvanced: false,
                 currentServer: 0,
                 addPaused: true,
                 contextMenu: 0,
                 catchUrls: false,
+                enableNotifications: true,
                 labels: []
             },
             servers: [
