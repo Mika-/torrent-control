@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.2.0",
+    "mocha": "^7.0.0",
     "rewire": "^4.0.1",
     "sinon-chrome": "^3.0.1",
     "web-ext": "^4.0.0"
