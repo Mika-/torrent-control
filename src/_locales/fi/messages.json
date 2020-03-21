@@ -55,6 +55,10 @@
     "message": "Lisää torrent polulla",
     "description": "Context menu action"
   },
+  "addRssFeedAction": {
+    "message": "Lisää RSS-syöte",
+    "description": "Context menu action"
+  },
   "advancedModifier": {
     "message": "Edistynyt",
     "description": "Advanced modifier"
@@ -107,6 +111,10 @@
     "message": "Torrentti lisätty",
     "description": "Torrent added notification."
   },
+  "rssFeedAddedNotification": {
+    "message": "RSS-syöte lisätty",
+    "description": "Rss feed added notification."
+  },
   "loginError": {
     "message": "Sisäänkirjautuminen epäonnistui",
     "description": "Login error."
@@ -114,6 +122,10 @@
   "apiError": {
     "message": "Tuntematon vastaus. ($1)",
     "description": "Unknown response."
+  },
+  "rssFeedAddError": {
+    "message": "RSS-syötteen lisäys epäonnistui. $1",
+    "description": "Add error."
   },
   "torrentAddError": {
     "message": "Torrentin lisäys epäonnistui. $1",

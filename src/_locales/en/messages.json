@@ -55,6 +55,10 @@
     "message": "Add torrent with path",
     "description": "Context menu action"
   },
+  "addRssFeedAction": {
+    "message": "Add RSS feed",
+    "description": "Context menu action"
+  },
   "advancedModifier": {
     "message": "Advanced",
     "description": "Advanced modifier"
@@ -107,6 +111,10 @@
     "message": "Torrent added",
     "description": "Torrent added notification."
   },
+  "rssFeedAddedNotification": {
+    "message": "RSS feed added",
+    "description": "RSS feed added notification."
+  },
   "loginError": {
     "message": "Failed to login",
     "description": "Login error."
@@ -114,6 +122,10 @@
   "apiError": {
     "message": "Unknown response. ($1)",
     "description": "Unknown response."
+  },
+  "rssFeedAddError": {
+    "message": "Failed to add RSS feed. $1",
+    "description": "Add error."
   },
   "torrentAddError": {
     "message": "Failed to add torrent. $1",

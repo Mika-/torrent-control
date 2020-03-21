@@ -149,6 +149,21 @@ const createBrowserRequest = (url, referer) => {
     });
 }
 
+const addRssFeed = (url) => {
+    const serverSettings = options.servers[options.globals.currentServer];
+    const connection = getClient(serverSettings);
+
+    connection.logIn()
+        .then(() => connection.addRssFeed(url))
+        .then(() => {
+            notification(chrome.i18n.getMessage('rssFeedAddedNotification'));
+            connection.logOut();
+        }).catch((error) => {
+            connection.removeEventListeners();
+            notification(error.message);
+        });
+}
+
 const createServerSelectionContextMenu = () => {
     let context = ['browser_action'];
 
@@ -280,6 +295,19 @@ const createContextMenu = () => {
             });
         }
     }
+
+    if (client.torrentOptions.includes('rss')) {
+        chrome.contextMenus.create({
+            contexts: ['link'],
+            type: 'separator'
+        });
+
+        chrome.contextMenus.create({
+          id: 'add-rss-feed',
+          title: chrome.i18n.getMessage('addRssFeedAction'),
+          contexts: options.globals.contextMenu === 1 ? ['selection', 'link'] : ['selection']
+        });
+    }
 }
 
 const removeContextMenu = () => {
@@ -324,6 +352,8 @@ const registerHandler = () => {
             addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? info.pageUrl : null);
         else if (currentServer)
             setCurrentServer(~~currentServer[1]);
+        else if (info.menuItemId === 'add-rss-feed')
+            addRssFeed(info.linkUrl || info.selectionText.trim());
     });
 
     chrome.browserAction.onClicked.addListener(() => {
