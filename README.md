@@ -14,13 +14,14 @@ Supported clients:
 - Cloud Torrent
 - Deluge<sup>1,2</sup>
 - Flood<sup>1,2</sup>
-- ruTorrent<sup>1,2,3</sup>
+- ruTorrent<sup>1,2,3,4</sup>
 - Tixati
 - Transmission<sup>1</sup>
 - µTorrent
 - Vuze<sup>1</sup>
-- qBittorrent<sup>1,2,3</sup>
+- qBittorrent<sup>1,2,3,4</sup>
 
 <sup>1</sup> Supports download directories/paths
 <sup>2</sup> Supports labels/categories
 <sup>3</sup> Supports client specific extra options (sequential download, etc.)
+<sub>4</sub> Supports adding of RSS feeds
