@@ -141,6 +141,28 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
+    addRssFeed(url) {
+        const {hostname} = this.settings;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('url', url);
+            form.append('path', '');
+
+            fetch(hostname + 'api/v2/rss/addFeed', {
+                method: 'POST',
+                body: form
+            })
+            .then((response) => {
+                if (response.ok)
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('rssFeedAddError'));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
     _attachListeners() {
         const {hostname} = this.settings;
         let sessionCookie = this.cookie;

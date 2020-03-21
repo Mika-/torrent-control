@@ -91,4 +91,28 @@ class ruTorrentApi extends BaseClient {
         });
     }
 
+    addRssFeed(url) {
+        const {hostname} = this.settings;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('mode', 'add');
+            form.append('url', url);
+            form.append('label', '');
+
+            fetch(hostname + 'plugins/rss/action.php', {
+                method: 'POST',
+                credentials: 'include',
+                body: form
+            })
+            .then(this.parseJsonResponse)
+            .then((json) => {
+                if (json.errors.length === 0)
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('rssFeedAddError', json.result || ''));
+            })
+            .catch((error) => reject(error));
+        });
+    }
 }

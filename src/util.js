@@ -26,7 +26,7 @@ const clientList = [
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
-        torrentOptions: ['paused', 'label', 'path'],
+        torrentOptions: ['paused', 'label', 'path', 'rss'],
         clientOptions: [
             {
                 name: 'fast_resume',
@@ -71,7 +71,7 @@ const clientList = [
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/',
-        torrentOptions: ['paused', 'label', 'path'],
+        torrentOptions: ['paused', 'label', 'path', 'rss'],
         clientOptions: [
             {
                 name: 'sequentialDownload',
