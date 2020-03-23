@@ -296,11 +296,13 @@ const createContextMenu = () => {
         }
     }
 
-    if (client.torrentOptions.includes('rss')) {
-        chrome.contextMenus.create({
-            contexts: ['link'],
-            type: 'separator'
-        });
+    if (client.torrentOptions && client.torrentOptions.includes('rss')) {
+        if (options.globals.contextMenu === 1) {
+            chrome.contextMenus.create({
+                contexts: ['link'],
+                type: 'separator'
+            });
+        }
 
         chrome.contextMenus.create({
           id: 'add-rss-feed',
