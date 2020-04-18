@@ -1,4 +1,8 @@
-class uTorrentApi extends BaseClient {
+import BaseClient from './baseclient'
+
+export default class uTorrentApi extends BaseClient {
+    cookie?: string;
+    token?: string;
 
     constructor(serverSettings) {
         super();
@@ -8,7 +12,7 @@ class uTorrentApi extends BaseClient {
         this.token = null;
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         const {hostname} = this.settings;
 
         this._attachListeners();
@@ -50,7 +54,7 @@ class uTorrentApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
         const token = this.token;
 
@@ -73,7 +77,7 @@ class uTorrentApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname} = this.settings;
         const token = this.token;
 
@@ -94,7 +98,7 @@ class uTorrentApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname, username, password} = this.settings;
+        const {username, password} = this.settings;
         let sessionCookie = this.cookie;
 
         if (username && password)

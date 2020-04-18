@@ -1,26 +1,36 @@
+import {
+    clientList,
+    Options,
+    TorrentOptions,
+    loadOptions,
+} from '../util';
+
+const getInputElement = (selector: string) => (<HTMLInputElement>document.querySelector(selector));
+const getInputElements = (selector: string) => (<HTMLInputElement[]><unknown>document.querySelectorAll(selector));
+
 const restoreOptions = () => {
     const params = new URLSearchParams(window.location.search);
-    document.querySelector('#url').value = params.get('url');
+    getInputElement('#url').value = params.get('url');
 
-    document.querySelectorAll('[data-i18n]').forEach((element) => {
+    getInputElements('[data-i18n]').forEach((element) => {
         element.textContent = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
     });
 
-    loadOptions().then((options) => {
+    loadOptions().then((options: Options) => {
         const serverOptions = options.servers[options.globals.currentServer];
         const client = clientList.find((client) => client.id === serverOptions.application);
 
-        document.querySelector('#addpaused').checked = options.globals.addPaused;
+        getInputElement('#addpaused').checked = options.globals.addPaused;
 
         if (client.torrentOptions && client.torrentOptions.includes('path')) {
             serverOptions.directories.forEach((directory) => {
                 let element = document.createElement('option');
                 element.setAttribute('value', directory);
                 element.textContent = directory;
-                document.querySelector('#downloadLocation').appendChild(element);
+                getInputElement('#downloadLocation').appendChild(element);
             });
         } else {
-            document.querySelector('#downloadLocation').disabled = true;
+            getInputElement('#downloadLocation').disabled = true;
         }
 
         if (client.torrentOptions && client.torrentOptions.includes('label')) {
@@ -28,27 +38,28 @@ const restoreOptions = () => {
                 let element = document.createElement('option');
                 element.setAttribute('value', label);
                 element.textContent = label;
-                document.querySelector('#labels').appendChild(element);
+                getInputElement('#labels').appendChild(element);
             });
         } else {
-            document.querySelector('#labels').disabled = true;
+            getInputElement('#labels').disabled = true;
         }
 
         if (!client.torrentOptions || !client.torrentOptions.includes('paused'))
-            document.querySelector('#addpaused').disabled = true;
+            getInputElement('#addpaused').disabled = true;
     });
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('#add-torrent').addEventListener('click', (e) => {
+
+getInputElement('#add-torrent').addEventListener('click', (e) => {
     e.preventDefault();
 
     const params = new URLSearchParams(window.location.search);
-    const label = document.querySelector('#labels').value;
-    const path = document.querySelector('#downloadLocation').value;
-    const addPaused = document.querySelector('#addpaused').checked;
+    const label = getInputElement('#labels').value;
+    const path = getInputElement('#downloadLocation').value;
+    const addPaused = getInputElement('#addpaused').checked;
 
-    let options = {
+    let options: TorrentOptions = {
         paused: addPaused
     };
 

@@ -1,23 +1,39 @@
-class BaseClient {
+import {
+    ServerOptions, TorrentOptions,
+} from '../util';
+
+export default class BaseClient {
+    settings: ServerOptions;
+    listeners: {
+        onHeadersReceived?: (details: chrome.webRequest.WebResponseHeadersDetails) => void;
+        onBeforeSendHeaders?: (details: chrome.webRequest.WebResponseHeadersDetails) => void | chrome.webRequest.BlockingResponse;
+        onAuthRequired?: (details: chrome.webRequest.WebAuthenticationChallengeDetails) => void;
+        onAuthCompleted?: (details: chrome.webRequest.WebResponseCacheDetails) => void;
+    };
+    pendingRequests: Array<number | string>;
 
     constructor() {
         this.listeners = {};
         this.pendingRequests = [];
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         return Promise.resolve();
     }
 
-    logOut() {
+    logOut(): Promise<void> {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent: File, options: TorrentOptions): Promise<void> {
         return Promise.resolve();
     }
 
-    addTorrentUrl(url) {
+    addTorrentUrl(url: string, options: TorrentOptions): Promise<void> {
+        return Promise.resolve();
+    }
+
+    addRssFeed(url: string): Promise<void> {
         return Promise.resolve();
     }
 
@@ -28,7 +44,7 @@ class BaseClient {
 
         chrome.webRequest.onHeadersReceived.addListener(
             this.listeners.onHeadersReceived,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking', 'responseHeaders']
         );
     }
@@ -40,12 +56,12 @@ class BaseClient {
 
         chrome.webRequest.onBeforeSendHeaders.addListener(
             this.listeners.onBeforeSendHeaders,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking', 'requestHeaders']
         );
     }
 
-    addAuthRequiredListener(username, password) {
+    addAuthRequiredListener(username: string, password: string) {
         const {hostname} = this.settings;
 
         this.listeners.onAuthRequired = (details) => {
@@ -71,18 +87,18 @@ class BaseClient {
 
         chrome.webRequest.onAuthRequired.addListener(
             this.listeners.onAuthRequired,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking']
         );
 
         chrome.webRequest.onCompleted.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
         );
 
         chrome.webRequest.onErrorOccurred.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
         );
     }
 
@@ -100,7 +116,7 @@ class BaseClient {
         }
     }
 
-    parseJsonResponse(response) {
+    parseJsonResponse(response: Response) {
         const contentType = response.headers.get('content-type');
         const isJson = !!contentType.match(/application\/json/)
 
@@ -118,13 +134,13 @@ class BaseClient {
             throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
     }
 
-    filterHeaders(headers, filters) {
+    filterHeaders(headers, filters: string[]) {
         return headers.filter((header) => {
             return !filters.includes(header.name.toLowerCase());
         });
     }
 
-    getCookie(headers, key) {
+    getCookie(headers, key: string): null | string {
         const cookie = headers.find((header) => {
             return header.name.toLowerCase() === 'set-cookie';
         });
@@ -132,8 +148,8 @@ class BaseClient {
         const regex = new RegExp(key + '=(.+?);');
 
         if (cookie)
-            return cookie.value.match(regex)[0] || false;
+            return cookie.value.match(regex)[0] || null;
 
-        return false;
+        return null;
     }
 }

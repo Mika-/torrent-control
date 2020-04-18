@@ -1,4 +1,11 @@
-class qBittorrentApi extends BaseClient {
+import BaseClient from './baseclient'
+import {ServerOptions} from "../util";
+
+export default class qBittorrentApi extends BaseClient {
+    settings: ServerOptions & {
+        apiVersion: number;
+    };
+    cookie?: string;
 
     constructor(serverSettings) {
         super();
@@ -10,7 +17,7 @@ class qBittorrentApi extends BaseClient {
         this.cookie = null;
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         const {hostname, username, password, apiVersion} = this.settings;
         const loginPath = apiVersion === 2 ? 'api/v2/auth/login' : 'login';
 
@@ -43,7 +50,7 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    logOut() {
+    logOut(): Promise<void> {
         const {hostname, apiVersion} = this.settings;
         const logoutPath = apiVersion === 2 ? 'api/v2/auth/logout' : 'logout';
 
@@ -51,7 +58,7 @@ class qBittorrentApi extends BaseClient {
             fetch(hostname + logoutPath, {
                 method: 'GET'
             })
-            .finally((response) => {
+            .finally(() => {
                 this.removeEventListeners();
                 this.cookie = null;
                 resolve();
@@ -60,7 +67,7 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname, apiVersion} = this.settings;
         const addTorrentPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/upload';
 
@@ -71,7 +78,7 @@ class qBittorrentApi extends BaseClient {
                 form.append('fileselect', torrent, 'temp.torrent');
 
                 if (options.paused)
-                    form.append('paused', options.paused);
+                    form.append('paused', options.paused.toString());
 
                 if (options.path)
                     form.append('savepath', options.path);
@@ -80,10 +87,10 @@ class qBittorrentApi extends BaseClient {
                     form.append('category', options.label);
 
                 if (options.sequentialDownload)
-                    form.append('sequentialDownload', true);
+                    form.append('sequentialDownload', 'true');
 
                 if (options.firstLastPiecePrio)
-                    form.append('firstLastPiecePrio', true);
+                    form.append('firstLastPiecePrio', 'true');
             } else {
                 form.append('torrents', torrent, 'temp.torrent');
             }
@@ -102,7 +109,7 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname, apiVersion} = this.settings;
         const addTorrentUrlPath = apiVersion === 2 ? 'api/v2/torrents/add' : 'command/download';
 
@@ -112,7 +119,7 @@ class qBittorrentApi extends BaseClient {
 
             if (apiVersion === 2) {
                 if (options.paused)
-                    form.append('paused', options.paused);
+                    form.append('paused', options.paused.toString());
 
                 if (options.path)
                     form.append('savepath', options.path);
@@ -121,10 +128,10 @@ class qBittorrentApi extends BaseClient {
                     form.append('category', options.label);
 
                 if (options.sequentialDownload)
-                    form.append('sequentialDownload', true);
+                    form.append('sequentialDownload', 'true');
 
                 if (options.firstLastPiecePrio)
-                    form.append('firstLastPiecePrio', true);
+                    form.append('firstLastPiecePrio', 'true');
             }
 
             fetch(hostname + addTorrentUrlPath, {
@@ -141,7 +148,7 @@ class qBittorrentApi extends BaseClient {
         });
     }
 
-    addRssFeed(url) {
+    addRssFeed(url): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {

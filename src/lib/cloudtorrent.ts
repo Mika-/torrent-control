@@ -1,13 +1,10 @@
-class VuzeWebUIApi extends BaseClient {
+import BaseClient from './baseclient';
 
+export default class CloudTorrentApi extends BaseClient {
     constructor(serverSettings) {
         super();
 
-        this.settings = {
-            apiVersion: 2,
-            ...serverSettings
-        };
-        this.cookie = null;
+        this.settings = serverSettings;
     }
 
     logIn() {
@@ -25,25 +22,21 @@ class VuzeWebUIApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
-            
-            var empty_file = new File([''], '');
-            
-            let form = new FormData();
-            form.append('upfile_1', empty_file, '');
-            form.append('upfile_0', torrent, 'temp.torrent');
-
-            fetch(hostname + 'index.tmpl?d=u&local=1', {
+            fetch(hostname + 'api/torrentfile', {
                 method: 'POST',
                 credentials: 'include',
-                body: form
+                headers: new Headers({
+                    'Content-Type': 'application/x-bittorrent'
+                }),
+                body: torrent
             })
             .then((response) => {
                 if (response.ok)
-                    return resolve();
+                    return response.text();
                 else if (response.status === 400)
                     throw new Error(chrome.i18n.getMessage('torrentAddError'));
                 else if (response.status === 401)
@@ -51,22 +44,31 @@ class VuzeWebUIApi extends BaseClient {
                 else
                     throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
+            .then((text) => {
+                if (text === 'OK')
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('apiError', text));
+            })
             .catch((error) => reject(error));
         });
     }
 
-    addTorrentUrl(url, options = {}) {
-        const {hostname, apiVersion} = this.settings;
-        const addTorrentURLPath = (apiVersion === 2) ? 'index.ajax' : 'index.tmpl';
+    addTorrentUrl(url, options): Promise<void> {
+        const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
-            fetch(hostname + addTorrentURLPath + '?d=u&upurl=' + encodeURIComponent(url), {
-                method: 'GET',
-                credentials: 'include'
+            fetch(hostname + 'api/magnet', {
+                method: 'POST',
+                credentials: 'include',
+                headers: new Headers({
+                    'Content-Type': 'text/plain'
+                }),
+                body: url
             })
             .then((response) => {
                 if (response.ok)
-                    return resolve();
+                    return response.text();
                 else if (response.status === 400)
                     throw new Error(chrome.i18n.getMessage('torrentAddError'));
                 else if (response.status === 401)
@@ -74,8 +76,13 @@ class VuzeWebUIApi extends BaseClient {
                 else
                     throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
+            .then((text) => {
+                if (text === 'OK')
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('apiError', text));
+            })
             .catch((error) => reject(error));
         });
     }
-
 }

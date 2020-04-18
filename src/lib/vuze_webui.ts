@@ -1,9 +1,20 @@
-class TixatiApi extends BaseClient {
+import BaseClient from './baseclient'
+import {ServerOptions} from "../util";
+
+export default class VuzeWebUIApi extends BaseClient {
+    settings: ServerOptions & {
+        apiVersion: number;
+    };
+    cookie?: string;
 
     constructor(serverSettings) {
         super();
 
-        this.settings = serverSettings;
+        this.settings = {
+            apiVersion: 2,
+            ...serverSettings
+        };
+        this.cookie = null;
     }
 
     logIn() {
@@ -21,16 +32,18 @@ class TixatiApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
+            
+            var empty_file = new File([''], '');
+            
             let form = new FormData();
-            form.append('metafile', torrent, 'temp.torrent');
-            form.append('addmetafile', 'Add');
-            form.append('noautostart', options.paused ? 1 : 0);
+            form.append('upfile_1', empty_file, '');
+            form.append('upfile_0', torrent, 'temp.torrent');
 
-            fetch(hostname + 'transfers/action', {
+            fetch(hostname + 'index.tmpl?d=u&local=1', {
                 method: 'POST',
                 credentials: 'include',
                 body: form
@@ -49,19 +62,14 @@ class TixatiApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
-        const {hostname} = this.settings;
+    addTorrentUrl(url, options): Promise<void> {
+        const {hostname, apiVersion} = this.settings;
+        const addTorrentURLPath = (apiVersion === 2) ? 'index.ajax' : 'index.tmpl';
 
         return new Promise((resolve, reject) => {
-            let form = new FormData();
-            form.append('addlinktext', url);
-            form.append('addlink', 'Add');
-            form.append('noautostart', options.paused ? 1 : 0);
-
-            fetch(hostname + 'transfers/action', {
-                method: 'POST',
-                credentials: 'include',
-                body: form
+            fetch(hostname + addTorrentURLPath + '?d=u&upurl=' + encodeURIComponent(url), {
+                method: 'GET',
+                credentials: 'include'
             })
             .then((response) => {
                 if (response.ok)

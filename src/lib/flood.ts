@@ -1,4 +1,7 @@
-class floodApi extends BaseClient {
+import BaseClient from './baseclient'
+
+export default class floodApi extends BaseClient {
+    cookie?: string;
 
     constructor(serverSettings) {
         super();
@@ -7,7 +10,7 @@ class floodApi extends BaseClient {
         this.cookie = null;
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         const {hostname, username, password} = this.settings;
 
         this._attachListeners();
@@ -34,7 +37,7 @@ class floodApi extends BaseClient {
                 else if (json.success === false)
                     throw new Error(chrome.i18n.getMessage('loginError'));
                 else
-                    throw new Error(chrome.i18n.getMessage('apiError', text));
+                    throw new Error(chrome.i18n.getMessage('apiError'));
             })
             .catch((error) => reject(error));
         });
@@ -46,15 +49,15 @@ class floodApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
             form.append('torrents', torrent, 'temp.torrent');
-            form.append('start', !options.paused);
+            form.append('start', (!options.paused).toString());
             form.append('destination', options.path || '');
-            form.append('isBasePath', false);
+            form.append('isBasePath', 'false');
             form.append('tags', options.label || '');
 
             fetch(hostname + 'api/client/add-files', {
@@ -71,7 +74,7 @@ class floodApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -135,5 +138,4 @@ class floodApi extends BaseClient {
             };
         });
     }
-
 }

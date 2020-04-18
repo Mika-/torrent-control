@@ -1,4 +1,17 @@
-var options;
+import {
+    clientList,
+    Options,
+    TorrentOptions,
+    getClient,
+    loadOptions,
+    saveOptions,
+    isTorrentUrl,
+    isMagnetUrl,
+    getTorrentName,
+    getMagnetUrlName,
+} from './util';
+
+let options: Options;
 
 chrome.storage.onChanged.addListener((changes) => {
     Object.keys(changes).forEach((key) => options[key] = changes[key].newValue);
@@ -14,7 +27,7 @@ chrome.storage.onChanged.addListener((changes) => {
     createDefaultMenu();
 });
 
-loadOptions().then((newOptions) => {
+loadOptions().then((newOptions: Options) => {
     options = newOptions;
 
     if (options.globals.contextMenu && options.servers[options.globals.currentServer].hostname !== '')
@@ -27,7 +40,7 @@ loadOptions().then((newOptions) => {
     registerHandler();
 });
 
-const addTorrent = (url, referer = null, torrentOptions = {}) => {
+const addTorrent = (url: string, referer: null | string = null, torrentOptions: TorrentOptions = {}) => {
     const serverSettings = options.servers[options.globals.currentServer];
     const connection = getClient(serverSettings);
     const networkErrors = [
@@ -49,7 +62,7 @@ const addTorrent = (url, referer = null, torrentOptions = {}) => {
                     notification(chrome.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                     connection.logOut();
                 })
-            ).catch((error) => {
+            ).catch((error: Error) => {
                 connection.removeEventListeners();
 
                 if (networkErrors.includes(error.message))
@@ -77,9 +90,9 @@ const addTorrent = (url, referer = null, torrentOptions = {}) => {
     }
 }
 
-const fetchTorrent = (url, referer) => {
+const fetchTorrent = (url: string, referer: null | string) => {
     return new Promise((resolve, reject) => {
-        createBrowserRequest(url, referer).then((removeEventListeners) => {
+        createBrowserRequest(url, referer).then((removeEventListeners: Function) => {
             fetch(url, {
                 headers: new Headers({
                     'Accept': 'application/x-bittorrent,*/*;q=0.9'
@@ -104,12 +117,14 @@ const fetchTorrent = (url, referer) => {
     });
 }
 
-const createBrowserRequest = (url, referer) => {
-    return new Promise((resolve, reject) => {
-        const listener = async (details) => {
+const createBrowserRequest = (url: string, referer: null | string) => {
+    return new Promise((resolve) => {
+        const listener = async (details: chrome.webRequest.WebRequestHeadersDetails) => {
             let requestHeaders = details.requestHeaders;
 
             const currentTab = await getCurrentTab();
+
+            // @ts-ignore @crossplatform Tab includes cookieStoreId on Firefox
             const cookies = currentTab ? await getCookies(currentTab.cookieStoreId, url) : [];
 
             requestHeaders = requestHeaders.filter((header) => {
@@ -140,16 +155,18 @@ const createBrowserRequest = (url, referer) => {
         }
 
         chrome.webRequest.onBeforeSendHeaders.addListener(
+            // @ts-ignore @crossplatform Async callback is supported on Firefox
             listener,
             {urls: [url]},
             ['blocking', 'requestHeaders']
         );
 
+        // @ts-ignore
         resolve(() => chrome.webRequest.onBeforeSendHeaders.removeListener(listener));
     });
 }
 
-const addRssFeed = (url) => {
+const addRssFeed = (url: string) => {
     const serverSettings = options.servers[options.globals.currentServer];
     const connection = getClient(serverSettings);
 
@@ -158,7 +175,7 @@ const addRssFeed = (url) => {
         .then(() => {
             notification(chrome.i18n.getMessage('rssFeedAddedNotification'));
             connection.logOut();
-        }).catch((error) => {
+        }).catch((error: Error) => {
             connection.removeEventListeners();
             notification(error.message);
         });
@@ -218,7 +235,7 @@ const createContextMenu = () => {
         if (client.torrentOptions.length > 1) {
             chrome.contextMenus.create({
               id: 'add-torrent-advanced',
-              title: browser.i18n.getMessage('addTorrentAction') + ' (' + browser.i18n.getMessage('advancedModifier') + ')',
+              title: chrome.i18n.getMessage('addTorrentAction') + ' (' + chrome.i18n.getMessage('advancedModifier') + ')',
               contexts: ['link']
             });
         }
@@ -317,10 +334,10 @@ const removeContextMenu = () => {
 }
 
 const registerHandler = () => {
-    chrome.contextMenus.onClicked.addListener((info, tab) => {
-        const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
-        const labelId = info.menuItemId.match(/^add\-torrent\-label\-(\d+)$/);
-        const pathId = info.menuItemId.match(/^add\-torrent\-path\-(\d+)$/);
+    chrome.contextMenus.onClicked.addListener((info) => {
+        const currentServer = info.menuItemId.match(/^current-server-(\d+)$/);
+        const labelId = info.menuItemId.match(/^add-torrent-label-(\d+)$/);
+        const pathId = info.menuItemId.match(/^add-torrent-path-(\d+)$/);
 
         const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
@@ -391,10 +408,12 @@ const registerHandler = () => {
     chrome.webRequest.onBeforeRequest.addListener((details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
                 if (options.globals.addAdvanced) {
+                    // @ts-ignore @crossplatform WebRequestBodyDetails includes origin URL on Firefox
                     addAdvancedDialog(details.url, details.originUrl);
                 } else {
                     const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
+                    // @ts-ignore
                     addTorrent(details.url, details.originUrl, {
                         paused: options.globals.addPaused,
                         ...clientOptions
@@ -410,7 +429,7 @@ const registerHandler = () => {
     );
 
     chrome.runtime.onMessage.addListener(
-        (request, sender, sendResponse) => {
+        (request) => {
             if (request.type === 'addTorrent') {
                 const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
@@ -423,7 +442,7 @@ const registerHandler = () => {
     );
 }
 
-const addAdvancedDialog = (url, referer = null) => {
+const addAdvancedDialog = (url: string, referer: null | string = null) => {
     let params = new URLSearchParams();
     params.append('url', url);
 
@@ -436,19 +455,20 @@ const addAdvancedDialog = (url, referer = null) => {
     const top = Math.round((screen.height / 2) - (height / 2));
     const left = Math.round((screen.width / 2) - (width / 2));
 
+    // @ts-ignore @crossplatform allowScriptsToClose, titlePreface are Firefox specific
     chrome.windows.create({
         url: 'view/add_torrent.html?' + params.toString(),
-        titlePreface: chrome.i18n.getMessage('addTorrentAction'),
         type: 'panel',
-        allowScriptsToClose: true,
         top: top,
         left: left,
         height: height,
-        width: width
+        width: width,
+        allowScriptsToClose: true,
+        titlePreface: chrome.i18n.getMessage('addTorrentAction')
     });
 }
 
-const notification = (message) => {
+export const notification = (message: string) => {
     if (options && !options.globals.enableNotifications) {
         return;
     }
@@ -461,7 +481,7 @@ const notification = (message) => {
     }, (id) => setTimeout(() => chrome.notifications.clear(id), 3000));
 }
 
-const setCurrentServer = (id) => {
+const setCurrentServer = (id: number) => {
     options.globals.currentServer = id;
     saveOptions(options);
 }
@@ -476,8 +496,8 @@ const toggleAddPaused = () => {
     saveOptions(options);
 }
 
-const getCurrentTab = async () => {
-    const activeTabs = await new Promise((resolve) => {
+const getCurrentTab = async (): Promise<null | chrome.tabs.Tab> => {
+    const activeTabs: chrome.tabs.Tab[] = await new Promise((resolve) => {
         chrome.tabs.query({
             active: true,
             windowId: chrome.windows.WINDOW_ID_CURRENT
@@ -490,7 +510,7 @@ const getCurrentTab = async () => {
     return null;
 }
 
-const getCookies = async (cookieStoreId, torrentUrl) => {
+const getCookies = async (cookieStoreId: string, torrentUrl: string): Promise<chrome.cookies.Cookie[]> => {
     return await new Promise((resolve) => {
         chrome.cookies.getAll({
             url: torrentUrl,

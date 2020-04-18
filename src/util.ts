@@ -1,4 +1,60 @@
-const clientList = [
+import TransmissionApi from './lib/transmission';
+import CloudTorrentApi from './lib/cloudtorrent';
+import DelugeApi from './lib/deluge';
+import FloodApi from './lib/flood';
+import ruTorrentApi from './lib/rutorrent';
+import TixatiApi from './lib/tixati';
+import uTorrentApi from './lib/utorrent';
+import VuzeWebUIApi from './lib/vuze_webui';
+import qBittorrentApi from './lib/qbittorrent';
+
+export enum ContextMenuVisibility {Hidden, Default, Simple}
+
+export type Options = {
+    globals: {
+        currentServer: number;
+        addPaused: boolean;
+        addAdvanced: boolean;
+        contextMenu: ContextMenuVisibility;
+        catchUrls: boolean;
+        enableNotifications: boolean;
+        labels: string[];
+    };
+    servers: ServerOptions[];
+};
+
+export type TorrentOptions = {
+    paused?: boolean;
+    path?: string;
+    label?: string;
+};
+
+export type ClientCapabilities = 'paused' | 'label' | 'path' | 'rss';
+
+export type ClientOption = {
+    readonly name: string;
+    readonly description: string;
+};
+
+export type Client = {
+    readonly id: string;
+    readonly name: string;
+    readonly addressPlaceholder: string;
+    readonly torrentOptions?: ClientCapabilities[];
+    readonly clientOptions?: ClientOption[];
+};
+
+export type ServerOptions = {
+    name: string;
+    application: string;
+    hostname: string;
+    username: string;
+    password?: string;
+    directories: string[];
+    clientOptions?: object;
+};
+
+export const clientList: Client[] = [
     {
         id: 'biglybt',
         name: 'BiglyBT',
@@ -90,7 +146,7 @@ const clientList = [
     }
 ];
 
-const getClient = (serverSettings) => {
+export const getClient = (serverSettings: ServerOptions) => {
     switch(serverSettings.application) {
         case 'biglybt':
             return new TransmissionApi(serverSettings);
@@ -99,7 +155,7 @@ const getClient = (serverSettings) => {
         case 'deluge':
             return new DelugeApi(serverSettings);
         case 'flood':
-            return new floodApi(serverSettings);
+            return new FloodApi(serverSettings);
         case 'rutorrent':
             return new ruTorrentApi(serverSettings);
         case 'tixati':
@@ -126,16 +182,16 @@ const getClient = (serverSettings) => {
             });
     }
 
-    return new Error('No client found');
+    throw new Error('No client found');
 }
 
-const loadOptions = () => {
-    const defaults = {
+export const loadOptions = (): Promise<Options> => {
+    const defaults: Options = {
         globals: {
             currentServer: 0,
             addPaused: false,
             addAdvanced: false,
-            contextMenu: 1,
+            contextMenu: ContextMenuVisibility.Default,
             catchUrls: true,
             enableNotifications: true,
             labels: []
@@ -153,7 +209,7 @@ const loadOptions = () => {
         ]
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         chrome.storage.local.get(['globals', 'servers'], (options) => {
             mergeObjects(defaults, options);
             resolve(defaults);
@@ -161,15 +217,15 @@ const loadOptions = () => {
     });
 }
 
-const saveOptions = (options) => {
+export const saveOptions = (options: object) => {
     return chrome.storage.local.set(options);
 }
 
-const isMagnetUrl = (url) => {
+export const isMagnetUrl = (url: string): boolean => {
     return !!url.match(/^magnet:/);
 }
 
-const whitelist = [
+const whitelist: RegExp[] = [
     // Generic
     /\.torrent$/,
     /\.torrent\?/,
@@ -185,35 +241,38 @@ const whitelist = [
     /^https:\/\/animebytes\.tv\/torrent\/\d+\/download\/$/,
 ];
 
-const isTorrentUrl = (url) => {
+export const isTorrentUrl = (url: string): boolean => {
     return whitelist.some((regexp) => !!url.match(regexp));
 }
 
-const getMagnetUrlName = (url) => {
+export const getMagnetUrlName = (url: string): string | boolean => {
     const match = url.match(/^magnet:(.+)$/);
     const params = new URLSearchParams(match ? match[1] : '');
 
     return (params.has('dn') ? params.get('dn') : false);
 }
 
-const getTorrentName = (data) => {
-    return new Promise((resolve, reject) => {
+export const getTorrentName = (data: Blob): Promise<boolean | string> => {
+    return new Promise((resolve) => {
         let reader = new FileReader();
-        reader.onerror = (error) => resolve(false);
+        reader.onerror = () => resolve(false);
         reader.onload = () => {
-            const offset = reader.result.match(/name(\d+):/) || false;
-            let text = false;
+            let text: boolean | string = false;
 
-            if (offset) {
-                const index = offset.index + offset[0].length;
-                let bytes = 0;
-                text = '';
+            if (typeof reader.result === 'string') {
+                const offset = reader.result.match(/name(\d+):/) || false;
 
-                while (bytes < offset[1]) {
-                    let char = reader.result.charAt(index + text.length);
+                if (offset) {
+                    const index = offset.index + offset[0].length;
+                    let bytes = 0;
+                    text = '';
 
-                    text += char;
-                    bytes += unescape(encodeURI(char)).length;
+                    while (bytes < ~~offset[1]) {
+                        let char = reader.result.charAt(index + text.length);
+
+                        text += char;
+                        bytes += unescape(encodeURI(char)).length;
+                    }
                 }
             }
 
@@ -223,17 +282,17 @@ const getTorrentName = (data) => {
     });
 }
 
-const base64Encode = (data) => {
+export const base64Encode = (data: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.onerror = (error) => reject(error);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result.split(',')[1] : null);
         reader.readAsDataURL(data);
     });
 }
 
-const mergeObjects = (target, source) => {
-    Object.keys(source).forEach((key) =>
+const mergeObjects = (target: object, source: object) => {
+    Object.keys(source).forEach((key: string) =>
         target.hasOwnProperty(key) && typeof target[key] === 'object' ?
             mergeObjects(target[key], source[key]) : target[key] = source[key]
     );

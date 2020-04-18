@@ -1,4 +1,10 @@
-class TransmissionApi extends BaseClient {
+import BaseClient from './baseclient'
+import {
+    base64Encode,
+} from '../util';
+
+export default class TransmissionApi extends BaseClient {
+    session?: string;
 
     constructor(serverSettings) {
         super();
@@ -7,7 +13,7 @@ class TransmissionApi extends BaseClient {
         this.session = null;
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         const {hostname} = this.settings;
 
         this._attachListeners();
@@ -50,7 +56,7 @@ class TransmissionApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -63,7 +69,7 @@ class TransmissionApi extends BaseClient {
                 };
 
                 if (options.paused)
-                    request.arguments.paused = options.paused;
+                    request.arguments['paused'] = options.paused;
 
                 if (options.path)
                     request.arguments['download-dir'] = options.path;
@@ -87,7 +93,7 @@ class TransmissionApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -99,7 +105,7 @@ class TransmissionApi extends BaseClient {
             };
 
             if (options.paused)
-                request.arguments.paused = options.paused;
+                request.arguments['paused'] = options.paused;
 
             if (options.path)
                 request.arguments['download-dir'] = options.path;

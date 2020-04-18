@@ -1,4 +1,12 @@
-class DelugeApi extends BaseClient {
+import BaseClient from './baseclient'
+import {
+    base64Encode,
+} from '../util';
+
+export default class DelugeApi extends BaseClient {
+    username: string;
+    password: string;
+    cookie?: string;
 
     constructor(serverSettings) {
         super();
@@ -14,10 +22,11 @@ class DelugeApi extends BaseClient {
             ...serverSettings,
             hostname: url.toString()
         };
+
         this.cookie = null;
     }
 
-    logIn() {
+    logIn(): Promise<void> {
         const {hostname, password} = this.settings;
 
         this._attachListeners();
@@ -27,7 +36,7 @@ class DelugeApi extends BaseClient {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'X-Internal': true
+                    'X-Internal': 'true',
                 }),
                 body: JSON.stringify({
                     method: 'auth.login',
@@ -53,7 +62,7 @@ class DelugeApi extends BaseClient {
         });
     }
 
-    logOut() {
+    logOut(): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -61,7 +70,7 @@ class DelugeApi extends BaseClient {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'X-Internal': true
+                    'X-Internal': 'true',
                 }),
                 body: JSON.stringify({
                     method: 'auth.delete_session',
@@ -69,7 +78,7 @@ class DelugeApi extends BaseClient {
                     id: 4
                 })
             })
-            .finally((response) => {
+            .finally(() => {
                 this.removeEventListeners();
                 this.cookie = null;
                 resolve();
@@ -78,7 +87,7 @@ class DelugeApi extends BaseClient {
         });
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -95,7 +104,7 @@ class DelugeApi extends BaseClient {
                     method: 'POST',
                     headers: new Headers({
                         'Content-Type': 'application/json',
-                        'X-Internal': true
+                        'X-Internal': 'true',
                     }),
                     body: JSON.stringify({
                         method: 'core.add_torrent_file',
@@ -126,7 +135,7 @@ class DelugeApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -142,7 +151,7 @@ class DelugeApi extends BaseClient {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'X-Internal': true
+                    'X-Internal': 'true',
                 }),
                 body: JSON.stringify({
                     method: 'core.add_torrent_magnet',
@@ -180,7 +189,7 @@ class DelugeApi extends BaseClient {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'X-Internal': true
+                    'X-Internal': 'true',
                 }),
                 body: JSON.stringify({
                     method: 'label.set_torrent',
@@ -208,7 +217,6 @@ class DelugeApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname} = this.settings;
         let sessionCookie = this.cookie;
 
         if (this.username && this.password)
@@ -250,5 +258,4 @@ class DelugeApi extends BaseClient {
             };
         });
     }
-
 }

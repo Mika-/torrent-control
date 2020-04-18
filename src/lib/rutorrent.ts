@@ -1,5 +1,6 @@
-class ruTorrentApi extends BaseClient {
+import BaseClient from './baseclient'
 
+export default class ruTorrentApi extends BaseClient {
     constructor(serverSettings) {
         super();
 
@@ -21,7 +22,7 @@ class ruTorrentApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent, options = {}) {
+    addTorrent(torrent, options): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
@@ -38,7 +39,7 @@ class ruTorrentApi extends BaseClient {
                 form.append('label', options.label);
 
             if (options.fast_resume)
-                form.append('fast_resume', 1);
+                form.append('fast_resume', '1');
 
             fetch(hostname + 'php/addtorrent.php?json=1', {
                 method: 'POST',
@@ -56,11 +57,11 @@ class ruTorrentApi extends BaseClient {
         });
     }
 
-    addTorrentUrl(url, options = {}) {
+    addTorrentUrl(url, options): Promise<void> {
         const {hostname} = this.settings;
 
         let params = new URLSearchParams();
-        params.append('json', 1);
+        params.append('json', '1');
         params.append('url', url);
 
         if (options.paused)
@@ -73,7 +74,7 @@ class ruTorrentApi extends BaseClient {
             params.append('label', options.label);
 
         if (options.fast_resume)
-            form.append('fast_resume', 1);
+            params.append('fast_resume', '1');
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'php/addtorrent.php?' + params.toString(), {
@@ -91,7 +92,7 @@ class ruTorrentApi extends BaseClient {
         });
     }
 
-    addRssFeed(url) {
+    addRssFeed(url): Promise<void> {
         const {hostname} = this.settings;
 
         return new Promise((resolve, reject) => {
