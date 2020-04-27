@@ -28,18 +28,21 @@ loadOptions().then((newOptions) => {
 });
 
 const addTorrent = (url, referer = null, torrentOptions = {}) => {
-    const serverSettings = options.servers[options.globals.currentServer];
-    const connection = getClient(serverSettings);
-    const networkErrors = [
-        'NetworkError when attempting to fetch resource.',
-    ];
-
+    
     torrentOptions = {
         paused: false,
         path: null,
         label: null,
         ...torrentOptions
     };
+
+    const server = torrentOptions.server !== undefined ? torrentOptions.server : options.globals.currentServer;
+    const serverSettings = options.servers[server];
+    
+    const connection = getClient(serverSettings);
+    const networkErrors = [
+        'NetworkError when attempting to fetch resource.',
+    ];
 
     if (isMagnetUrl(url)) {
         connection.logIn()
@@ -431,7 +434,7 @@ const addAdvancedDialog = (url, referer = null) => {
         params.append('referer', referer);
     }
 
-    const height = 305;
+    const height = 330;
     const width = 500;
     const top = Math.round((screen.height / 2) - (height / 2));
     const left = Math.round((screen.width / 2) - (width / 2));
