@@ -23,6 +23,17 @@ const restoreOptions = () => {
             document.querySelector('#downloadLocation').disabled = true;
         }
 
+        if(options.servers.length > 1) {
+            options.servers.forEach((server, i) => {
+                let element = document.createElement('option')
+                element.setAttribute('value', i)
+                element.textContent = server.name
+                document.querySelector('#server').appendChild(element)
+            })
+        } else {
+            document.querySelector('#server').disabled = true;
+        }
+
         if (client.torrentOptions && client.torrentOptions.includes('label')) {
             options.globals.labels.forEach((label) => {
                 let element = document.createElement('option');
@@ -47,6 +58,7 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
     const label = document.querySelector('#labels').value;
     const path = document.querySelector('#downloadLocation').value;
     const addPaused = document.querySelector('#addpaused').checked;
+    const server = document.querySelector('#server').value;
 
     let options = {
         paused: addPaused
@@ -57,6 +69,9 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
 
     if (path.length)
         options.path = path;
+
+    if (server) 
+        options.server = parseInt(server)
 
     chrome.runtime.sendMessage({
         type: 'addTorrent',
