@@ -142,4 +142,25 @@ describe('Test options', () => {
         expect(chrome.storage.local.get.calledOnce).to.equal(true);
         expect(loadedOptions).to.deep.equal(modifiedOptions);
     });
+
+    it('Get server url with basic auth', () => {
+
+        const util = rewire('../src/util');
+        const getURL = util.__get__('getURL');
+
+        expect(getURL({ hostname: 'https://127.0.0.1:4000/' })).to.equal('https://127.0.0.1:4000/')
+        expect(getURL({ hostname: 'https://127.0.0.1:4000' })).to.equal('https://127.0.0.1:4000/')
+        
+        expect(getURL({ 
+            hostname: 'https://127.0.0.1:4000/', 
+            username: 'foo',
+            password: 'bar',
+        })).to.equal('https://foo:bar@127.0.0.1:4000/')        
+        
+        expect(getURL({ 
+            hostname: 'https://127.0.0.1:4000/', 
+            username: '',
+            password: '',
+        })).to.equal('https://127.0.0.1:4000/')
+    })
 });

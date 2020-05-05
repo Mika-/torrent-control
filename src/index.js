@@ -363,9 +363,8 @@ const registerHandler = () => {
 
     chrome.browserAction.onClicked.addListener(() => {
         if (options.servers[options.globals.currentServer].hostname !== '') {
-            chrome.tabs.create({
-                url: options.servers[options.globals.currentServer].hostname
-            });
+            const url = getURL(options.servers[options.globals.currentServer])
+            chrome.tabs.create({ url });
         } else {
             chrome.runtime.openOptionsPage();
         }

@@ -238,3 +238,13 @@ const mergeObjects = (target, source) => {
             mergeObjects(target[key], source[key]) : target[key] = source[key]
     );
 }
+
+const getURL = (serverOptions) => {
+    const { hostname, username, password } = serverOptions;
+    const url = new URL(hostname);
+    
+    url.username = username ? username : '';
+    url.password = password ? password : '';
+
+    return url.toString()
+}
