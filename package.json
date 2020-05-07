@@ -8,7 +8,7 @@
     "startdev": "web-ext run --firefox=firefoxdeveloperedition --source-dir ./dist/",
     "watch": "webpack --mode=development --watch",
     "build": "webpack --mode=production && web-ext build --source-dir ./dist/",
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register 'test/**/*.ts'"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
