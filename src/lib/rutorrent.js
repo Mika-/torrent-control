@@ -73,7 +73,7 @@ class ruTorrentApi extends BaseClient {
             params.append('label', options.label);
 
         if (options.fast_resume)
-            form.append('fast_resume', 1);
+            params.append('fast_resume', 1);
 
         return new Promise((resolve, reject) => {
             fetch(hostname + 'php/addtorrent.php?' + params.toString(), {
