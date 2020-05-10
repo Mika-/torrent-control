@@ -221,7 +221,7 @@ const createContextMenu = () => {
         if (client.torrentOptions.length > 1) {
             chrome.contextMenus.create({
               id: 'add-torrent-advanced',
-              title: browser.i18n.getMessage('addTorrentAction') + ' (' + browser.i18n.getMessage('advancedModifier') + ')',
+              title: chrome.i18n.getMessage('addTorrentAction') + ' (' + chrome.i18n.getMessage('advancedModifier') + ')',
               contexts: ['link']
             });
         }
