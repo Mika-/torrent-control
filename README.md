@@ -24,4 +24,4 @@ Supported clients:
 <sup>1</sup> Supports download directories/paths
 <sup>2</sup> Supports labels/categories
 <sup>3</sup> Supports client specific extra options (sequential download, etc.)
-<sub>4</sub> Supports adding of RSS feeds
+<sup>4</sup> Supports adding of RSS feeds
