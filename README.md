@@ -6,6 +6,7 @@ Features:
 - Supports magnet links
 - Supports private trackers
 - Supports multiple servers
+- Auto login for interfaces using HTTP auth
 - HTTP Digest authentication
 - Private mode and Multi-Account Container support
 
