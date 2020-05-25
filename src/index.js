@@ -1,3 +1,15 @@
+import {
+    clientList,
+    loadOptions,
+    saveOptions,
+    getClient,
+    isTorrentUrl,
+    isMagnetUrl,
+    getTorrentName,
+    getMagnetUrlName,
+    getURL,
+} from './util';
+
 var options;
 
 chrome.storage.onChanged.addListener((changes) => {

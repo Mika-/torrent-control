@@ -1,4 +1,7 @@
-class DelugeApi extends BaseClient {
+import BaseClient from './baseclient';
+import {base64Encode} from '../base64';
+
+export default class DelugeApi extends BaseClient {
 
     constructor(serverSettings) {
         super();

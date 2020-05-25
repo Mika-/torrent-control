@@ -1,3 +1,8 @@
+import {
+    clientList,
+    loadOptions,
+} from '../util';
+
 const restoreOptions = () => {
     const params = new URLSearchParams(window.location.search);
     document.querySelector('#url').value = params.get('url');

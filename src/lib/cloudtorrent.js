@@ -1,4 +1,6 @@
-class CloudTorrentApi extends BaseClient {
+import BaseClient from './baseclient';
+
+export default class CloudTorrentApi extends BaseClient {
 
     constructor(serverSettings) {
         super();
