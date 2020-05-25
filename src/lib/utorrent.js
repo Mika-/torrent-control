@@ -1,4 +1,6 @@
-class uTorrentApi extends BaseClient {
+import BaseClient from './baseclient.js';
+
+export default class uTorrentApi extends BaseClient {
 
     constructor(serverSettings) {
         super();

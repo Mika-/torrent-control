@@ -1,4 +1,6 @@
-class qBittorrentApi extends BaseClient {
+import BaseClient from './baseclient.js';
+
+export default class qBittorrentApi extends BaseClient {
 
     constructor(serverSettings) {
         super();
@@ -71,7 +73,7 @@ class qBittorrentApi extends BaseClient {
                 form.append('fileselect', torrent, 'temp.torrent');
 
                 if (options.paused)
-                    form.append('paused', options.paused);
+                    form.append('paused', options.paused.toString());
 
                 if (options.path)
                     form.append('savepath', options.path);
@@ -80,10 +82,10 @@ class qBittorrentApi extends BaseClient {
                     form.append('category', options.label);
 
                 if (options.sequentialDownload)
-                    form.append('sequentialDownload', true);
+                    form.append('sequentialDownload', 'true');
 
                 if (options.firstLastPiecePrio)
-                    form.append('firstLastPiecePrio', true);
+                    form.append('firstLastPiecePrio', 'true');
             } else {
                 form.append('torrents', torrent, 'temp.torrent');
             }
@@ -112,7 +114,7 @@ class qBittorrentApi extends BaseClient {
 
             if (apiVersion === 2) {
                 if (options.paused)
-                    form.append('paused', options.paused);
+                    form.append('paused', options.paused.toString());
 
                 if (options.path)
                     form.append('savepath', options.path);
@@ -121,10 +123,10 @@ class qBittorrentApi extends BaseClient {
                     form.append('category', options.label);
 
                 if (options.sequentialDownload)
-                    form.append('sequentialDownload', true);
+                    form.append('sequentialDownload', 'true');
 
                 if (options.firstLastPiecePrio)
-                    form.append('firstLastPiecePrio', true);
+                    form.append('firstLastPiecePrio', 'true');
             }
 
             fetch(hostname + addTorrentUrlPath, {

@@ -1,3 +1,15 @@
+import {
+    clientList,
+    loadOptions,
+    saveOptions,
+    getClient,
+    isTorrentUrl,
+    isMagnetUrl,
+    getTorrentName,
+    getMagnetUrlName,
+    getURL,
+} from './util.js';
+
 var options;
 
 chrome.storage.onChanged.addListener((changes) => {
@@ -450,7 +462,7 @@ const addAdvancedDialog = (url, referer = null) => {
     });
 }
 
-const notification = (message) => {
+export const notification = (message) => {
     if (options && !options.globals.enableNotifications) {
         return;
     }

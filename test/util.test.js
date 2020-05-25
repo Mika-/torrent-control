@@ -1,21 +1,18 @@
-const chrome = require('sinon-chrome/extensions');
-const expect = require('chai').expect;
-const rewire = require('rewire');
+import {
+    isTorrentUrl,
+    isMagnetUrl,
+    getMagnetUrlName,
+    getURL,
+    loadOptions,
+    saveOptions,
+} from '../src/util.js';
 
 describe('Test helpers', () => {
-    before(() => {
-        global.chrome = chrome;
-    });
-
     beforeEach(() => {
         chrome.flush();
     });
 
     it('isTorrentUrl(url)', () => {
-        const util = rewire('./../src/util');
-
-        const isTorrentUrl = util.__get__('isTorrentUrl');
-
         const validUrls = [
             'https://example.com/file.torrent',
             'https://example.com/file.torrent?query=value',
@@ -31,10 +28,6 @@ describe('Test helpers', () => {
     });
 
     it('isMagnetUrl(url)', () => {
-        const util = rewire('./../src/util');
-
-        const isMagnetUrl = util.__get__('isMagnetUrl');
-
         const validUrls = [
             'magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn=Test Torrent',
         ];
@@ -47,10 +40,6 @@ describe('Test helpers', () => {
     });
 
     it('getMagnetUrlName(url)', () => {
-        const util = rewire('./../src/util');
-
-        const getMagnetUrlName = util.__get__('getMagnetUrlName');
-
         expect(getMagnetUrlName('magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn=Test Torrent')).to.equal('Test Torrent');
         expect(getMagnetUrlName('magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a&dn=Test Torrent&tr=http://tracker.example.com/announce')).to.equal('Test Torrent');
 
@@ -60,19 +49,11 @@ describe('Test helpers', () => {
 });
 
 describe('Test options', () => {
-    before(() => {
-        global.chrome = chrome;
-    });
-
     beforeEach(() => {
         chrome.flush();
     });
 
     it('Load default options', async () => {
-        const util = rewire('./../src/util');
-
-        const loadOptions = util.__get__('loadOptions');
-
         chrome.storage.local.get.withArgs(['globals', 'servers']).yields({});
 
         expect(chrome.storage.local.set.notCalled).to.equal(true);
@@ -103,11 +84,6 @@ describe('Test options', () => {
     });
 
     it('Save and load custom options', async () => {
-        const util = rewire('./../src/util');
-
-        const loadOptions = util.__get__('loadOptions');
-        const saveOptions = util.__get__('saveOptions');
-
         const modifiedOptions = {
             globals: {
                 addAdvanced: false,
@@ -144,10 +120,6 @@ describe('Test options', () => {
     });
 
     it('Get server url with basic auth', () => {
-
-        const util = rewire('../src/util');
-        const getURL = util.__get__('getURL');
-
         expect(getURL({ hostname: 'https://127.0.0.1:4000/' })).to.equal('https://127.0.0.1:4000/')
         expect(getURL({ hostname: 'https://127.0.0.1:4000' })).to.equal('https://127.0.0.1:4000/')
         

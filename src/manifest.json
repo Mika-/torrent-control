@@ -40,20 +40,7 @@
     "<all_urls>"
   ],
   "background": {
-    "scripts": [
-      "lib/baseclient.js",
-      "lib/cloudtorrent.js",
-      "lib/deluge.js",
-      "lib/flood.js",
-      "lib/rutorrent.js",
-      "lib/tixati.js",
-      "lib/transmission.js",
-      "lib/utorrent.js",
-      "lib/vuze_webui.js",
-      "lib/qbittorrent.js",
-      "util.js",
-      "index.js"
-    ]
+    "page": "background.html"
   },
   "protocol_handlers": [
     {

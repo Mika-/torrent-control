@@ -1,4 +1,6 @@
-class floodApi extends BaseClient {
+import BaseClient from './baseclient.js';
+
+export default class FloodApi extends BaseClient {
 
     constructor(serverSettings) {
         super();
