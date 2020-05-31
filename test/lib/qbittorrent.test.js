@@ -28,6 +28,10 @@ describe('qBittorrentApi', () => {
         });
     });
 
+    after(() => {
+        delete global.chrome;
+    });
+
     afterEach(() => {
         chrome.flush();
         fetchMock.reset();

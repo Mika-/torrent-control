@@ -29,6 +29,10 @@ describe('qBittorrentApi (<=4.0.4)', () => {
         });
     });
 
+    after(() => {
+        delete global.chrome;
+    });
+
     afterEach(() => {
         chrome.flush();
         fetchMock.reset();
