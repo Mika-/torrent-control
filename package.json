@@ -18,6 +18,7 @@
     "@rollup/plugin-babel": "^5.0.0",
     "chai": "^4.2.0",
     "fetch-mock": "^9.10.1",
+    "jsdom": "^16.2.2",
     "mocha": "^7.0.0",
     "node-fetch": "^2.6.0",
     "rewire": "^5.0.0",

@@ -1,6 +1,10 @@
 const chrome = require('sinon-chrome/extensions');
 const expect = require('chai').expect;
+const { JSDOM } = require('jsdom');
 const rewire = require('rewire');
+
+import {getTestTorrent} from './helpers';
+import {getTorrentName} from '../src/util';
 
 describe('Test helpers', () => {
     before(() => {
@@ -56,6 +60,17 @@ describe('Test helpers', () => {
 
         expect(getMagnetUrlName('magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a')).to.equal(false);
         expect(getMagnetUrlName('https://example.com/file.torrent')).to.equal(false);
+    });
+
+    it('getTorrentName', async () => {
+        const jsdom = new JSDOM();
+        global.FileReader = jsdom.window.FileReader;
+
+        const torrentFile = await getTestTorrent();
+
+        expect(await getTorrentName(torrentFile)).to.equal('ubuntu-20.04-desktop-amd64.iso');
+
+        delete global.FileReader;
     });
 });
 
