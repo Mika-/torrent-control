@@ -125,6 +125,8 @@ const createBrowserRequest = (url, referer) => {
             let requestHeaders = details.requestHeaders;
 
             const currentTab = await getCurrentTab();
+
+            // @crossplatform Tab includes cookieStoreId on Firefox
             const cookies = currentTab ? await getCookies(currentTab.cookieStoreId, url) : [];
 
             requestHeaders = requestHeaders.filter((header) => {
@@ -405,6 +407,7 @@ const registerHandler = () => {
     chrome.webRequest.onBeforeRequest.addListener((details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
                 if (options.globals.addAdvanced) {
+                    // @crossplatform WebRequestBodyDetails includes origin URL on Firefox
                     addAdvancedDialog(details.url, details.originUrl);
                 } else {
                     const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
@@ -452,13 +455,15 @@ const addAdvancedDialog = (url, referer = null) => {
 
     chrome.windows.create({
         url: 'view/add_torrent.html?' + params.toString(),
-        titlePreface: chrome.i18n.getMessage('addTorrentAction'),
         type: 'panel',
-        allowScriptsToClose: true,
         top: top,
         left: left,
         height: height,
-        width: width
+        width: width,
+
+        // @crossplatform allowScriptsToClose, titlePreface are Firefox specific
+        allowScriptsToClose: true,
+        titlePreface: chrome.i18n.getMessage('addTorrentAction')
     });
 }
 
