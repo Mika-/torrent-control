@@ -132,8 +132,8 @@ export default class BaseClient {
         const regex = new RegExp(key + '=(.+?);');
 
         if (cookie)
-            return cookie.value.match(regex)[0] || false;
+            return cookie.value.match(regex)[0] || null;
 
-        return false;
+        return null;
     }
 }
