@@ -28,7 +28,7 @@ export default class BaseClient {
 
         chrome.webRequest.onHeadersReceived.addListener(
             this.listeners.onHeadersReceived,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking', 'responseHeaders']
         );
     }
@@ -40,7 +40,7 @@ export default class BaseClient {
 
         chrome.webRequest.onBeforeSendHeaders.addListener(
             this.listeners.onBeforeSendHeaders,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking', 'requestHeaders']
         );
     }
@@ -71,18 +71,18 @@ export default class BaseClient {
 
         chrome.webRequest.onAuthRequired.addListener(
             this.listeners.onAuthRequired,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
             ['blocking']
         );
 
         chrome.webRequest.onCompleted.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
         );
 
         chrome.webRequest.onErrorOccurred.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/\:\d+/, '') + '*']},
+            {urls: [hostname.replace(/:\d+/, '') + '*']},
         );
     }
 

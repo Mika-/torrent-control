@@ -32,7 +32,7 @@ const persistOptions = () => {
 
     let clientOptions = {};
     Array.from(document.querySelectorAll('*[id^="clientOptions"]')).forEach((element) => {
-        clientOptions[element.id.match(/\[(.+?)\]$/)[1]] = element.checked;
+        clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.checked;
     });
 
     options.servers[~~serverSelect.value] = {

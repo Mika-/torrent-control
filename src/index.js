@@ -333,9 +333,9 @@ const removeContextMenu = () => {
 
 const registerHandler = () => {
     chrome.contextMenus.onClicked.addListener((info, tab) => {
-        const currentServer = info.menuItemId.match(/^current\-server\-(\d+)$/);
-        const labelId = info.menuItemId.match(/^add\-torrent\-label\-(\d+)$/);
-        const pathId = info.menuItemId.match(/^add\-torrent\-path\-(\d+)$/);
+        const currentServer = info.menuItemId.match(/^current-server-(\d+)$/);
+        const labelId = info.menuItemId.match(/^add-torrent-label-(\d+)$/);
+        const pathId = info.menuItemId.match(/^add-torrent-path-(\d+)$/);
 
         const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
