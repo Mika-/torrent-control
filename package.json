@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.9.0",
     "@rollup/plugin-babel": "^5.0.0",
+    "@types/chrome": "^0.0.121",
     "chai": "^4.2.0",
     "fetch-mock": "^9.10.1",
     "jsdom": "^16.2.2",
