@@ -47,7 +47,7 @@ const persistOptions = () => {
 
     saveOptions(options);
 
-    saveButton.setAttribute('disabled', true);
+    saveButton.setAttribute('disabled', 'true');
 }
 
 const restoreOptions = () => {
@@ -86,7 +86,7 @@ const restoreOptions = () => {
         restoreServer(serverSelect.value);
     });
 
-    saveButton.setAttribute('disabled', true);
+    saveButton.setAttribute('disabled', 'true');
 }
 
 const restoreServerList = () => {
@@ -126,7 +126,7 @@ const restoreServer = (id) => {
     if (options.servers.length > 1)
         document.querySelector('#remove-server').removeAttribute('disabled');
     else
-        document.querySelector('#remove-server').setAttribute('disabled', true);
+        document.querySelector('#remove-server').setAttribute('disabled', 'true');
 }
 
 const addServer = () => {

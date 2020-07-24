@@ -30,10 +30,10 @@ const restoreOptions = () => {
 
         if(options.servers.length > 1) {
             options.servers.forEach((server, i) => {
-                let element = document.createElement('option')
-                element.setAttribute('value', i)
-                element.textContent = server.name
-                document.querySelector('#server').appendChild(element)
+                let element = document.createElement('option');
+                element.setAttribute('value', i.toString());
+                element.textContent = server.name;
+                document.querySelector('#server').appendChild(element);
             })
         } else {
             document.querySelector('#server').disabled = true;
