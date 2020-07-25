@@ -11,6 +11,9 @@
     "test": "mocha --require ./test/env.js 'test/**/*.js'"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/chrome": "^0.0.122",
+    "@types/mocha": "^8.0.0",
     "chai": "^4.2.0",
     "fetch-mock": "^9.10.4",
     "jsdom": "^16.3.0",
