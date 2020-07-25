@@ -4,8 +4,6 @@ import {
     getTorrentName,
     getMagnetUrlName,
     getURL,
-    loadOptions,
-    saveOptions,
 } from '../src/util.js';
 
 import {getTestTorrent} from './helpers.js';
