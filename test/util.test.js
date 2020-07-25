@@ -1,6 +1,7 @@
 import {
     isTorrentUrl,
     isMagnetUrl,
+    getTorrentName,
     getMagnetUrlName,
     getURL,
     loadOptions,
@@ -47,6 +48,12 @@ describe('Test helpers', () => {
 
         expect(getMagnetUrlName('magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a')).to.equal(false);
         expect(getMagnetUrlName('https://example.com/file.torrent')).to.equal(false);
+    });
+
+    it('getTorrentName', async () => {
+        const torrentFile = await getTestTorrent();
+
+        expect(await getTorrentName(torrentFile)).to.equal('ubuntu-20.04-desktop-amd64.iso');
     });
 
     it('Get server url with basic auth', () => {
