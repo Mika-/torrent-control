@@ -12,7 +12,7 @@ const saveButton = document.querySelector('#save-options');
 const isLabelsSupported = (servers) => servers.some((server) => {
     const client = clientList.find((client) => client.id === server.application);
 
-    if (client && client.torrentOptions && client.torrentOptions.includes('label')) {
+    if (client && client.clientCapabilities && client.clientCapabilities.includes('label')) {
         return true;
     }
     return false;
@@ -196,10 +196,10 @@ document.querySelector('#application').addEventListener('change', (e) => {
             document.querySelector('#hostname').value = client.addressPlaceholder;
 
         document.querySelector('[data-panel="directories"]').style.display =
-            client.torrentOptions && client.torrentOptions.includes('path') ? 'flex' : 'none';
+            client.clientCapabilities && client.clientCapabilities.includes('path') ? 'flex' : 'none';
 
         document.querySelector('[data-panel="labels"]').style.display =
-            isLabelsSupported(options.servers) || (client.torrentOptions && client.torrentOptions.includes('label')) ? 'flex' : 'none';
+            isLabelsSupported(options.servers) || (client.clientCapabilities && client.clientCapabilities.includes('label')) ? 'flex' : 'none';
 
         if (client.id === 'deluge')
             document.querySelector('#username').setAttribute('disabled', 'true');

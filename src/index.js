@@ -231,8 +231,8 @@ const createContextMenu = () => {
 
     const client = clientList.find((client) => client.id === serverOptions.application);
 
-    if (options.globals.contextMenu === 1 && client.torrentOptions) {
-        if (client.torrentOptions.length > 1) {
+    if (options.globals.contextMenu === 1 && client.clientCapabilities) {
+        if (client.clientCapabilities.length > 1) {
             chrome.contextMenus.create({
               id: 'add-torrent-advanced',
               title: chrome.i18n.getMessage('addTorrentAction') + ' (' + chrome.i18n.getMessage('advancedModifier') + ')',
@@ -240,7 +240,7 @@ const createContextMenu = () => {
             });
         }
 
-        if (client.torrentOptions.includes('paused')) {
+        if (client.clientCapabilities.includes('paused')) {
             chrome.contextMenus.create({
               id: 'add-torrent-paused',
               title: chrome.i18n.getMessage('addTorrentPausedAction'),
@@ -248,7 +248,7 @@ const createContextMenu = () => {
             });
         }
 
-        if (client.torrentOptions.includes('label') && options.globals.labels.length) {
+        if (client.clientCapabilities.includes('label') && options.globals.labels.length) {
             chrome.contextMenus.create({
                 id: 'add-torrent-label',
                 title: chrome.i18n.getMessage('addTorrentLabelAction'),
@@ -265,7 +265,7 @@ const createContextMenu = () => {
             });
         }
 
-        if (client.torrentOptions.includes('path') && serverOptions.directories.length) {
+        if (client.clientCapabilities.includes('path') && serverOptions.directories.length) {
             chrome.contextMenus.create({
                 id: 'add-torrent-path',
                 title: chrome.i18n.getMessage('addTorrentPathAction'),
@@ -281,8 +281,8 @@ const createContextMenu = () => {
                 });
             });
         }
-    } else if (client.torrentOptions) {
-        if (client.torrentOptions.includes('label') && options.globals.labels.length) {
+    } else if (client.clientCapabilities) {
+        if (client.clientCapabilities.includes('label') && options.globals.labels.length) {
             chrome.contextMenus.create({
                 contexts: ['link'],
                 type: 'separator'
@@ -297,7 +297,7 @@ const createContextMenu = () => {
             });
         }
 
-        if (client.torrentOptions.includes('path') && serverOptions.directories.length) {
+        if (client.clientCapabilities.includes('path') && serverOptions.directories.length) {
             chrome.contextMenus.create({
                 contexts: ['link'],
                 type: 'separator'
@@ -313,7 +313,7 @@ const createContextMenu = () => {
         }
     }
 
-    if (client.torrentOptions && client.torrentOptions.includes('rss')) {
+    if (client.clientCapabilities && client.clientCapabilities.includes('rss')) {
         if (options.globals.contextMenu === 1) {
             chrome.contextMenus.create({
                 contexts: ['link'],

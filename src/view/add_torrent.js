@@ -17,7 +17,7 @@ const restoreOptions = () => {
 
         document.querySelector('#addpaused').checked = options.globals.addPaused;
 
-        if (client.torrentOptions && client.torrentOptions.includes('path')) {
+        if (client.clientCapabilities && client.clientCapabilities.includes('path')) {
             serverOptions.directories.forEach((directory) => {
                 let element = document.createElement('option');
                 element.setAttribute('value', directory);
@@ -39,7 +39,7 @@ const restoreOptions = () => {
             document.querySelector('#server').disabled = true;
         }
 
-        if (client.torrentOptions && client.torrentOptions.includes('label')) {
+        if (client.clientCapabilities && client.clientCapabilities.includes('label')) {
             options.globals.labels.forEach((label) => {
                 let element = document.createElement('option');
                 element.setAttribute('value', label);
@@ -50,7 +50,7 @@ const restoreOptions = () => {
             document.querySelector('#labels').disabled = true;
         }
 
-        if (!client.torrentOptions || !client.torrentOptions.includes('paused'))
+        if (!client.clientCapabilities || !client.clientCapabilities.includes('paused'))
             document.querySelector('#addpaused').disabled = true;
     });
 }

@@ -13,7 +13,7 @@ export const clientList = [
         id: 'biglybt',
         name: 'BiglyBT',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused', 'path']
+        clientCapabilities: ['paused', 'path']
     },
     {
         id: 'cloudtorrent',
@@ -24,19 +24,19 @@ export const clientList = [
         id: 'deluge',
         name: 'Deluge Web UI',
         addressPlaceholder: 'http://127.0.0.1:8112/',
-        torrentOptions: ['paused', 'label', 'path']
+        clientCapabilities: ['paused', 'label', 'path']
     },
     {
         id: 'flood',
         name: 'Flood',
         addressPlaceholder: 'http://127.0.0.1:3000/',
-        torrentOptions: ['paused', 'label', 'path']
+        clientCapabilities: ['paused', 'label', 'path']
     },
     {
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
-        torrentOptions: ['paused', 'label', 'path', 'rss'],
+        clientCapabilities: ['paused', 'label', 'path', 'rss'],
         clientOptions: [
             {
                 name: 'fast_resume',
@@ -48,13 +48,13 @@ export const clientList = [
         id: 'tixati',
         name: 'Tixati',
         addressPlaceholder: 'http://127.0.0.1:8888/',
-        torrentOptions: ['paused']
+        clientCapabilities: ['paused']
     },
     {
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused', 'path']
+        clientCapabilities: ['paused', 'path']
     },
     {
         id: 'utorrent',
@@ -65,7 +65,7 @@ export const clientList = [
         id: 'vuze_remoteui',
         name: 'Vuze Web Remote',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        torrentOptions: ['paused', 'path']
+        clientCapabilities: ['paused', 'path']
     },
     {
         id: 'vuze_webui',
@@ -81,7 +81,7 @@ export const clientList = [
         id: 'qbittorrent',
         name: 'qBittorrent',
         addressPlaceholder: 'http://127.0.0.1:8080/',
-        torrentOptions: ['paused', 'label', 'path', 'rss'],
+        clientCapabilities: ['paused', 'label', 'path', 'rss'],
         clientOptions: [
             {
                 name: 'sequentialDownload',
