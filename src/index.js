@@ -40,7 +40,7 @@ loadOptions().then((newOptions) => {
 });
 
 const addTorrent = (url, referer = null, torrentOptions = {}) => {
-    
+
     torrentOptions = {
         paused: false,
         path: null,
@@ -50,7 +50,7 @@ const addTorrent = (url, referer = null, torrentOptions = {}) => {
 
     const server = torrentOptions.server !== undefined ? torrentOptions.server : options.globals.currentServer;
     const serverSettings = options.servers[server];
-    
+
     const connection = getClient(serverSettings);
     const networkErrors = [
         'NetworkError when attempting to fetch resource.',
@@ -384,7 +384,7 @@ const registerHandler = () => {
         }
     });
 
-    chrome.webRequest.onBeforeRequest.addListener((details) => {        
+    chrome.webRequest.onBeforeRequest.addListener((details) => {
             let parser = document.createElement('a');
             parser.href = details.url;
             let magnetUri = decodeURIComponent(parser.pathname).substr(1);
@@ -513,7 +513,7 @@ const getCookies = async (cookieStoreId, torrentUrl) => {
     return await new Promise((resolve) => {
         chrome.cookies.getAll({
             url: torrentUrl,
-            storeId: cookieStoreId 
+            storeId: cookieStoreId
         }, (cookies) => resolve(cookies))
     });
 }
