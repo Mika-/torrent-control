@@ -13,18 +13,19 @@ export const clientList = [
         id: 'biglybt',
         name: 'BiglyBT',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        clientCapabilities: ['paused', 'path']
+        clientCapabilities: ['paused', 'path', 'httpAuth']
     },
     {
         id: 'cloudtorrent',
         name: 'Cloud Torrent',
-        addressPlaceholder: 'http://127.0.0.1:3000/'
+        addressPlaceholder: 'http://127.0.0.1:3000/',
+        clientCapabilities: ['httpAuth']
     },
     {
         id: 'deluge',
         name: 'Deluge Web UI',
         addressPlaceholder: 'http://127.0.0.1:8112/',
-        clientCapabilities: ['paused', 'label', 'path']
+        clientCapabilities: ['paused', 'label', 'path', 'httpAuth']
     },
     {
         id: 'flood',
@@ -36,7 +37,7 @@ export const clientList = [
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
-        clientCapabilities: ['paused', 'label', 'path', 'rss'],
+        clientCapabilities: ['paused', 'label', 'path', 'rss', 'httpAuth'],
         clientOptions: [
             {
                 name: 'fast_resume',
@@ -48,13 +49,13 @@ export const clientList = [
         id: 'tixati',
         name: 'Tixati',
         addressPlaceholder: 'http://127.0.0.1:8888/',
-        clientCapabilities: ['paused']
+        clientCapabilities: ['paused', 'httpAuth']
     },
     {
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        clientCapabilities: ['paused', 'path']
+        clientCapabilities: ['paused', 'path', 'httpAuth']
     },
     {
         id: 'utorrent',
@@ -65,12 +66,13 @@ export const clientList = [
         id: 'vuze_remoteui',
         name: 'Vuze Web Remote',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        clientCapabilities: ['paused', 'path']
+        clientCapabilities: ['paused', 'path', 'httpAuth']
     },
     {
         id: 'vuze_webui',
         name: 'Vuze HTML Web UI',
-        addressPlaceholder: 'http://127.0.0.1:6886/'
+        addressPlaceholder: 'http://127.0.0.1:6886/',
+        clientCapabilities: ['httpAuth']
     },
     {
         id: 'vuze_webui_100',
@@ -240,12 +242,15 @@ const mergeObjects = (target, source) => {
     );
 }
 
-export const getURL = (serverOptions) => {
-    const { hostname, username, password } = serverOptions;
+export const getURL = ({ hostname, username, password, application }) => {
+    const client = clientList.find((client) => client.id === application);
+
     const url = new URL(hostname);
-    
-    url.username = username ? username : '';
-    url.password = password ? password : '';
+
+    if (client.clientCapabilities && client.clientCapabilities.includes('httpAuth')) {
+        url.username = username ? username : '';
+        url.password = password ? password : '';
+    }
 
     return url.toString()
 }
