@@ -20,6 +20,6 @@
     "mocha": "^8.0.0",
     "node-fetch": "^2.6.0",
     "sinon-chrome": "^3.0.1",
-    "web-ext": "^4.0.0"
+    "web-ext": "^5.0.0"
   }
 }
