@@ -3,6 +3,8 @@ import {
     loadOptions,
 } from '../util.js';
 
+var options;
+
 const restoreOptions = () => {
     const params = new URLSearchParams(window.location.search);
     document.querySelector('#url').value = params.get('url');
@@ -11,51 +13,71 @@ const restoreOptions = () => {
         element.textContent = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
     });
 
-    loadOptions().then((options) => {
-        const serverOptions = options.servers[options.globals.currentServer];
-        const client = clientList.find((client) => client.id === serverOptions.application);
+    loadOptions().then((loadedOptions) => {
+        options = loadedOptions;
 
         document.querySelector('#addpaused').checked = options.globals.addPaused;
 
-        if (client.clientCapabilities && client.clientCapabilities.includes('path')) {
-            serverOptions.directories.forEach((directory) => {
-                let element = document.createElement('option');
-                element.setAttribute('value', directory);
-                element.textContent = directory;
-                document.querySelector('#downloadLocation').appendChild(element);
-            });
-        } else {
-            document.querySelector('#downloadLocation').disabled = true;
-        }
+        options.servers.forEach((server, i) => {
+            let element = document.createElement('option');
+            element.setAttribute('value', i.toString());
+            element.textContent = server.name;
+            document.querySelector('#server').appendChild(element);
+        })
 
-        if(options.servers.length > 1) {
-            options.servers.forEach((server, i) => {
-                let element = document.createElement('option');
-                element.setAttribute('value', i.toString());
-                element.textContent = server.name;
-                document.querySelector('#server').appendChild(element);
-            })
-        } else {
-            document.querySelector('#server').disabled = true;
-        }
+        options.globals.labels.forEach((label) => {
+            let element = document.createElement('option');
+            element.setAttribute('value', label);
+            element.textContent = label;
+            document.querySelector('#labels').appendChild(element);
+        });
 
-        if (client.clientCapabilities && client.clientCapabilities.includes('label')) {
-            options.globals.labels.forEach((label) => {
-                let element = document.createElement('option');
-                element.setAttribute('value', label);
-                element.textContent = label;
-                document.querySelector('#labels').appendChild(element);
-            });
-        } else {
-            document.querySelector('#labels').disabled = true;
-        }
-
-        if (!client.clientCapabilities || !client.clientCapabilities.includes('paused'))
-            document.querySelector('#addpaused').disabled = true;
+        selectServer(options.globals.currentServer);
     });
 }
 
+const selectServer = (serverId) => {
+    document.querySelector('#server').value = serverId;
+
+    const serverOptions = options.servers[serverId];
+    const client = clientList.find((client) => client.id === serverOptions.application);
+
+    const downloadLocationSelect = document.querySelector('#downloadLocation');
+
+    document.querySelectorAll('#downloadLocation > option').forEach((element, i) => {
+        if (i > 0)
+            element.remove();
+    });
+
+    if (client.clientCapabilities && client.clientCapabilities.includes('path')) {
+        serverOptions.directories.forEach((directory) => {
+            let element = document.createElement('option');
+            element.setAttribute('value', directory);
+            element.textContent = directory;
+            downloadLocationSelect.appendChild(element);
+        });
+
+        downloadLocationSelect.disabled = false;
+    } else {
+        downloadLocationSelect.value = '';
+        downloadLocationSelect.disabled = true;
+    }
+
+    const labelSelect = document.querySelector('#labels');
+
+    if (client.clientCapabilities && client.clientCapabilities.includes('label')) {
+        labelSelect.disabled = false;
+    } else {
+        labelSelect.value = '';
+        labelSelect.disabled = true;
+    }
+
+    if (!client.clientCapabilities || !client.clientCapabilities.includes('paused'))
+        document.querySelector('#addpaused').disabled = true;
+}
+
 document.addEventListener('DOMContentLoaded', restoreOptions);
+document.querySelector('#server').addEventListener('change', (e) => selectServer(~~e.currentTarget.value));
 document.querySelector('#add-torrent').addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -75,8 +97,8 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
     if (path.length)
         options.path = path;
 
-    if (server) 
-        options.server = parseInt(server)
+    if (server)
+        options.server = ~~server;
 
     chrome.runtime.sendMessage({
         type: 'addTorrent',
