@@ -17,7 +17,7 @@ chrome.storage.onChanged.addListener((changes) => {
 
     removeContextMenu();
 
-    if (options.globals.contextMenu && options.servers[options.globals.currentServer].hostname !== '')
+    if (options.globals.contextMenu && isConfigured())
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -29,7 +29,7 @@ chrome.storage.onChanged.addListener((changes) => {
 loadOptions().then((newOptions) => {
     options = newOptions;
 
-    if (options.globals.contextMenu && options.servers[options.globals.currentServer].hostname !== '')
+    if (options.globals.contextMenu && isConfigured())
         createContextMenu();
 
     if (options.servers.length > 1)
@@ -38,6 +38,8 @@ loadOptions().then((newOptions) => {
     createDefaultMenu();
     registerHandler();
 });
+
+const isConfigured = () => options.servers[options.globals.currentServer].hostname !== '';
 
 const addTorrent = (url, referer = null, torrentOptions = {}) => {
 
@@ -376,7 +378,7 @@ const registerHandler = () => {
     });
 
     chrome.browserAction.onClicked.addListener(() => {
-        if (options.servers[options.globals.currentServer].hostname !== '') {
+        if (isConfigured()) {
             const url = getURL(options.servers[options.globals.currentServer])
             chrome.tabs.create({ url });
         } else {
@@ -405,7 +407,7 @@ const registerHandler = () => {
     );
 
     chrome.webRequest.onBeforeRequest.addListener((details) => {
-            if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url)) {
+            if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url) && isConfigured()) {
                 if (options.globals.addAdvanced) {
                     // @crossplatform WebRequestBodyDetails includes origin URL on Firefox
                     addAdvancedDialog(details.url, details.originUrl);
