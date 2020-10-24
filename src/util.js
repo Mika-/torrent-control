@@ -25,7 +25,7 @@ export const clientList = [
         id: 'deluge',
         name: 'Deluge Web UI',
         addressPlaceholder: 'http://127.0.0.1:8112/',
-        clientCapabilities: ['paused', 'label', 'path', 'httpAuth']
+        clientCapabilities: ['paused', 'label', 'path']
     },
     {
         id: 'flood',
