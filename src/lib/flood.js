@@ -58,9 +58,9 @@ export default class FloodApi extends BaseClient {
                     files: [
                         base64torrent,
                     ],
-                    destination: options.path,
+                    destination: options.path || '',
                     tags: options.label ? [options.label] : [],
-                    start: !options.paused
+                    start: !(options.paused || false)
                 };
 
                 return fetch(hostname + 'api/torrents/add-files', {
@@ -88,9 +88,9 @@ export default class FloodApi extends BaseClient {
                 urls: [
                     url,
                 ],
-                destination: options.path,
+                destination: options.path || '',
                 tags: options.label ? [options.label] : [],
-                start: !options.paused
+                start: !(options.paused || false)
             };
 
             fetch(hostname + 'api/torrents/add-urls', {
