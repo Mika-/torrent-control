@@ -37,7 +37,10 @@ describe('FloodApi', () => {
 
         expect(fetchMock.calls().length).to.equal(1);
         expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body.toString()).to.equal('username=testuser&password=testpassw0rd');
+        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+            username: 'testuser',
+            password: 'testpassw0rd',
+        });
     });
 
     it('Login fail', async () => {
@@ -59,7 +62,10 @@ describe('FloodApi', () => {
 
         expect(fetchMock.calls().length).to.equal(1);
         expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body.toString()).to.equal('username=testuser&password=testpassw0rd');
+        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+            username: 'testuser',
+            password: 'testpassw0rd',
+        });
     });
 
     it('Logout', async () => {
