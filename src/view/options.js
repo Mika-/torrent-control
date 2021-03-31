@@ -1,5 +1,6 @@
 import {
     clientList,
+    whitelist,
     loadOptions,
     saveOptions,
     regExpFromString,
@@ -26,11 +27,7 @@ const persistOptions = () => {
     options.globals.addAdvanced = document.querySelector('#addadvanced').checked;
     options.globals.enableNotifications = document.querySelector('#enablenotifications').checked;
 
-    const matchRegExp = document.querySelector('#matchregexp').value.split(/\n/g) || [];
-    options.globals.matchRegExp = matchRegExp
-        .map((regExpStr) => regExpStr.trim())
-        .filter((regExpStr) => regExpStr.length)
-        .map((regExpStr) => regExpFromString(regExpStr).toString());
+    options.globals.matchRegExp = getRegExps().map((regExp) => regExp.toString());
 
     const labels = document.querySelector('#labels').value.split(/\n/g) || [];
     options.globals.labels = labels.map((label) => label.trim()).filter((label) => label.length);
@@ -166,6 +163,14 @@ const removeServer = (id) => {
     persistOptions();
 }
 
+const getRegExps = () => {
+    const matchRegExp = document.querySelector('#matchregexp').value.split(/\n/g) || [];
+    return matchRegExp
+        .map((regExpStr) => regExpStr.trim())
+        .filter((regExpStr) => regExpStr.length)
+        .map((regExpStr) => regExpFromString(regExpStr));
+}
+
 const validateUrl = (str) => {
     try {
         const url = new URL(str);
@@ -178,6 +183,19 @@ const validateUrl = (str) => {
 serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addServer() : restoreServer(e.target.value));
 document.querySelector('#catchurls').addEventListener('change', (e) => {
     document.querySelector('#matchregexp').disabled = e.target.checked === false;
+});
+document.querySelector('#test-regexp').addEventListener('click', (e) => {
+    const testUrl = document.querySelector('#test-regexp-url').value.trim();
+
+    if (testUrl.length === 0) {
+        return;
+    }
+
+    const regExps = getRegExps().concat(whitelist);
+    const matchingRegExp = regExps.find((regExp) => regExp.exec(testUrl) !== null) || null;
+
+    document.querySelector('#test-regexp-result').textContent = matchingRegExp ?
+        chrome.i18n.getMessage('testSuccessText', matchingRegExp.toString()) : chrome.i18n.getMessage('testFailText');
 });
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#remove-server').addEventListener('click', (e) => {

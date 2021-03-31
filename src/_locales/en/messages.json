@@ -43,6 +43,22 @@
     "message": "Custom URL matching regular expressions",
     "description": "Matching regexp option"
   },
+  "testUrlOption": {
+    "message": "Test URL",
+    "description": "Test url label"
+  },
+  "testAction": {
+    "message": "Test",
+    "description": "Test action"
+  },
+  "testSuccessText": {
+    "message": "Matched by: $1",
+    "description": "Test fail text"
+  },
+  "testFailText": {
+    "message": "No matches found",
+    "description": "Test fail text"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"

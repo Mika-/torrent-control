@@ -43,6 +43,22 @@
     "message": "Käyttäjän määrittelemät URL kaappaimet",
     "description": "Matching regexp option"
   },
+  "testUrlOption": {
+    "message": "Testaa URL",
+    "description": "Test url label"
+  },
+  "testAction": {
+    "message": "Testaa",
+    "description": "Test action"
+  },
+  "testSuccessText": {
+    "message": "Löytyi kaappaimella: $1",
+    "description": "Test fail text"
+  },
+  "testFailText": {
+    "message": "Ei osumia",
+    "description": "Test fail text"
+  },
   "addTorrentAction": {
     "message": "Lisää torrent",
     "description": "Context menu action"
