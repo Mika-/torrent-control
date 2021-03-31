@@ -39,6 +39,10 @@
     "message": "Tunnisteet",
     "description": "Label list option"
   },
+  "regexpMatchLabelsOption": {
+    "message": "Käyttäjän määrittelemät URL kaappaimet",
+    "description": "Matching regexp option"
+  },
   "addTorrentAction": {
     "message": "Lisää torrent",
     "description": "Context menu action"

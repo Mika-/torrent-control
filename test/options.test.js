@@ -22,7 +22,8 @@ describe('Test options', () => {
                 contextMenu: 1,
                 catchUrls: true,
                 enableNotifications: true,
-                labels: []
+                labels: [],
+                matchRegExp: []
             },
             servers: [
                 {
@@ -47,7 +48,8 @@ describe('Test options', () => {
                 contextMenu: 0,
                 catchUrls: false,
                 enableNotifications: true,
-                labels: []
+                labels: [],
+                matchRegExp: []
             },
             servers: [
                 {

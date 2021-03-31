@@ -39,6 +39,10 @@
     "message": "Labels",
     "description": "Label list option"
   },
+  "regexpMatchLabelsOption": {
+    "message": "Custom URL matching regular expressions",
+    "description": "Matching regexp option"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"

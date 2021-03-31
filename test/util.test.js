@@ -4,6 +4,7 @@ import {
     getTorrentName,
     getMagnetUrlName,
     getURL,
+    regExpFromString,
 } from '../src/util.js';
 
 import {getTestTorrent} from './helpers.js';
@@ -85,5 +86,13 @@ describe('Test helpers', () => {
             password: 'bar',
             application: 'qbittorrent',
         })).to.equal('https://127.0.0.1:4000/');
+    });
+
+    it('regExpFromString', () => {
+        expect(regExpFromString('abcd')).to.deep.equal(/abcd/);
+        expect(regExpFromString('/abcd/g')).to.deep.equal(/abcd/g);
+        expect(regExpFromString('(\\d+)')).to.deep.equal(/(\d+)/);
+        expect(regExpFromString('m\/m')).to.deep.equal(/m\/m/);
+        expect(regExpFromString('/\\/download\\.php\\?id=[a-z0-9]{40}&f=.+?&key=/')).to.deep.equal(/\/download\.php\?id=[a-z0-9]{40}&f=.+?&key=/);
     });
 });

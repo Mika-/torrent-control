@@ -150,7 +150,8 @@ export const loadOptions = () => {
             contextMenu: 1,
             catchUrls: true,
             enableNotifications: true,
-            labels: []
+            labels: [],
+            matchRegExp: []
         },
         servers: [
             {
@@ -253,4 +254,18 @@ export const getURL = ({ hostname, username, password, application }) => {
     }
 
     return url.toString()
+}
+
+/**
+ * @param regExpStr {string}
+ * @returns {RegExp}
+ */
+export const regExpFromString = (regExpStr) => {
+    const parts = /\/(.*)\/(.*)/.exec(regExpStr);
+
+    if (parts === null) {
+        return new RegExp(regExpStr);
+    }
+
+    return new RegExp(parts[1], parts[2]);
 }

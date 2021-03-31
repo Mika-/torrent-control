@@ -2,6 +2,7 @@ import {
     clientList,
     loadOptions,
     saveOptions,
+    regExpFromString,
 } from '../util.js';
 
 var options;
@@ -24,6 +25,12 @@ const persistOptions = () => {
     options.globals.addPaused = document.querySelector('#addpaused').checked;
     options.globals.addAdvanced = document.querySelector('#addadvanced').checked;
     options.globals.enableNotifications = document.querySelector('#enablenotifications').checked;
+
+    const matchRegExp = document.querySelector('#matchregexp').value.split(/\n/g) || [];
+    options.globals.matchRegExp = matchRegExp
+        .map((regExpStr) => regExpStr.trim())
+        .filter((regExpStr) => regExpStr.length)
+        .map((regExpStr) => regExpFromString(regExpStr).toString());
 
     const labels = document.querySelector('#labels').value.split(/\n/g) || [];
     options.globals.labels = labels.map((label) => label.trim()).filter((label) => label.length);
@@ -57,6 +64,7 @@ const restoreOptions = () => {
         }, { passive: true });
     });
 
+    document.querySelector('#matchregexp').placeholder = '/^https:\\/\\/example\\.com\\/torrent\\/\\d+\\/download\\/$/'.replace(/\\n/g, '\n');
     document.querySelector('#labels').placeholder = 'Label\nAnother label'.replace(/\\n/g, '\n');
     document.querySelector('#directories').placeholder = '/home/user/downloads\n/data/incomplete'.replace(/\\n/g, '\n');
 
@@ -80,6 +88,8 @@ const restoreOptions = () => {
         document.querySelector('#addadvanced').checked = options.globals.addAdvanced;
         document.querySelector('#enablenotifications').checked = options.globals.enableNotifications;
 
+        document.querySelector('#matchregexp').value = options.globals.matchRegExp.join('\n');
+        document.querySelector('#matchregexp').disabled = options.globals.catchUrls === false;
         document.querySelector('#labels').value = options.globals.labels.join('\n');
 
         restoreServerList();
@@ -166,6 +176,9 @@ const validateUrl = (str) => {
 }
 
 serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addServer() : restoreServer(e.target.value));
+document.querySelector('#catchurls').addEventListener('change', (e) => {
+    document.querySelector('#matchregexp').disabled = e.target.checked === false;
+});
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#remove-server').addEventListener('click', (e) => {
     e.preventDefault();

@@ -26,11 +26,6 @@
         </div>
 
         <div class="panel-formElements-item browser-style">
-            <input type="checkbox" id="catchurls" />
-            <label for="catchurls" data-i18n="catchUrlsOption"></label>
-        </div>
-
-        <div class="panel-formElements-item browser-style">
             <input type="checkbox" id="addpaused" />
             <label for="addpaused" data-i18n="addPausedOption"></label>
         </div>
@@ -45,9 +40,19 @@
             <label for="enablenotifications" data-i18n="enableNotificationsOption"></label>
         </div>
 
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="catchurls" />
+            <label for="catchurls" data-i18n="catchUrlsOption"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="matchregexp">
+            <label for="matchregexp" data-i18n="regexpMatchLabelsOption"></label>
+            <textarea id="matchregexp" class="browser-style" style="width:100%"></textarea>
+        </div>
+
         <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="labels">
             <label for="labels" data-i18n="torrentLabelsOption"></label>
-            <textarea id="labels" class="browser-style" style="width:250px"></textarea>
+            <textarea id="labels" class="browser-style" style="width:100%"></textarea>
         </div>
 
     </div>
@@ -102,7 +107,7 @@
 
         <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="directories">
             <label for="directories" data-i18n="serverDirectoriesOption"></label>
-            <textarea id="directories" class="browser-style" style="width:250px"></textarea>
+            <textarea id="directories" class="browser-style" style="width:100%"></textarea>
         </div>
 
     </div>
