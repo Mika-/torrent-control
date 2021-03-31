@@ -1,4 +1,5 @@
 import {
+    whitelist,
     isTorrentUrl,
     isMagnetUrl,
     getTorrentName,
@@ -21,12 +22,12 @@ describe('Test helpers', () => {
             'https://example.com/file.ext?query=file.torrent',
             'https://example.com/torrents.php?action=download&id=1234',
         ];
-        validUrls.forEach((url) => expect(isTorrentUrl(url)).to.equal(true));
+        validUrls.forEach((url) => expect(isTorrentUrl(url, whitelist)).to.equal(true, url));
 
         const invalidUrls = [
             'https://example.com/file.jpg',
         ];
-        invalidUrls.forEach((url) => expect(isTorrentUrl(url)).to.equal(false));
+        invalidUrls.forEach((url) => expect(isTorrentUrl(url, whitelist)).to.equal(false, url));
     });
 
     it('isMagnetUrl', () => {

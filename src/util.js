@@ -182,7 +182,10 @@ export const isMagnetUrl = (url) => {
     return !!url.match(/^magnet:/);
 }
 
-const whitelist = [
+/**
+ * @type {RegExp[]}
+ */
+export const whitelist = [
     // Generic
     /\.torrent$/,
     /\.torrent\?/,
@@ -192,14 +195,15 @@ const whitelist = [
     /\/dl\/.+?\/\?jackett_apikey=[a-z0-9]{32}&path=/, // Jackett
     /\/download\.php\?id=[a-z0-9]{40}&f=.+?&key=/, // Xbtit
     /\/torrents\/download\/\d+/, // UNIT3D
-
-    // Site specific
-    /^https:\/\/anidex\.info\/dl\/\d+$/,
-    /^https:\/\/animebytes\.tv\/torrent\/\d+\/download\/$/,
 ];
 
-export const isTorrentUrl = (url) => {
-    return whitelist.some((regexp) => !!url.match(regexp));
+/**
+ * @param url {string}
+ * @param whitelist {RegExp[]}
+ * @returns {boolean}
+ */
+export const isTorrentUrl = (url, whitelist) => {
+    return whitelist.some((regExp) => !!url.match(regExp));
 }
 
 export const getMagnetUrlName = (url) => {

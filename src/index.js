@@ -1,5 +1,6 @@
 import {
     clientList,
+    whitelist,
     loadOptions,
     saveOptions,
     getClient,
@@ -8,12 +9,20 @@ import {
     getTorrentName,
     getMagnetUrlName,
     getURL,
+    regExpFromString,
 } from './util.js';
 
 var options;
 
+/**
+ * @type {RegExp[]}
+ */
+let regExpCache = [];
+
 chrome.storage.onChanged.addListener((changes) => {
     Object.keys(changes).forEach((key) => options[key] = changes[key].newValue);
+
+    regExpCache = options.globals.matchRegExp.map((regExpStr) => regExpFromString(regExpStr)).concat(whitelist);
 
     removeContextMenu();
 
@@ -28,6 +37,8 @@ chrome.storage.onChanged.addListener((changes) => {
 
 loadOptions().then((newOptions) => {
     options = newOptions;
+
+    regExpCache = options.globals.matchRegExp.map((regExpStr) => regExpFromString(regExpStr)).concat(whitelist);
 
     if (options.globals.contextMenu && isConfigured())
         createContextMenu();
@@ -418,7 +429,7 @@ const registerHandler = () => {
     );
 
     chrome.webRequest.onBeforeRequest.addListener((details) => {
-            if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url) && isConfigured()) {
+            if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url, regExpCache) && isConfigured()) {
                 if (options.globals.addAdvanced) {
                     // @crossplatform WebRequestBodyDetails includes origin URL on Firefox
                     addAdvancedDialog(details.url, details.originUrl);
