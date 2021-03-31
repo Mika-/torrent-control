@@ -189,9 +189,20 @@ const createServerSelectionContextMenu = () => {
     if (options.globals.contextMenu)
         context.push('page');
 
+    const hasManyServers = options.servers.length > 3;
+
+    if (hasManyServers) {
+        chrome.contextMenus.create({
+            id: 'current-server',
+            title: chrome.i18n.getMessage('serverSelect'),
+            contexts: context
+        });
+    }
+
     options.servers.forEach((server, id) => {
         chrome.contextMenus.create({
             id: 'current-server-' + id.toString(),
+            parentId: hasManyServers ? 'current-server' : null,
             type: 'radio',
             checked: id === options.globals.currentServer,
             title: server.name,
