@@ -9,6 +9,10 @@ Features:
 - Auto login for interfaces using HTTP auth
 - HTTP Digest authentication
 - Private mode and Multi-Account Container support
+- User defined URL matchers
+- Bittorrent client specific options eg.
+    - Fast resume on ruTorrent
+    - Piece priority on qBittorrent
 
 Supported clients:
 - BiglyBT<sup>1</sup>
