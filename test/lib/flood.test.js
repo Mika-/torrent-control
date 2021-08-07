@@ -43,6 +43,40 @@ describe('FloodApi', () => {
         });
     });
 
+    it('Login with HTTP Auth', async () => {
+        fetchMock.postOnce('https://example.com:1234/api/auth/authenticate', {
+            status: 200,
+            body: {
+                success: true,
+                username: 'testuser',
+                level: 10,
+            },
+        });
+
+        const authInstance = new FloodApi({
+            username: 'testuser',
+            password: 'testpassw0rd',
+            hostname: 'https://example.com:1234/',
+            httpAuth: {
+                username: 'httpUser',
+                password: 'httpPassw0rd',
+            },
+        });
+
+        await authInstance.logIn();
+
+        expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
+
+        expect(fetchMock.calls().length).to.equal(1);
+        expect(fetchMock.lastOptions().method).to.equal('POST');
+        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+            username: 'testuser',
+            password: 'testpassw0rd',
+        });
+    });
+
     it('Login fail', async () => {
         fetchMock.postOnce('https://example.com:1234/api/auth/authenticate', {
             status: 401,

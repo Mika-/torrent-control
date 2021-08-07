@@ -115,7 +115,12 @@ export default class FloodApi extends BaseClient {
     }
 
     _attachListeners() {
+        const {httpAuth} = this.settings;
         let sessionCookie = this.cookie;
+
+        if (httpAuth) {
+            this.addAuthRequiredListener(httpAuth.username, httpAuth.password);
+        }
 
         this.addHeadersReceivedEventListener((details) => {
             const cookie = this.getCookie(details.responseHeaders, 'jwt');

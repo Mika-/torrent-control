@@ -6,17 +6,7 @@ export default class DelugeApi extends BaseClient {
     constructor(serverSettings) {
         super();
 
-        let url = new URL(serverSettings.hostname);
-        this.username = url.username;
-        this.password = url.password;
-
-        url.username = '';
-        url.password = '';
-
-        this.settings = {
-            ...serverSettings,
-            hostname: url.toString()
-        };
+        this.settings = serverSettings;
         this.cookie = null;
     }
 
@@ -211,11 +201,12 @@ export default class DelugeApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname} = this.settings;
+        const {httpAuth} = this.settings;
         let sessionCookie = this.cookie;
 
-        if (this.username && this.password)
-            this.addAuthRequiredListener(this.username, this.password)
+        if (httpAuth) {
+            this.addAuthRequiredListener(httpAuth.username, httpAuth.password);
+        }
 
         this.addHeadersReceivedEventListener((details) => {
             const cookie = this.getCookie(details.responseHeaders, '_session_id');

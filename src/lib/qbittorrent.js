@@ -166,8 +166,12 @@ export default class qBittorrentApi extends BaseClient {
     }
 
     _attachListeners() {
-        const {hostname} = this.settings;
+        const {hostname, httpAuth} = this.settings;
         let sessionCookie = this.cookie;
+
+        if (httpAuth) {
+            this.addAuthRequiredListener(httpAuth.username, httpAuth.password);
+        }
 
         this.addHeadersReceivedEventListener((details) => {
             const cookie = this.getCookie(details.responseHeaders, 'SID');

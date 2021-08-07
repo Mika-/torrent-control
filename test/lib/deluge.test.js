@@ -45,6 +45,42 @@ describe('DelugeApi', () => {
         });
     });
 
+    it('Login with HTTP Auth', async () => {
+        fetchMock.postOnce('https://example.com:1234/json', {
+            status: 200,
+            body: {
+                result: true,
+                error: null,
+            },
+        });
+
+        const authInstance = new DelugeApi({
+            username: 'testuser',
+            password: 'testpassw0rd',
+            hostname: 'https://example.com:1234/',
+            httpAuth: {
+                username: 'httpUser',
+                password: 'httpPassw0rd',
+            },
+        });
+
+        await authInstance.logIn();
+
+        expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
+
+        expect(fetchMock.calls().length).to.equal(1);
+        expect(fetchMock.lastOptions().method).to.equal('POST');
+        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+            method: 'auth.login',
+            params: [
+                'testpassw0rd'
+            ],
+            id: 1
+        });
+    });
+
     it('Login fail', async () => {
         fetchMock.postOnce('https://example.com:1234/json', {
             status: 200,
