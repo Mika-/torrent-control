@@ -241,8 +241,10 @@ export const getTorrentName = (data) => {
 }
 
 const mergeObjects = (target, source) => {
+    const isObject = obj => obj && typeof obj === 'object';
+
     Object.keys(source).forEach((key) =>
-        target.hasOwnProperty(key) && typeof target[key] === 'object' ?
+        isObject(target) && target.hasOwnProperty(key) && isObject(target[key]) ?
             mergeObjects(target[key], source[key]) : target[key] = source[key]
     );
 }
