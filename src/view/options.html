@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<section id="options-section" class="panel">
+<section class="panel">
 
     <div class="panel-section panel-section-header">
         <span class="text-section-header" data-i18n="addonConfigurationTitle"></span>
@@ -50,7 +50,7 @@
             <textarea id="matchregexp" class="browser-style" style="width:100%"></textarea>
 
             <div class="panel-formElements-item browser-style">
-                <label for="test-regexp-url"data-i18n="testUrlOption"></label>
+                <label for="test-regexp-url" data-i18n="testUrlOption"></label>
                 <input type="url" id="test-regexp-url">
                 <button type="button" id="test-regexp" class="browser-style" data-i18n="testAction"></button>
                 <span id="test-regexp-result" style="margin-left:16px"></span>
@@ -67,7 +67,7 @@
 </section>
 
 
-<section id="options-section" class="panel">
+<section class="panel">
 
     <div class="panel-section panel-section-header">
         <span class="text-section-header" data-i18n="serverConfigurationTitle"></span>
@@ -75,7 +75,7 @@
 
     <div class="panel-section panel-section-formElements">
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="serverSelect"></label>
+            <label for="server-list" data-i18n="serverSelect"></label>
             <select id="server-list" class="browser-style"></select>
         </div>
     </div>
@@ -85,28 +85,28 @@
     <div class="panel-section panel-section-formElements">
 
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="serverNameOption"></label>
+            <label for="name" data-i18n="serverNameOption"></label>
             <input type="text" id="name" />
         </div>
 
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="bittorrentClientOption"></label>
+            <label for="application" data-i18n="bittorrentClientOption"></label>
             <select id="application" class="browser-style">
             </select>
         </div>
 
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="serverAddressOption"></label>
+            <label for="hostname" data-i18n="serverAddressOption"></label>
             <input type="text" id="hostname" />
         </div>
 
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="usernameOption"></label>
+            <label for="username" data-i18n="usernameOption"></label>
             <input type="text" id="username" />
         </div>
 
         <div class="panel-formElements-item browser-style">
-            <label data-i18n="passwordOption"></label>
+            <label for="password" data-i18n="passwordOption"></label>
             <input type="password" id="password" />
         </div>
 
