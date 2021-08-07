@@ -161,7 +161,8 @@ export const loadOptions = () => {
                 username: '',
                 password: '',
                 directories: [],
-                clientOptions: {}
+                clientOptions: {},
+                httpAuth: null
             }
         ]
     };

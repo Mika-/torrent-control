@@ -33,7 +33,8 @@ describe('Test options', () => {
                     username: '',
                     password: '',
                     directories: [],
-                    clientOptions: {}
+                    clientOptions: {},
+                    httpAuth: null
                 }
             ]
         });
@@ -59,7 +60,11 @@ describe('Test options', () => {
                     username: '',
                     password: '',
                     directories: [],
-                    clientOptions: {}
+                    clientOptions: {},
+                    httpAuth: {
+                        username: 'httpUsername',
+                        password: 'httpPassword'
+                    }
                 }
             ]
         };
@@ -128,6 +133,7 @@ describe('Test options', () => {
                     password: '',
                     directories: [],
                     clientOptions: {},
+                    httpAuth: null,
                 }
             ]
         });

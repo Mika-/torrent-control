@@ -123,6 +123,10 @@
     "message": "Salasana",
     "description": "Password option"
   },
+  "httpAuthOption": {
+    "message": "Käytä HTTP tunnistautumista",
+    "description": "HTTP auth option"
+  },
   "serverDirectoriesOption": {
     "message": "Lataushakemistot",
     "description": "Server directories option"

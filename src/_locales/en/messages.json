@@ -123,6 +123,10 @@
     "message": "Password",
     "description": "Password option"
   },
+  "httpAuthOption": {
+    "message": "Use additional HTTP authentication",
+    "description": "HTTP auth option"
+  },
   "serverDirectoriesOption": {
     "message": "Download directories",
     "description": "Server directories option"

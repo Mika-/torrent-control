@@ -39,6 +39,16 @@ const persistOptions = () => {
         clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.checked;
     });
 
+    const client = clientList.find((client) => client.id === document.querySelector('#application').value);
+
+    let httpAuth = null;
+    if (document.querySelector('#httpAuth').checked && client && client.clientCapabilities && !client.clientCapabilities.includes('httpAuth')) {
+        httpAuth = {
+            username: document.querySelector('#httpAuthUsername').value.trim(),
+            password: document.querySelector('#httpAuthPassword').value.trim()
+        };
+    }
+
     options.servers[~~serverSelect.value] = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
@@ -46,7 +56,8 @@ const persistOptions = () => {
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value,
         directories: directories.map((directory) => directory.trim()).filter((directory) => directory.length),
-        clientOptions: clientOptions
+        clientOptions: clientOptions,
+        httpAuth: httpAuth
     };
 
     saveOptions(options);
@@ -128,6 +139,20 @@ const restoreServer = (id) => {
     document.querySelector('#password').value = server.password;
     document.querySelector('#directories').value = server.directories.join('\n');
 
+    if (server.httpAuth) {
+        document.querySelector('#httpAuth').checked = true;
+        document.querySelector('#httpAuthUsername').disabled = false;
+        document.querySelector('#httpAuthUsername').value = server.httpAuth.username;
+        document.querySelector('#httpAuthPassword').disabled = false;
+        document.querySelector('#httpAuthPassword').value = server.httpAuth.password;
+    } else {
+        document.querySelector('#httpAuth').checked = false;
+        document.querySelector('#httpAuthUsername').disabled = true;
+        document.querySelector('#httpAuthUsername').value = '';
+        document.querySelector('#httpAuthPassword').disabled = true;
+        document.querySelector('#httpAuthPassword').value = '';
+    }
+
     document.querySelector('#application').dispatchEvent(new Event('change'));
 
     if (options.servers.length > 1)
@@ -184,6 +209,10 @@ serverSelect.addEventListener('change', (e) => e.target.value === 'add' ? addSer
 document.querySelector('#catchurls').addEventListener('change', (e) => {
     document.querySelector('#matchregexp').disabled = e.target.checked === false;
 });
+document.querySelector('#httpAuth').addEventListener('change', (e) => {
+    document.querySelector('#httpAuthUsername').disabled = !e.currentTarget.checked;
+    document.querySelector('#httpAuthPassword').disabled = !e.currentTarget.checked;
+});
 document.querySelector('#test-regexp').addEventListener('click', (e) => {
     const testUrl = document.querySelector('#test-regexp-url').value.trim();
 
@@ -231,6 +260,12 @@ document.querySelector('#application').addEventListener('change', (e) => {
 
         document.querySelector('[data-panel="labels"]').style.display =
             isLabelsSupported(options.servers) || (client.clientCapabilities && client.clientCapabilities.includes('label')) ? 'flex' : 'none';
+
+        if (client.clientCapabilities && !client.clientCapabilities.includes('httpAuth')) {
+            document.querySelector('[data-panel="httpAuth"]').style.display = 'flex';
+        } else {
+            document.querySelector('[data-panel="httpAuth"]').style.display = 'none';
+        }
 
         if (client.id === 'deluge')
             document.querySelector('#username').setAttribute('disabled', 'true');
