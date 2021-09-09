@@ -92,6 +92,10 @@ export const clientList = [
             {
                 name: 'firstLastPiecePrio',
                 description: chrome.i18n.getMessage('firstLastPiecePriorityOption')
+            },
+            {
+                name: 'skip_checking',
+                description: chrome.i18n.getMessage('skipHashCheckOption')
             }
         ]
     },
