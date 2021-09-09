@@ -119,6 +119,7 @@ describe('qBittorrentApi', () => {
             label: 'Test',
             sequentialDownload: true,
             firstLastPiecePrio: true,
+            skip_checking: true,
         });
 
         expect(fetchMock.calls().length).to.equal(1);
@@ -130,6 +131,7 @@ describe('qBittorrentApi', () => {
             category: 'Test',
             sequentialDownload: 'true',
             firstLastPiecePrio: 'true',
+            skip_checking: 'true',
         });
     });
 
@@ -167,6 +169,7 @@ describe('qBittorrentApi', () => {
             label: 'Test',
             sequentialDownload: true,
             firstLastPiecePrio: true,
+            skip_checking: true,
         });
 
         expect(fetchMock.calls().length).to.equal(1);
@@ -178,6 +181,7 @@ describe('qBittorrentApi', () => {
             category: 'Test',
             sequentialDownload: 'true',
             firstLastPiecePrio: 'true',
+            skip_checking: true,
         });
     });
 
