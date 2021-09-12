@@ -181,7 +181,7 @@ describe('qBittorrentApi', () => {
             category: 'Test',
             sequentialDownload: 'true',
             firstLastPiecePrio: 'true',
-            skip_checking: true,
+            skip_checking: 'true',
         });
     });
 
