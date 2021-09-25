@@ -128,7 +128,7 @@
     "description": "HTTP auth option"
   },
   "serverDirectoriesOption": {
-    "message": "Каталог загрузки на сервере",
+    "message": "Пути загрузки на сервере",
     "description": "Server directories option"
   },
   "torrentAddedNotification": {
@@ -184,7 +184,7 @@
     "description": "Add torrent"
   },
   "torrentUrl": {
-    "message": "Адрес торрента",
+    "message": "Ссылка торрента",
     "description": "Torrent url"
   },
   "labelSelect": {
@@ -192,7 +192,7 @@
     "description": "Label select"
   },
   "downloadLocationSelect": {
-    "message": "Каталог загрузки",
+    "message": "Путь загрузки",
     "description": "Download location select"
   },
   "defaultOption": {
@@ -204,7 +204,7 @@
     "description": "None option"
   },
   "addAsPausedOption": {
-    "message": "Поставить на паузу после добавления",
+    "message": "Добавить и поставить на паузу",
     "description": "Add as paused"
   }
 }
