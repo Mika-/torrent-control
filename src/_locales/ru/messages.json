@@ -1,0 +1,210 @@
+{
+  "addonConfigurationTitle": {
+    "message": "Настройки расширения",
+    "description": "Addon configuration"
+  },
+  "contextMenuOption": {
+    "message": "Контекстное меню",
+    "description": "Context menu"
+  },
+  "contextMenuDefaultOption": {
+    "message": "По умолчанию",
+    "description": "Context menu default"
+  },
+  "contextMenuSimpleOption": {
+    "message": "Простое",
+    "description": "Context menu simple"
+  },
+  "contextMenuHiddenOption": {
+    "message": "Скрыть",
+    "description": "Context menu hidden"
+  },
+  "catchUrlsOption": {
+    "message": "Перехватывать ссылки торрентов",
+    "description": "Catch torrent URLs"
+  },
+  "addAdvancedOption": {
+    "message": "Добавлять через расширенное диалоговое окно",
+    "description": "Add torrents via advanced dialog"
+  },
+  "enableNotificationsOption": {
+    "message": "Показывать уведомления",
+    "description": "Enable notifications option"
+  },
+  "addPausedOption": {
+    "message": "Ставить на паузу при добавлении торрентов",
+    "description": "Add as paused by default"
+  },
+  "torrentLabelsOption": {
+    "message": "Метки",
+    "description": "Label list option"
+  },
+  "regexpMatchLabelsOption": {
+    "message": "Пользовательские URL-адреса, соответствующие регулярным выражениям",
+    "description": "Matching regexp option"
+  },
+  "testUrlOption": {
+    "message": "Тестовый URL-адрес",
+    "description": "Test url label"
+  },
+  "testAction": {
+    "message": "Тест",
+    "description": "Test action"
+  },
+  "testSuccessText": {
+    "message": "Соответствует: $1",
+    "description": "Test fail text"
+  },
+  "testFailText": {
+    "message": "Совпадений не найдено",
+    "description": "Test fail text"
+  },
+  "addTorrentAction": {
+    "message": "Добавить торрент",
+    "description": "Context menu action"
+  },
+  "addTorrentPausedAction": {
+    "message": "Добавить торрент (Пауза)",
+    "description": "Context menu action"
+  },
+  "addTorrentLabelAction": {
+    "message": "Добавить торрент (Метка)",
+    "description": "Context menu action"
+  },
+  "addTorrentPathAction": {
+    "message": "Добавить торрент (Путь)",
+    "description": "Context menu action"
+  },
+  "addRssFeedAction": {
+    "message": "Добавить RSS-канал",
+    "description": "Context menu action"
+  },
+  "advancedModifier": {
+    "message": "Расширенный",
+    "description": "Advanced modifier"
+  },
+  "saveAction": {
+    "message": "Сохранить",
+    "description": "Save action"
+  },
+  "removeAction": {
+    "message": "Удалить сервер",
+    "description": "Remove action"
+  },
+  "addServerAction": {
+    "message": "Добавить новый сервер",
+    "description": "Add server action"
+  },
+  "serverConfigurationTitle": {
+    "message": "Конфигурация сервера",
+    "description": "Server configuration title"
+  },
+  "bittorrentClientOption": {
+    "message": "Клиент Bittorrent",
+    "description": "Bittorrent client option"
+  },
+  "serverSelect": {
+    "message": "Текущий сервер",
+    "description": "Server select"
+  },
+  "serverNameOption": {
+    "message": "Имя сервера",
+    "description": "Server name option"
+  },
+  "serverAddressOption": {
+    "message": "Адрес сервера",
+    "description": "Server address option"
+  },
+  "usernameOption": {
+    "message": "Имя пользователя",
+    "description": "Username option"
+  },
+  "passwordOption": {
+    "message": "Пароль",
+    "description": "Password option"
+  },
+  "httpAuthOption": {
+    "message": "Использовать дополнительную аутентификацию HTTP",
+    "description": "HTTP auth option"
+  },
+  "serverDirectoriesOption": {
+    "message": "Пути загрузки на сервере",
+    "description": "Server directories option"
+  },
+  "torrentAddedNotification": {
+    "message": "Торрент добавлен",
+    "description": "Torrent added notification."
+  },
+  "rssFeedAddedNotification": {
+    "message": "RSS-канал добавлен",
+    "description": "RSS feed added notification."
+  },
+  "loginError": {
+    "message": "Не удалось войти",
+    "description": "Login error."
+  },
+  "apiError": {
+    "message": "Неизвестный ответ: ($1)",
+    "description": "Unknown response."
+  },
+  "rssFeedAddError": {
+    "message": "Не удалось добавить RSS-канал: $1",
+    "description": "Add error."
+  },
+  "torrentAddError": {
+    "message": "Не удалось добавить торрент: $1",
+    "description": "Add error."
+  },
+  "torrentFetchError": {
+    "message": "Не удалось получить торрент: ($1)",
+    "description": "Fetch error."
+  },
+  "torrentParseError": {
+    "message": "Не удалось прочитать торрент: ($1)",
+    "description": "Parse error."
+  },
+  "torrentLabelAddError": {
+    "message": "Не удалось добавить метку для торрента.",
+    "description": "Add error."
+  },
+  "sequentialDownloadOption": {
+    "message": "Загружать последовательно",
+    "description": "Client option"
+  },
+  "firstLastPiecePriorityOption": {
+    "message": "Загружать с первой и последней части",
+    "description": "Client option"
+  },
+  "skipHashCheckOption": {
+    "message": "Пропустить проверку хэша",
+    "description": "Client option"
+  },
+  "addTorrentTitle": {
+    "message": "Добавить торрент",
+    "description": "Add torrent"
+  },
+  "torrentUrl": {
+    "message": "Ссылка торрента",
+    "description": "Torrent url"
+  },
+  "labelSelect": {
+    "message": "Метка",
+    "description": "Label select"
+  },
+  "downloadLocationSelect": {
+    "message": "Путь загрузки",
+    "description": "Download location select"
+  },
+  "defaultOption": {
+    "message": "По умолчанию",
+    "description": "Default option"
+  },
+  "noneOption": {
+    "message": "Не выбрано",
+    "description": "None option"
+  },
+  "addAsPausedOption": {
+    "message": "Добавить и поставить на паузу",
+    "description": "Add as paused"
+  }
+}
