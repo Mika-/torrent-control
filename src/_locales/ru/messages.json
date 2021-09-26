@@ -132,7 +132,7 @@
     "description": "Server directories option"
   },
   "torrentAddedNotification": {
-    "message": "Торрент добавлен",
+    "message": "Добавлен торрент:",
     "description": "Torrent added notification."
   },
   "rssFeedAddedNotification": {
