@@ -498,7 +498,7 @@ export const notification = (message) => {
 
     chrome.notifications.create({
         type: 'basic',
-        iconUrl: chrome.extension.getURL('icon/default-48.png'),
+        iconUrl: chrome.runtime.getURL('icon/default-48.png'),
         title: 'Torrent Control',
         message: message
     }, (id) => setTimeout(() => chrome.notifications.clear(id), 3000));
