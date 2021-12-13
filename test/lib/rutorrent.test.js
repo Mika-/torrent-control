@@ -29,6 +29,14 @@ describe('ruTorrentApi', () => {
     });
 
     it('Login', async () => {
+        fetchMock.getOnce('https://example.com:1234/', {
+            status: 200,
+            body: {
+                // ruTorrent HTML is here: https://github.com/Novik/ruTorrent/blob/master/index.html
+                result: '<html></html>',
+            },
+        });
+
         await instance.logIn();
 
         expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
@@ -59,7 +67,7 @@ describe('ruTorrentApi', () => {
         expect(fetchMock.calls().length).to.equal(1);
         expect(fetchMock.lastOptions().method).to.equal('POST');
         expect(fetchMock.lastOptions().body).to.deep.equal({
-            torrent_file: torrentFile,
+            "torrent_file[]": torrentFile,
         });
     });
 
@@ -83,7 +91,7 @@ describe('ruTorrentApi', () => {
         expect(fetchMock.calls().length).to.equal(1);
         expect(fetchMock.lastOptions().method).to.equal('POST');
         expect(fetchMock.lastOptions().body).to.deep.equal({
-            torrent_file: torrentFile,
+            "torrent_file[]": torrentFile,
             torrents_start_stopped: 'true',
             dir_edit: '/mnt/storage',
             label: 'Test',
