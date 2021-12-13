@@ -6,5 +6,6 @@ global.expect = expect;
 global.chrome = chrome;
 
 const jsdom = new JSDOM.JSDOM();
+global.DOMParser = jsdom.window.DOMParser;
 global.FileReader = jsdom.window.FileReader;
 global.Headers = jsdom.window.Headers;
