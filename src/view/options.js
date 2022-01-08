@@ -36,7 +36,11 @@ const persistOptions = () => {
 
     let clientOptions = {};
     Array.from(document.querySelectorAll('*[id^="clientOptions"]')).forEach((element) => {
-        clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.checked;
+        if (element.tagName.toLowerCase() === 'select') {
+            clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.value;
+        } else {
+            clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.checked;
+        }
     });
 
     const client = clientList.find((client) => client.id === document.querySelector('#application').value);
@@ -283,19 +287,41 @@ document.querySelector('#application').addEventListener('change', (e) => {
                 let container = document.createElement('div');
                 container.className = 'panel-formElements-item browser-style';
 
-                let input = document.createElement('input');
-                input.type = 'checkbox';
-                input.id = 'clientOptions[' + option.name + ']';
-                input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
+                let input;
+                if (option.values) {
+                    input = document.createElement('select');
+                    input.id = 'clientOptions[' + option.name + ']';
+
+                    for (const [value, description] of Object.entries(option.values)) {
+                        let optionEl = document.createElement('option');
+                        optionEl.value = value;
+                        optionEl.textContent = description;
+                        optionEl.selected = server.clientOptions[option.name] === value;
+                        input.appendChild(optionEl);
+                    }
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = 'clientOptions[' + option.name + ']';
+                    input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
+                }
+
                 input.addEventListener('input', () => {
                     saveButton.removeAttribute('disabled');
                 }, { passive: true });
-                container.appendChild(input);
+
+                if (!option.values) {
+                    container.appendChild(input);
+                }
 
                 let label = document.createElement('label');
                 label.htmlFor = 'clientOptions[' + option.name + ']';
                 label.textContent = option.description;
                 container.appendChild(label);
+
+                if (option.values) {
+                    container.appendChild(input);
+                }
 
                 clientOptionsPanel.appendChild(container);
             });
