@@ -206,5 +206,17 @@
   "addAsPausedOption": {
     "message": "Добавить и поставить на паузу",
     "description": "Add as paused"
+  },
+  "authTypeOption": {
+    "message": "Authentication type",
+    "description": "Authentication type option"
+  },
+  "authTypeHttpAuthOption": {
+    "message": "HTTP Auth",
+    "description": "HTTP Auth option"
+  },
+  "authTypeLoginFormOption": {
+    "message": "Login form",
+    "description": "Login form option"
   }
 }

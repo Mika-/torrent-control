@@ -206,5 +206,17 @@
   "addAsPausedOption": {
     "message": "Lisää keskeytettynä",
     "description": "Add as paused"
+  },
+  "authTypeOption": {
+    "message": "Kirjautumistapa",
+    "description": "Authentication type option"
+  },
+  "authTypeHttpAuthOption": {
+    "message": "HTTP Autentikaatio",
+    "description": "HTTP Auth option"
+  },
+  "authTypeLoginFormOption": {
+    "message": "Lomake",
+    "description": "Login form option"
   }
 }

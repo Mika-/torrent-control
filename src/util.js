@@ -40,6 +40,14 @@ export const clientList = [
         clientCapabilities: ['paused', 'label', 'path', 'rss', 'httpAuth'],
         clientOptions: [
             {
+                name: 'authType',
+                description: chrome.i18n.getMessage('authTypeOption'),
+                values: {
+                    'httpAuth': chrome.i18n.getMessage('authTypeHttpAuthOption'),
+                    'loginForm': chrome.i18n.getMessage('authTypeLoginFormOption'),
+                }
+            },
+            {
                 name: 'fast_resume',
                 description: chrome.i18n.getMessage('skipHashCheckOption')
             }

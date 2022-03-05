@@ -20,6 +20,10 @@ describe('ruTorrentApi', () => {
             username: 'testuser',
             password: 'testpassw0rd',
             hostname: 'https://example.com:1234/',
+            clientOptions: {
+                authType: 'httpAuth',
+                fast_resume: false,
+            },
         });
     });
 

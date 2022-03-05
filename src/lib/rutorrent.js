@@ -9,16 +9,18 @@ export default class ruTorrentApi extends BaseClient {
     }
 
     logIn() {
-        const {username, password, hostname} = this.settings;
+        const {username, password, hostname, clientOptions} = this.settings;
 
         // No authentication provided
         if (!(username && password))
             return Promise.resolve();
 
-
         // HTTP Basic Auth
-        this.addAuthRequiredListener(username, password);
+        if (!clientOptions.authType || clientOptions.authType === 'httpAuth') {
+            this.addAuthRequiredListener(username, password);
 
+            return Promise.resolve();
+        }
 
         // Form Auth
         return new Promise((resolve, reject) => {
@@ -30,7 +32,7 @@ export default class ruTorrentApi extends BaseClient {
                 response.text().then((html) => {
                     const page = (new DOMParser()).parseFromString(html, 'text/html');
 
-                    // Use HTML autocomplete auttributes to complete many different login forms
+                    // Use HTML autocomplete attributes to complete many different login forms
                     // regardless of what they look like
                     const usernameInput = page.querySelector('[autocomplete="username"]');
                     const passwordInput = page.querySelector('[autocomplete="current-password"]');
