@@ -104,7 +104,16 @@ export const clientList = [
             {
                 name: 'skip_checking',
                 description: chrome.i18n.getMessage('skipHashCheckOption')
-            }
+            },
+            {
+                name: 'contentLayout',
+                description: chrome.i18n.getMessage('contentLayoutOption'),
+                values: {
+                    '': chrome.i18n.getMessage('contentLayoutOriginalOption'),
+                    'Subfolder': chrome.i18n.getMessage('contentLayoutSubfolderOption'),
+                    'NoSubfolder': chrome.i18n.getMessage('contentLayoutNoSubfolderOption'),
+                },
+            },
         ]
     },
     {

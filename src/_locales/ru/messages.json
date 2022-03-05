@@ -218,5 +218,21 @@
   "authTypeLoginFormOption": {
     "message": "Login form",
     "description": "Login form option"
+  },
+  "contentLayoutOption": {
+    "message": "Размещение содержимого",
+    "description": "Content layout option"
+  },
+  "contentLayoutOriginalOption": {
+    "message": "Исходное",
+    "description": "Content layout original option"
+  },
+  "contentLayoutSubfolderOption": {
+    "message": "Создавать подпапку",
+    "description": "Content layout subfolder option"
+  },
+  "contentLayoutNoSubfolderOption": {
+    "message": "Не создавать подпапку",
+    "description": "Content layout no subfolder option"
   }
 }

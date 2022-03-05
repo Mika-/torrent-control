@@ -120,6 +120,7 @@ describe('qBittorrentApi', () => {
             sequentialDownload: true,
             firstLastPiecePrio: true,
             skip_checking: true,
+            contentLayout: 'Subfolder',
         });
 
         expect(fetchMock.calls().length).to.equal(1);
@@ -132,6 +133,7 @@ describe('qBittorrentApi', () => {
             sequentialDownload: 'true',
             firstLastPiecePrio: 'true',
             skip_checking: 'true',
+            contentLayout: 'Subfolder',
         });
     });
 

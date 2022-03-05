@@ -89,6 +89,9 @@ export default class qBittorrentApi extends BaseClient {
 
                 if (options.skip_checking)
                     form.append('skip_checking', 'true');
+
+                if (options.contentLayout)
+                    form.append('contentLayout', options.contentLayout);
             } else {
                 form.append('torrents', torrent, 'temp.torrent');
             }
@@ -133,6 +136,9 @@ export default class qBittorrentApi extends BaseClient {
 
                 if (options.skip_checking)
                     form.append('skip_checking', 'true');
+
+                if (options.contentLayout)
+                    form.append('contentLayout', options.contentLayout);
             }
 
             fetch(hostname + addTorrentUrlPath, {

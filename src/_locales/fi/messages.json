@@ -218,5 +218,21 @@
   "authTypeLoginFormOption": {
     "message": "Lomake",
     "description": "Login form option"
+  },
+  "contentLayoutOption": {
+    "message": "Sisällön ulkoasu",
+    "description": "Content layout option"
+  },
+  "contentLayoutOriginalOption": {
+    "message": "Alkuperäinen",
+    "description": "Content layout original option"
+  },
+  "contentLayoutSubfolderOption": {
+    "message": "Luo alikansio",
+    "description": "Content layout subfolder option"
+  },
+  "contentLayoutNoSubfolderOption": {
+    "message": "Älä luo alikansiota",
+    "description": "Content layout no subfolder option"
   }
 }

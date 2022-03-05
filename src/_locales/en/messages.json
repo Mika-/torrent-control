@@ -218,5 +218,21 @@
   "authTypeLoginFormOption": {
     "message": "Login form",
     "description": "Login form option"
+  },
+  "contentLayoutOption": {
+    "message": "Content layout",
+    "description": "Content layout option"
+  },
+  "contentLayoutOriginalOption": {
+    "message": "Original",
+    "description": "Content layout original option"
+  },
+  "contentLayoutSubfolderOption": {
+    "message": "Create subfolder",
+    "description": "Content layout subfolder option"
+  },
+  "contentLayoutNoSubfolderOption": {
+    "message": "Don't create subfolder",
+    "description": "Content layout no subfolder option"
   }
 }
