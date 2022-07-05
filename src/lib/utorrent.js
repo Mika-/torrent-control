@@ -99,7 +99,7 @@ export default class uTorrentApi extends BaseClient {
         const {hostname, username, password} = this.settings;
         let sessionCookie = this.cookie;
 
-        if (username && password)
+        if (username !== '' || password !== '')
             this.addAuthRequiredListener(username, password);
 
         this.addHeadersReceivedEventListener((details) => {

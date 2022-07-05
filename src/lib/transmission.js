@@ -130,7 +130,7 @@ export default class TransmissionApi extends BaseClient {
         const {username, password} = this.settings;
         let session = this.session;
 
-        if (username && password)
+        if (username !== '' || password !== '')
             this.addAuthRequiredListener(username, password);
 
         this.addHeadersReceivedEventListener((details) => {

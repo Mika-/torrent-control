@@ -27,6 +27,48 @@ describe('CloudTorrentApi', () => {
         expect(chrome.webRequest.onErrorOccurred.addListener.calledOnce).to.equal(true);
     });
 
+    it('Login without credentials', async () => {
+        const loginInstance = new CloudTorrentApi({
+            username: '',
+            password: '',
+            hostname: 'https://example.com:1234/',
+        });
+
+        await loginInstance.logIn();
+
+        expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(false);
+        expect(chrome.webRequest.onCompleted.addListener.calledOnce).to.equal(false);
+        expect(chrome.webRequest.onErrorOccurred.addListener.calledOnce).to.equal(false);
+    });
+
+    it('Login with only username', async () => {
+        const loginInstance = new CloudTorrentApi({
+            username: 'testuser',
+            password: '',
+            hostname: 'https://example.com:1234/',
+        });
+
+        await loginInstance.logIn();
+
+        expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onCompleted.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onErrorOccurred.addListener.calledOnce).to.equal(true);
+    });
+
+    it('Login with only password', async () => {
+        const loginInstance = new CloudTorrentApi({
+            username: '',
+            password: 'testpassw0rd',
+            hostname: 'https://example.com:1234/',
+        });
+
+        await loginInstance.logIn();
+
+        expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onCompleted.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onErrorOccurred.addListener.calledOnce).to.equal(true);
+    });
+
     it('Logout', async () => {
         await instance.logOut();
 
