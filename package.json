@@ -12,14 +12,14 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
-    "@types/chrome": "^0.0.179",
+    "@types/chrome": "^0.0.193",
     "@types/mocha": "^9.0.0",
     "chai": "^4.2.0",
     "fetch-mock": "^9.10.4",
-    "jsdom": "^19.0.0",
-    "mocha": "^9.0.0",
+    "jsdom": "^20.0.0",
+    "mocha": "^10.0.0",
     "node-fetch": "^2.6.5",
     "sinon-chrome": "^3.0.1",
-    "web-ext": "^6.0.0"
+    "web-ext": "^7.1.0"
   }
 }
