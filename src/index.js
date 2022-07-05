@@ -472,7 +472,7 @@ const addAdvancedDialog = (url, referer = null) => {
         params.append('referer', referer);
     }
 
-    const height = 350;
+    const height = 365;
     const width = 500;
     const top = Math.round((screen.height / 2) - (height / 2));
     const left = Math.round((screen.width / 2) - (width / 2));
