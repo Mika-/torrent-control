@@ -22,31 +22,31 @@ export default class BaseClient {
     }
 
     addHeadersReceivedEventListener(listener) {
-        const {hostname} = this.settings;
+        const { hostname } = this.settings;
 
         this.listeners.onHeadersReceived = listener;
 
         chrome.webRequest.onHeadersReceived.addListener(
             this.listeners.onHeadersReceived,
-            {urls: [hostname.replace(/:\d+/, '') + '*']},
+            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
             ['blocking', 'responseHeaders']
         );
     }
 
     addBeforeSendHeadersEventListener(listener) {
-        const {hostname} = this.settings;
+        const { hostname } = this.settings;
 
         this.listeners.onBeforeSendHeaders = listener;
 
         chrome.webRequest.onBeforeSendHeaders.addListener(
             this.listeners.onBeforeSendHeaders,
-            {urls: [hostname.replace(/:\d+/, '') + '*']},
+            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
             ['blocking', 'requestHeaders']
         );
     }
 
     addAuthRequiredListener(username, password) {
-        const {hostname} = this.settings;
+        const { hostname } = this.settings;
 
         this.listeners.onAuthRequired = (details) => {
             if (this.pendingRequests.indexOf(details.requestId) !== -1)
@@ -71,18 +71,18 @@ export default class BaseClient {
 
         chrome.webRequest.onAuthRequired.addListener(
             this.listeners.onAuthRequired,
-            {urls: [hostname.replace(/:\d+/, '') + '*']},
+            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
             ['blocking']
         );
 
         chrome.webRequest.onCompleted.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/:\d+/, '') + '*']},
+            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
         );
 
         chrome.webRequest.onErrorOccurred.addListener(
             this.listeners.onAuthCompleted,
-            {urls: [hostname.replace(/:\d+/, '') + '*']},
+            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
         );
     }
 
