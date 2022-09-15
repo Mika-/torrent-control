@@ -1,3 +1,13 @@
+/**
+ * @param hostname {string}
+ * @returns {string}
+ */
+export const getHostFilter = (hostname) => {
+    const url = new URL(hostname);
+
+    return `${url.protocol}//${url.hostname}/*`;
+}
+
 export default class BaseClient {
 
     constructor() {
@@ -28,7 +38,7 @@ export default class BaseClient {
 
         chrome.webRequest.onHeadersReceived.addListener(
             this.listeners.onHeadersReceived,
-            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
+            { urls: [getHostFilter(hostname)] },
             ['blocking', 'responseHeaders']
         );
     }
@@ -40,7 +50,7 @@ export default class BaseClient {
 
         chrome.webRequest.onBeforeSendHeaders.addListener(
             this.listeners.onBeforeSendHeaders,
-            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
+            { urls: [getHostFilter(hostname)] },
             ['blocking', 'requestHeaders']
         );
     }
@@ -71,18 +81,18 @@ export default class BaseClient {
 
         chrome.webRequest.onAuthRequired.addListener(
             this.listeners.onAuthRequired,
-            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
+            { urls: [getHostFilter(hostname)] },
             ['blocking']
         );
 
         chrome.webRequest.onCompleted.addListener(
             this.listeners.onAuthCompleted,
-            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
+            { urls: [getHostFilter(hostname)] },
         );
 
         chrome.webRequest.onErrorOccurred.addListener(
             this.listeners.onAuthCompleted,
-            { urls: [hostname.replace(/:\d+(?=\/$)/, '') + '*'] },
+            { urls: [getHostFilter(hostname)] },
         );
     }
 
