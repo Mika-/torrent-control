@@ -118,7 +118,7 @@ const fetchTorrent = (url, referer) => {
 
                 const contentType = response.headers.get('content-type');
                 if (!contentType.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
-                    throw new Error(chrome.i18n.getMessage('torrentParseError', 'Unkown type: ' + contentType));
+                    throw new Error(chrome.i18n.getMessage('torrentParseError', 'Unknown type: ' + contentType));
 
                 return response.blob();
             }).then((buffer) => {
