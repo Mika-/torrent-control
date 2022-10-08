@@ -103,7 +103,7 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
     chrome.runtime.sendMessage({
         type: 'addTorrent',
         url: params.get('url'),
-        referer: params.get('referer'),
+        tabId: params.has('tabId') ? parseInt(params.get('tabId'), 10) : null,
         options: options
     });
 

@@ -167,6 +167,10 @@
     "message": "Failed to add label for torrent.",
     "description": "Add error."
   },
+  "sourceTabDestroyedError": {
+    "message": "Source tab no longer exists.",
+    "description": "Tab destroyed error."
+  },
   "sequentialDownloadOption": {
     "message": "Sequential download",
     "description": "Client option"

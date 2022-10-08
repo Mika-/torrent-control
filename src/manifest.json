@@ -30,6 +30,13 @@
       "strict_min_version": "68.0"
     }
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "all_frames": false
+    }
+  ],
   "permissions": [
     "contextMenus",
     "cookies",

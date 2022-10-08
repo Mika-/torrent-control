@@ -52,8 +52,7 @@ loadOptions().then((newOptions) => {
 
 const isConfigured = () => options.servers[options.globals.currentServer].hostname !== '';
 
-const addTorrent = (url, referer = null, torrentOptions = {}) => {
-
+const addTorrent = (url, tabId, torrentOptions = {}) => {
     torrentOptions = {
         paused: false,
         path: null,
@@ -86,7 +85,7 @@ const addTorrent = (url, referer = null, torrentOptions = {}) => {
                     notification(error.message);
             });
     } else {
-        fetchTorrent(url, referer)
+        fetchTorrent(url, tabId)
             .then(({torrent, torrentName}) => connection.logIn()
                 .then(() => connection.addTorrent(torrent, torrentOptions)
                     .then(() => {
@@ -105,77 +104,30 @@ const addTorrent = (url, referer = null, torrentOptions = {}) => {
     }
 }
 
-const fetchTorrent = (url, referer) => {
-    return new Promise((resolve, reject) => {
-        createBrowserRequest(url, referer).then((removeEventListeners) => {
-            fetch(url, {
-                headers: new Headers({
-                    'Accept': 'application/x-bittorrent,*/*;q=0.9'
-                })
-            }).then((response) => {
-                if (!response.ok)
-                    throw new Error(chrome.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText));
-
-                const contentType = response.headers.get('content-type');
-                if (!contentType.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
-                    throw new Error(chrome.i18n.getMessage('torrentParseError', 'Unknown type: ' + contentType));
-
-                return response.blob();
-            }).then((buffer) => {
-                getTorrentName(buffer).then((name) => resolve({
-                    torrent: buffer,
-                    torrentName: name,
-                }));
-            }).catch((error) => reject(error))
-            .finally(() => removeEventListeners());
-        });
-    });
-}
-
-const createBrowserRequest = (url, referer) => {
-    return new Promise((resolve, reject) => {
-        const listener = async (details) => {
-            let requestHeaders = details.requestHeaders;
-
-            const currentTab = await getCurrentTab();
-
-            // @crossplatform Tab includes cookieStoreId on Firefox
-            const cookies = currentTab ? await getCookies(currentTab.cookieStoreId, url) : [];
-
-            requestHeaders = requestHeaders.filter((header) => {
-                return ![
-                    'cookie',
-                    'origin',
-                    'referer',
-                ].includes(header.name.toLowerCase());
-            });
-
-            if (cookies.length) {
-                requestHeaders.push({
-                    name: 'Cookie',
-                    value: cookies.map((cookie) => [cookie.name, cookie.value].join('=')).join('; ')
-                });
-            }
-
-            if (referer) {
-                requestHeaders.push({
-                    name: 'Referer',
-                    value: referer
-                });
-            }
-
-            return {
-                requestHeaders: requestHeaders
-            };
+export const fetchTorrent = (url, tabId) => {
+    return new Promise(async (resolve, reject) => {
+        if (tabId === null || await tabExists(tabId) === false) {
+            return reject(new Error(chrome.i18n.getMessage('sourceTabDestroyedError')));
         }
 
-        chrome.webRequest.onBeforeSendHeaders.addListener(
-            listener,
-            {urls: [url]},
-            ['blocking', 'requestHeaders']
-        );
+        chrome.tabs.sendMessage(tabId, {
+            type: 'fetchTorrent',
+            url: url,
+        }, (response) => {
+            if (response instanceof Error)
+                return reject(response);
 
-        resolve(() => chrome.webRequest.onBeforeSendHeaders.removeListener(listener));
+            if (!response.ok)
+                return reject(new Error(chrome.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText)));
+
+            if (!['application/x-bittorrent', 'application/octet-stream'].includes(response.content.type.toLowerCase()))
+                return reject(new Error(chrome.i18n.getMessage('torrentParseError', 'Unknown type: ' + response.content.type)));
+
+            getTorrentName(response.content).then((name) => resolve({
+                torrent: response.content,
+                torrentName: name,
+            }));
+        })
     });
 }
 
@@ -370,29 +322,29 @@ const registerHandler = () => {
         if (info.menuItemId === 'add-paused')
             toggleAddPaused();
         else if (info.menuItemId === 'add-torrent')
-            addTorrent(info.linkUrl, info.pageUrl, {
+            addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
                 ...clientOptions
             });
         else if (info.menuItemId === 'add-torrent-paused')
-            addTorrent(info.linkUrl, info.pageUrl, {
+            addTorrent(info.linkUrl, tab.id, {
                 paused: true,
                 ...clientOptions
             });
         else if (labelId)
-            addTorrent(info.linkUrl, info.pageUrl, {
+            addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
                 label: options.globals.labels[~~labelId[1]],
                 ...clientOptions
             });
         else if (pathId)
-            addTorrent(info.linkUrl, info.pageUrl, {
+            addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
                 path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
                 ...clientOptions
             });
         else if (info.menuItemId === 'add-torrent-advanced')
-            addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? info.pageUrl : null);
+            addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? tab.id : null);
         else if (currentServer)
             setCurrentServer(~~currentServer[1]);
         else if (info.menuItemId === 'add-rss-feed')
@@ -431,12 +383,11 @@ const registerHandler = () => {
     chrome.webRequest.onBeforeRequest.addListener((details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url, regExpCache) && isConfigured()) {
                 if (options.globals.addAdvanced) {
-                    // @crossplatform WebRequestBodyDetails includes origin URL on Firefox
-                    addAdvancedDialog(details.url, details.originUrl);
+                    addAdvancedDialog(details.url, details.tabId);
                 } else {
                     const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
-                    addTorrent(details.url, details.originUrl, {
+                    addTorrent(details.url, details.tabId, {
                         paused: options.globals.addPaused,
                         ...clientOptions
                     });
@@ -455,7 +406,7 @@ const registerHandler = () => {
             if (request.type === 'addTorrent') {
                 const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
-                addTorrent(request.url, request.referer, {
+                addTorrent(request.url, request.tabId, {
                     ...clientOptions,
                     ...request.options
                 });
@@ -464,12 +415,12 @@ const registerHandler = () => {
     );
 }
 
-const addAdvancedDialog = (url, referer = null) => {
+const addAdvancedDialog = (url, tabId = null) => {
     let params = new URLSearchParams();
     params.append('url', url);
 
-    if (referer) {
-        params.append('referer', referer);
+    if (tabId) {
+        params.append('tabId', tabId);
     }
 
     const height = 365;
@@ -491,6 +442,16 @@ const addAdvancedDialog = (url, referer = null) => {
     });
 }
 
+/**
+ * @param tabId {number}
+ * @returns {Promise<boolean>}
+ */
+const tabExists = (tabId) => {
+    return new Promise((resolve) => {
+        chrome.tabs.get(tabId, (tab) => resolve(tab !== undefined));
+    });
+}
+
 export const notification = (message) => {
     if (options && !options.globals.enableNotifications) {
         return;
@@ -501,7 +462,7 @@ export const notification = (message) => {
         iconUrl: chrome.runtime.getURL('icon/default-48.png'),
         title: 'Torrent Control',
         message: message
-    }, (id) => setTimeout(() => chrome.notifications.clear(id), 3000));
+    }, (id) => setTimeout(() => chrome.notifications.clear(id), 5000));
 }
 
 const setCurrentServer = (id) => {
@@ -517,27 +478,4 @@ const toggleURLCatching = () => {
 const toggleAddPaused = () => {
     options.globals.addPaused = !options.globals.addPaused;
     saveOptions(options);
-}
-
-const getCurrentTab = async () => {
-    const activeTabs = await new Promise((resolve) => {
-        chrome.tabs.query({
-            active: true,
-            windowId: chrome.windows.WINDOW_ID_CURRENT
-        }, (activeTabs) => resolve(activeTabs))
-    });
-
-    if (activeTabs.length > 0)
-      return activeTabs[0];
-
-    return null;
-}
-
-const getCookies = async (cookieStoreId, torrentUrl) => {
-    return await new Promise((resolve) => {
-        chrome.cookies.getAll({
-            url: torrentUrl,
-            storeId: cookieStoreId
-        }, (cookies) => resolve(cookies))
-    });
 }

@@ -167,6 +167,10 @@
     "message": "Kategorian asetus epäonnistui.",
     "description": "Add error."
   },
+  "sourceTabDestroyedError": {
+    "message": "Lähde välilehteä ei enää löytynyt.",
+    "description": "Tab destroyed error."
+  },
   "sequentialDownloadOption": {
     "message": "Lataa järjestyksessä",
     "description": "Client option"

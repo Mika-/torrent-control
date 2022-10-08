@@ -8,3 +8,11 @@ export const getTestTorrent = async () => {
         type: 'application/x-bittorrent',
     });
 }
+
+export const getTestHtml = async () => {
+    const jsdom = new JSDOM.JSDOM();
+
+    return new jsdom.window.Blob(['<!doctype html>'], {
+        type: 'text/html',
+    });
+}
