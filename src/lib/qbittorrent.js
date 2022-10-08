@@ -51,7 +51,7 @@ export default class qBittorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             fetch(hostname + logoutPath, {
-                method: 'GET'
+                method: apiVersion === 2 ? 'POST' : 'GET'
             })
             .finally((response) => {
                 this.removeEventListeners();

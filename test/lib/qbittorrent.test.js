@@ -83,7 +83,7 @@ describe('qBittorrentApi', () => {
     });
 
     it('Logout', async () => {
-        fetchMock.getOnce('https://example.com:1234/api/v2/auth/logout', 200);
+        fetchMock.postOnce('https://example.com:1234/api/v2/auth/logout', 200);
 
         await instance.logOut();
 
@@ -91,7 +91,7 @@ describe('qBittorrentApi', () => {
         expect(chrome.webRequest.onBeforeSendHeaders.removeListener.calledOnce).to.equal(true);
 
         expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('GET');
+        expect(fetchMock.lastOptions().method).to.equal('POST');
     });
 
     it('Add torrent', async () => {
