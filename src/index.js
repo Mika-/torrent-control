@@ -380,14 +380,21 @@ const registerHandler = () => {
         ['blocking']
     );
 
-    chrome.webRequest.onBeforeRequest.addListener((details) => {
+    chrome.webRequest.onBeforeRequest.addListener(async (details) => {
             if (options.globals.catchUrls && details.type === 'main_frame' && isTorrentUrl(details.url, regExpCache) && isConfigured()) {
+                const originTab = await getOriginTab(details.cookieStoreId, details.originUrl);
+                let tabId = details.tabId;
+
+                if (originTab !== undefined) {
+                    tabId = originTab.id;
+                }
+
                 if (options.globals.addAdvanced) {
-                    addAdvancedDialog(details.url, details.tabId);
+                    addAdvancedDialog(details.url, tabId);
                 } else {
                     const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
-                    addTorrent(details.url, details.tabId, {
+                    addTorrent(details.url, tabId, {
                         paused: options.globals.addPaused,
                         ...clientOptions
                     });
@@ -449,6 +456,19 @@ const addAdvancedDialog = (url, tabId = null) => {
 const tabExists = (tabId) => {
     return new Promise((resolve) => {
         chrome.tabs.get(tabId, (tab) => resolve(tab !== undefined));
+    });
+}
+/**
+ * @param cookieStoreId {string}
+ * @param url {string}
+ * @returns {Promise<Tab>}
+ */
+const getOriginTab = (cookieStoreId, url) => {
+    return new Promise((resolve) => {
+        chrome.tabs.query({
+            url: url,
+            cookieStoreId: cookieStoreId
+        }, (tab) => resolve(tab[0] || undefined));
     });
 }
 
