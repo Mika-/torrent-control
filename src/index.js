@@ -120,7 +120,7 @@ export const fetchTorrent = (url, tabId) => {
             if (!response.ok)
                 return reject(new Error(chrome.i18n.getMessage('torrentFetchError', response.status.toString() + ': ' + response.statusText)));
 
-            if (!response.content.type.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
+            if (response.content.type !== '' && !response.content.type.match(/(application\/x-bittorrent|application\/octet-stream)/gi))
                 return reject(new Error(chrome.i18n.getMessage('torrentParseError', 'Unknown type: ' + response.content.type)));
 
             getTorrentName(response.content).then((name) => resolve({
