@@ -5,6 +5,7 @@ import qBittorrentApi from './lib/qbittorrent.js';
 import ruTorrentApi from './lib/rutorrent.js';
 import TixatiApi from './lib/tixati.js';
 import TransmissionApi from './lib/transmission.js';
+import tTorrentApi from './lib/ttorrent.js';
 import uTorrentApi from './lib/utorrent.js';
 import VuzeWebUIApi from './lib/vuze_webui.js';
 
@@ -64,6 +65,12 @@ export const clientList = [
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
         clientCapabilities: ['paused', 'path', 'httpAuth']
+    },
+    {
+        id: 'ttorrent',
+        name: 'tTorrent',
+        addressPlaceholder: 'http://127.0.0.1:1080/',
+        clientCapabilities: ['httpAuth']
     },
     {
         id: 'utorrent',
@@ -139,6 +146,8 @@ export const getClient = (serverSettings) => {
             return new TixatiApi(serverSettings);
         case 'transmission':
             return new TransmissionApi(serverSettings);
+        case 'ttorrent':
+            return new tTorrentApi(serverSettings);
         case 'utorrent':
             return new uTorrentApi(serverSettings);
         case 'vuze_remoteui':

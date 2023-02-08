@@ -22,6 +22,7 @@ Supported clients:
 - ruTorrent<sup>1,2,3,4</sup>
 - Tixati
 - Transmission<sup>1</sup>
+- tTorrent
 - µTorrent
 - Vuze<sup>1</sup>
 - qBittorrent<sup>1,2,3,4</sup>
