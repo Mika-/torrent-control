@@ -6,9 +6,9 @@ import {
     getClient,
     isTorrentUrl,
     isMagnetUrl,
+    getHostFilter,
     getTorrentName,
     getMagnetUrlName,
-    getURL,
     regExpFromString,
 } from './util.js';
 
@@ -351,12 +351,87 @@ const registerHandler = () => {
             addRssFeed(info.linkUrl || info.selectionText.trim());
     });
 
-    chrome.browserAction.onClicked.addListener(() => {
-        if (isConfigured()) {
-            const url = getURL(options.servers[options.globals.currentServer])
-            chrome.tabs.create({ url });
-        } else {
+    chrome.browserAction.onClicked.addListener(async () => {
+        if (!isConfigured()) {
             chrome.runtime.openOptionsPage();
+
+            return;
+        }
+
+        const {hostname, application, username, password} = options.servers[options.globals.currentServer];
+
+        const tab = await new Promise((resolve) => {
+            chrome.tabs.create({
+                url: hostname,
+            }, (tab) => resolve(tab));
+        });
+
+        const client = clientList.find((client) => client.id === application);
+
+        if (client.clientCapabilities && client.clientCapabilities.includes('httpAuth') && username && password) {
+            let pendingRequests = [];
+
+            const onAuthRequiredListener = (details) => {
+                if (pendingRequests.includes(details.requestId)) {
+                    return;
+                }
+
+                pendingRequests.push(details.requestId);
+
+                return {
+                    authCredentials: {
+                        username: username,
+                        password: password,
+                    },
+                };
+            };
+
+            const onAuthCompletedListener = (details) => {
+                let index = pendingRequests.indexOf(details.requestId);
+
+                if (index > -1) {
+                    pendingRequests.splice(index, 1);
+                }
+            };
+
+            chrome.webRequest.onAuthRequired.addListener(
+                onAuthRequiredListener,
+                {
+                    urls: [getHostFilter(hostname)],
+                    tabId: tab.id,
+                },
+                ['blocking'],
+            );
+
+            chrome.webRequest.onCompleted.addListener(
+                onAuthCompletedListener,
+                {
+                    urls: [getHostFilter(hostname)],
+                    tabId: tab.id,
+                },
+            );
+
+            chrome.webRequest.onErrorOccurred.addListener(
+                onAuthCompletedListener,
+                {
+                    urls: [getHostFilter(hostname)],
+                    tabId: tab.id,
+                },
+            );
+
+            const onTabRemovedListener = (tabId) => {
+                if (tabId !== tab.id) {
+                    return;
+                }
+
+                chrome.webRequest.onAuthRequired.removeListener(onAuthRequiredListener);
+                chrome.webRequest.onCompleted.removeListener(onAuthCompletedListener);
+                chrome.webRequest.onErrorOccurred.removeListener(onAuthCompletedListener);
+
+                chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
+            }
+
+            chrome.tabs.onRemoved.addListener(onTabRemovedListener)
         }
     });
 

@@ -280,19 +280,6 @@ const mergeObjects = (target, source) => {
     );
 }
 
-export const getURL = ({ hostname, username, password, application }) => {
-    const client = clientList.find((client) => client.id === application);
-
-    const url = new URL(hostname);
-
-    if (client.clientCapabilities && client.clientCapabilities.includes('httpAuth')) {
-        url.username = username ? username : '';
-        url.password = password ? password : '';
-    }
-
-    return url.toString()
-}
-
 /**
  * @param regExpStr {string}
  * @returns {RegExp}

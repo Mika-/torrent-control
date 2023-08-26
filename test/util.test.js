@@ -5,7 +5,6 @@ import {
     getHostFilter,
     getTorrentName,
     getMagnetUrlName,
-    getURL,
     regExpFromString,
 } from '../src/util.js';
 
@@ -55,39 +54,6 @@ describe('Test helpers', () => {
         const torrentFile = await getTestTorrent();
 
         expect(await getTorrentName(torrentFile)).to.equal('ubuntu-20.04-desktop-amd64.iso');
-    });
-
-    it('Get server url with basic auth', () => {
-        expect(getURL({
-            hostname: 'https://127.0.0.1:4000/',
-            application: 'rutorrent',
-        })).to.equal('https://127.0.0.1:4000/');
-
-        expect(getURL({
-            hostname: 'https://127.0.0.1:4000',
-            application: 'rutorrent',
-        })).to.equal('https://127.0.0.1:4000/');
-
-        expect(getURL({
-            hostname: 'https://127.0.0.1:4000/',
-            username: 'foo',
-            password: 'bar',
-            application: 'rutorrent',
-        })).to.equal('https://foo:bar@127.0.0.1:4000/');
-
-        expect(getURL({
-            hostname: 'https://127.0.0.1:4000/',
-            username: '',
-            password: '',
-            application: 'rutorrent',
-        })).to.equal('https://127.0.0.1:4000/');
-
-        expect(getURL({
-            hostname: 'https://127.0.0.1:4000/',
-            username: 'foo',
-            password: 'bar',
-            application: 'qbittorrent',
-        })).to.equal('https://127.0.0.1:4000/');
     });
 
     it('regExpFromString', () => {
