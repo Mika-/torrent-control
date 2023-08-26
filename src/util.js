@@ -306,3 +306,13 @@ export const regExpFromString = (regExpStr) => {
 
     return new RegExp(parts[1], parts[2]);
 }
+
+/**
+ * @param hostname {string}
+ * @returns {string}
+ */
+export const getHostFilter = (hostname) => {
+    const url = new URL(hostname);
+
+    return `${url.protocol}//${url.hostname}/*`;
+}
