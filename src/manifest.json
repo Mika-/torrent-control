@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Torrent Control",
-  "version": "0.2.35",
+  "version": "0.2.36",
   "description": "Add torrent and magnet links to your Bittorrent client's web interface.",
   "default_locale": "en",
   "icons": {
