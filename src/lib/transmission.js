@@ -71,6 +71,9 @@ export default class TransmissionApi extends BaseClient {
                 if (options.path)
                     request.arguments['download-dir'] = options.path;
 
+                if (options.label)
+                    request.arguments.labels = [options.label];
+
                 return fetch(hostname + 'transmission/rpc', {
                     method: 'POST',
                     credentials: 'include',
@@ -106,6 +109,9 @@ export default class TransmissionApi extends BaseClient {
 
             if (options.path)
                 request.arguments['download-dir'] = options.path;
+
+            if (options.label)
+                request.arguments.labels = [options.label];
             
             fetch(hostname + 'transmission/rpc', {
                 method: 'POST',

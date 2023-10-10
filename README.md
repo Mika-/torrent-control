@@ -21,7 +21,7 @@ Supported clients:
 - Flood<sup>1,2</sup>
 - ruTorrent<sup>1,2,3,4</sup>
 - Tixati
-- Transmission<sup>1</sup>
+- Transmission<sup>1,2</sup>
 - tTorrent
 - µTorrent
 - Vuze<sup>1</sup>

@@ -86,11 +86,12 @@ describe('TransmissionApi', () => {
         await instance.addTorrent(torrentFile, {
             paused: true,
             path: '/mnt/storage',
+            label: 'misc',
         });
 
         expect(fetchMock.calls().length).to.equal(1);
         expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body.toString()).to.match(/{"method":"torrent-add","arguments":{"metainfo":".+?","paused":true,"download-dir":"\/mnt\/storage"}}/);
+        expect(fetchMock.lastOptions().body.toString()).to.match(/{"method":"torrent-add","arguments":{"metainfo":".+?","paused":true,"download-dir":"\/mnt\/storage","labels":\["misc"]}}/);
     });
 
     it('Add torrent url', async () => {

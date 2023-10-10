@@ -64,7 +64,7 @@ export const clientList = [
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        clientCapabilities: ['paused', 'path', 'httpAuth']
+        clientCapabilities: ['paused', 'label', 'path', 'httpAuth']
     },
     {
         id: 'ttorrent',
