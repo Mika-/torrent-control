@@ -290,6 +290,7 @@ document.querySelector('#application').addEventListener('change', (e) => {
                 let input;
                 if (option.values) {
                     input = document.createElement('select');
+                    input.className = 'browser-style';
                     input.id = 'clientOptions[' + option.name + ']';
 
                     for (const [value, description] of Object.entries(option.values)) {
