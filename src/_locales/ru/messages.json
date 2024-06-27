@@ -195,7 +195,7 @@
     "message": "Метка",
     "description": "Label select"
   },
-  "downloadLocationSelect": {
+  "downloadDirectorySelect": {
     "message": "Путь загрузки",
     "description": "Download location select"
   },

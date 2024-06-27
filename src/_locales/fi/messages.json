@@ -195,7 +195,7 @@
     "message": "Tunniste",
     "description": "Label select"
   },
-  "downloadLocationSelect": {
+  "downloadDirectorySelect": {
     "message": "Lataushakemisto",
     "description": "Download location select"
   },

@@ -42,31 +42,38 @@ const selectServer = (serverId) => {
     const serverOptions = options.servers[serverId];
     const client = clientList.find((client) => client.id === serverOptions.application);
 
-    const downloadLocationSelect = document.querySelector('#downloadLocation');
+    const directorySelect = document.querySelector('#directories');
 
-    document.querySelectorAll('#downloadLocation > option').forEach((element, i) => {
-        if (i > 0)
-            element.remove();
-    });
+    for (let i = directorySelect.options.length - 1; i >= 1; i--) {
+        directorySelect.remove(i);
+    }
 
     if (client.clientCapabilities && client.clientCapabilities.includes('path')) {
         serverOptions.directories.forEach((directory) => {
             let element = document.createElement('option');
             element.setAttribute('value', directory);
             element.textContent = directory;
-            downloadLocationSelect.appendChild(element);
+            directorySelect.appendChild(element);
         });
 
-        downloadLocationSelect.disabled = false;
+        directorySelect.disabled = false;
+
+        if (serverOptions.defaultDirectory) {
+            directorySelect.value = serverOptions.defaultDirectory;
+        }
     } else {
-        downloadLocationSelect.value = '';
-        downloadLocationSelect.disabled = true;
+        directorySelect.value = '';
+        directorySelect.disabled = true;
     }
 
     const labelSelect = document.querySelector('#labels');
 
     if (client.clientCapabilities && client.clientCapabilities.includes('label')) {
         labelSelect.disabled = false;
+
+        if (serverOptions.defaultLabel) {
+            labelSelect.value = serverOptions.defaultLabel;
+        }
     } else {
         labelSelect.value = '';
         labelSelect.disabled = true;
@@ -83,22 +90,16 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
 
     const params = new URLSearchParams(window.location.search);
     const label = document.querySelector('#labels').value;
-    const path = document.querySelector('#downloadLocation').value;
+    const path = document.querySelector('#directories').value;
     const addPaused = document.querySelector('#addpaused').checked;
     const server = document.querySelector('#server').value;
 
-    let options = {
+    const options = {
         server: parseInt(server, 10),
         paused: addPaused,
-        label: null,
-        path: null,
+        label: label !== '' ? label : null,
+        path: path !== '' ? path : null,
     };
-
-    if (label.length)
-        options.label = label;
-
-    if (path.length)
-        options.path = path;
 
     chrome.runtime.sendMessage({
         type: 'addTorrent',

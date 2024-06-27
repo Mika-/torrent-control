@@ -195,9 +195,9 @@
     "message": "Label",
     "description": "Label select"
   },
-  "downloadLocationSelect": {
-    "message": "Download location",
-    "description": "Download location select"
+  "downloadDirectorySelect": {
+    "message": "Download directory",
+    "description": "Download directory select"
   },
   "defaultOption": {
     "message": "Default",
