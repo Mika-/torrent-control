@@ -53,15 +53,15 @@ loadOptions().then((newOptions) => {
 const isConfigured = () => options.servers[options.globals.currentServer].hostname !== '';
 
 const addTorrent = (url, tabId, torrentOptions = {}) => {
-    torrentOptions = {
-        paused: false,
-        path: null,
-        label: null,
-        ...torrentOptions
-    };
-
     const server = torrentOptions.server !== undefined ? torrentOptions.server : options.globals.currentServer;
     const serverSettings = options.servers[server];
+
+    const addTorrentOptions = {
+        paused: false,
+        path: serverSettings.defaultDirectory || null,
+        label: serverSettings.defaultLabel || null,
+        ...torrentOptions,
+    };
 
     const connection = getClient(serverSettings);
     const networkErrors = [
@@ -70,7 +70,7 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
 
     if (isMagnetUrl(url)) {
         connection.logIn()
-            .then(() => connection.addTorrentUrl(url, torrentOptions)
+            .then(() => connection.addTorrentUrl(url, addTorrentOptions)
                 .then(() => {
                     const torrentName = getMagnetUrlName(url);
                     notification(chrome.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
@@ -87,7 +87,7 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
     } else {
         fetchTorrent(url, tabId)
             .then(({torrent, torrentName}) => connection.logIn()
-                .then(() => connection.addTorrent(torrent, torrentOptions)
+                .then(() => connection.addTorrent(torrent, addTorrentOptions)
                     .then(() => {
                         notification(chrome.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                         connection.logOut();

@@ -88,7 +88,10 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
     const server = document.querySelector('#server').value;
 
     let options = {
-        paused: addPaused
+        server: parseInt(server, 10),
+        paused: addPaused,
+        label: null,
+        path: null,
     };
 
     if (label.length)
@@ -96,9 +99,6 @@ document.querySelector('#add-torrent').addEventListener('click', (e) => {
 
     if (path.length)
         options.path = path;
-
-    if (server)
-        options.server = ~~server;
 
     chrome.runtime.sendMessage({
         type: 'addTorrent',

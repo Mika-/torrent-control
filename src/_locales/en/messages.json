@@ -238,5 +238,13 @@
   "contentLayoutNoSubfolderOption": {
     "message": "Don't create subfolder",
     "description": "Content layout no subfolder option"
+  },
+  "serverDefaultDirectoryOption": {
+    "message": "Default directory",
+    "description": "Server default directory option"
+  },
+  "serverDefaultLabelOption": {
+    "message": "Default label",
+    "description": "Server default label option"
   }
 }

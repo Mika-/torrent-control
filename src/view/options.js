@@ -10,6 +10,62 @@ var options;
 
 const serverSelect = document.querySelector('#server-list');
 const saveButton = document.querySelector('#save-options');
+/** @type {HTMLSelectElement} */
+const defaultLabelSelect = document.querySelector('#defaultLabel');
+/** @type {HTMLSelectElement} */
+const defaultDirectorySelect = document.querySelector('#defaultDirectory');
+
+/**
+ * @param {string[]} labels
+ */
+function refreshDefaultLabelSelect(labels) {
+    const startingValue = defaultLabelSelect.value;
+
+    for (let i = defaultLabelSelect.options.length - 1; i >= 1; i--) {
+        defaultLabelSelect.remove(i);
+    }
+
+    const cleanLabels = labels
+        .map((label) => label.trim())
+        .filter((label) => label.length > 0);
+
+    for (const label of cleanLabels) {
+        let element = document.createElement('option');
+        element.setAttribute('value', label);
+        element.textContent = label;
+        defaultLabelSelect.appendChild(element);
+    }
+
+    if (cleanLabels.includes(startingValue)) {
+        defaultLabelSelect.value = startingValue;
+    }
+}
+
+/**
+ * @param {string[]} directories
+ */
+function refreshDefaultDirectorySelect(directories) {
+    const startingValue = defaultDirectorySelect.value;
+
+    for (let i = defaultDirectorySelect.options.length - 1; i >= 1; i--) {
+        defaultDirectorySelect.remove(i);
+    }
+
+    const cleanDirectories = directories
+        .map((directory) => directory.trim())
+        .filter((directory) => directory.length > 0);
+
+    for (const directory of cleanDirectories) {
+        let element = document.createElement('option');
+        element.setAttribute('value', directory);
+        element.textContent = directory;
+        defaultDirectorySelect.appendChild(element);
+    }
+
+    if (cleanDirectories.includes(startingValue)) {
+        defaultDirectorySelect.value = startingValue;
+    }
+}
 
 const isLabelsSupported = (servers) => servers.some((server) => {
     const client = clientList.find((client) => client.id === server.application);
@@ -61,7 +117,9 @@ const persistOptions = () => {
         password: document.querySelector('#password').value,
         directories: directories.map((directory) => directory.trim()).filter((directory) => directory.length),
         clientOptions: clientOptions,
-        httpAuth: httpAuth
+        httpAuth: httpAuth,
+        defaultLabel: document.querySelector('#defaultLabel').value || null,
+        defaultDirectory: document.querySelector('#defaultDirectory').value || null,
     };
 
     saveOptions(options);
@@ -104,6 +162,8 @@ const restoreOptions = () => {
         document.querySelector('#matchregexp').disabled = options.globals.catchUrls === false;
         document.querySelector('#labels').value = options.globals.labels.join('\n');
 
+        refreshDefaultLabelSelect(options.globals.labels);
+
         restoreServerList();
         restoreServer(serverSelect.value);
     });
@@ -136,12 +196,16 @@ const restoreServer = (id) => {
     options.globals.currentServer = ~~id;
     saveOptions(options);
 
+    refreshDefaultDirectorySelect(server.directories);
+
     document.querySelector('#name').value = server.name;
     document.querySelector('#application').value = server.application;
     document.querySelector('#hostname').value = server.hostname;
     document.querySelector('#username').value = server.username;
     document.querySelector('#password').value = server.password;
     document.querySelector('#directories').value = server.directories.join('\n');
+    document.querySelector('#defaultLabel').value = server.defaultLabel || '';
+    document.querySelector('#defaultDirectory').value = server.defaultDirectory || '';
 
     if (server.httpAuth) {
         document.querySelector('#httpAuth').checked = true;
@@ -217,6 +281,12 @@ document.querySelector('#httpAuth').addEventListener('change', (e) => {
     document.querySelector('#httpAuthUsername').disabled = !e.currentTarget.checked;
     document.querySelector('#httpAuthPassword').disabled = !e.currentTarget.checked;
 });
+document.querySelector('#labels').addEventListener('change', (e) => {
+    refreshDefaultLabelSelect(e.currentTarget.value.split('\n'));
+});
+document.querySelector('#directories').addEventListener('change', (e) => {
+    refreshDefaultDirectorySelect(e.currentTarget.value.split('\n'));
+});
 document.querySelector('#test-regexp').addEventListener('click', (e) => {
     const testUrl = document.querySelector('#test-regexp-url').value.trim();
 
@@ -259,11 +329,13 @@ document.querySelector('#application').addEventListener('change', (e) => {
         if (currentAddress === '' || clientList.find((client) => client.addressPlaceholder === currentAddress))
             document.querySelector('#hostname').value = client.addressPlaceholder;
 
-        document.querySelector('[data-panel="directories"]').style.display =
-            client.clientCapabilities && client.clientCapabilities.includes('path') ? 'flex' : 'none';
+        const hasPathSupport = client.clientCapabilities && client.clientCapabilities.includes('path');
+        document.querySelector('[data-panel="directories"]').style.display = hasPathSupport ? 'flex' : 'none';
+        document.querySelector('[data-panel="defaultDirectory"]').style.display = hasPathSupport ? 'flex' : 'none';
 
-        document.querySelector('[data-panel="labels"]').style.display =
-            isLabelsSupported(options.servers) || (client.clientCapabilities && client.clientCapabilities.includes('label')) ? 'flex' : 'none';
+        const hasLabelSupport = client.clientCapabilities && client.clientCapabilities.includes('label');
+        document.querySelector('[data-panel="labels"]').style.display = isLabelsSupported(options.servers) || hasLabelSupport ? 'flex' : 'none';
+        document.querySelector('[data-panel="defaultLabel"]').style.display = hasLabelSupport ? 'flex' : 'none';
 
         if (client.clientCapabilities && !client.clientCapabilities.includes('httpAuth')) {
             document.querySelector('[data-panel="httpAuth"]').style.display = 'flex';

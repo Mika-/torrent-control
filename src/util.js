@@ -192,7 +192,9 @@ export const loadOptions = () => {
                 password: '',
                 directories: [],
                 clientOptions: {},
-                httpAuth: null
+                httpAuth: null,
+                defaultLabel: null,
+                defaultDirectory: null,
             }
         ]
     };

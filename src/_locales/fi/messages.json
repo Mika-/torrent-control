@@ -238,5 +238,13 @@
   "contentLayoutNoSubfolderOption": {
     "message": "Älä luo alikansiota",
     "description": "Content layout no subfolder option"
+  },
+  "serverDefaultDirectoryOption": {
+    "message": "Oletushakemisto",
+    "description": "Server default directory option"
+  },
+  "serverDefaultLabelOption": {
+    "message": "Oletustunniste",
+    "description": "Server default label option"
   }
 }
