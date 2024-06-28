@@ -1,9 +1,9 @@
-import fetchMock from 'fetch-mock';
-
+import sinon from 'sinon';
 import {getTestTorrent} from '../helpers.js';
 import CloudTorrentApi from '../../src/lib/cloudtorrent.js';
 
 describe('CloudTorrentApi', () => {
+    /** @type {CloudTorrentApi} */
     let instance;
 
     before(() => {
@@ -12,11 +12,6 @@ describe('CloudTorrentApi', () => {
             password: 'testpassw0rd',
             hostname: 'https://example.com:1234/',
         });
-    });
-
-    afterEach(() => {
-        chrome.flush();
-        fetchMock.reset();
     });
 
     it('Login', async () => {
@@ -78,35 +73,46 @@ describe('CloudTorrentApi', () => {
     });
 
     it('Add torrent', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrentfile', {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: 'OK',
+            text: () => Promise.resolve('OK'),
         });
 
         const torrentFile = await getTestTorrent();
 
         await instance.addTorrent(torrentFile);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body).to.equal(torrentFile);
+        expect(fetchStub.calledOnce).to.equal(true);
+        expect(fetchStub.lastCall.args[0]).to.equal('https://example.com:1234/api/torrentfile');
+        expect(fetchStub.lastCall.args[1].method).to.equal('POST');
+        expect(fetchStub.lastCall.args[1].body).to.equal(torrentFile);
     });
 
     it('Add torrent url', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/magnet', {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: 'OK',
+            text: () => Promise.resolve('OK'),
         });
 
         await instance.addTorrentUrl('https://example.com/test.torrent', {});
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body).to.equal('https://example.com/test.torrent');
+        expect(fetchStub.calledOnce).to.equal(true);
+        expect(fetchStub.lastCall.args[0]).to.equal('https://example.com:1234/api/magnet');
+        expect(fetchStub.lastCall.args[1].method).to.equal('POST');
+        expect(fetchStub.lastCall.args[1].body).to.equal('https://example.com/test.torrent');
     });
 
     it('Add torrent url fail', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/magnet', {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: false,
             status: 400,
         });
 
@@ -116,8 +122,9 @@ describe('CloudTorrentApi', () => {
             expect(e).to.be.a('Error');
         }
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(fetchMock.lastOptions().body).to.equal('https://example.com/not_a_torrent_file');
+        expect(fetchStub.calledOnce).to.equal(true);
+        expect(fetchStub.lastCall.args[0]).to.equal('https://example.com:1234/api/magnet');
+        expect(fetchStub.lastCall.args[1].body).to.equal('https://example.com/not_a_torrent_file');
+        expect(fetchStub.lastCall.args[1].method).to.equal('POST');
     });
 });

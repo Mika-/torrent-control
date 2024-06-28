@@ -1,10 +1,10 @@
-import fetchMock from 'fetch-mock';
-
+import sinon from 'sinon';
 import {getTestTorrent} from '../helpers.js';
 import {base64Encode} from '../../src/base64.js';
 import FloodApi from '../../src/lib/flood.js';
 
 describe('FloodApi', () => {
+    /** @type {FloodApi} */
     let instance;
 
     before(() => {
@@ -15,19 +15,20 @@ describe('FloodApi', () => {
         });
     });
 
-    afterEach(() => {
-        chrome.flush();
-        fetchMock.reset();
-    });
-
     it('Login', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/auth/authenticate', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 success: true,
                 username: 'testuser',
                 level: 10,
-            },
+            }),
         });
 
         await instance.logIn();
@@ -35,22 +36,29 @@ describe('FloodApi', () => {
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/auth/authenticate');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             username: 'testuser',
             password: 'testpassw0rd',
         });
     });
 
     it('Login with HTTP Auth', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/auth/authenticate', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 success: true,
                 username: 'testuser',
                 level: 10,
-            },
+            }),
         });
 
         const authInstance = new FloodApi({
@@ -69,20 +77,27 @@ describe('FloodApi', () => {
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/auth/authenticate');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             username: 'testuser',
             password: 'testpassw0rd',
         });
     });
 
     it('Login fail', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/auth/authenticate', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: false,
             status: 401,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 message: 'Failed login.',
-            },
+            }),
         });
 
         try {
@@ -94,9 +109,10 @@ describe('FloodApi', () => {
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/auth/authenticate');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             username: 'testuser',
             password: 'testpassw0rd',
         });
@@ -110,7 +126,10 @@ describe('FloodApi', () => {
     });
 
     it('Add torrent', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrents/add-files', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
         });
 
@@ -119,9 +138,10 @@ describe('FloodApi', () => {
 
         await instance.addTorrent(torrentFile);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/torrents/add-files');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             files: [
                 base64Torrent,
             ],
@@ -132,7 +152,12 @@ describe('FloodApi', () => {
     });
 
     it('Add torrent with options', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrents/add-files', 200);
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+        });
 
         const torrentFile = await getTestTorrent();
         const base64Torrent = await base64Encode(torrentFile);
@@ -143,9 +168,10 @@ describe('FloodApi', () => {
             label: 'Test',
         });
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/torrents/add-files');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             files: [
                 base64Torrent,
             ],
@@ -156,13 +182,19 @@ describe('FloodApi', () => {
     });
 
     it('Add torrent url', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrents/add-urls', 200);
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+        });
 
         await instance.addTorrentUrl('https://example.com/test.torrent');
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/torrents/add-urls');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             urls: [
                 'https://example.com/test.torrent',
             ],
@@ -173,7 +205,12 @@ describe('FloodApi', () => {
     });
 
     it('Add torrent url fail', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrents/add-urls', 400);
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: false,
+            status: 400,
+        });
 
         try {
             await instance.addTorrentUrl('https://example.com/not_a_torrent_file', {});
@@ -181,12 +218,18 @@ describe('FloodApi', () => {
             expect(e).to.be.a('Error');
         }
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/torrents/add-urls');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
     });
 
     it('Add torrent url with options', async () => {
-        fetchMock.postOnce('https://example.com:1234/api/torrents/add-urls', 200);
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+        });
 
         await instance.addTorrentUrl('https://example.com/test.torrent', {
             paused: true,
@@ -194,9 +237,10 @@ describe('FloodApi', () => {
             label: 'Test',
         });
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/torrents/add-urls');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             urls: [
                 'https://example.com/test.torrent',
             ],

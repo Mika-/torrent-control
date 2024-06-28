@@ -1,10 +1,10 @@
-import fetchMock from 'fetch-mock';
-
+import sinon from 'sinon';
 import {getTestTorrent} from '../helpers.js';
 import {base64Encode} from '../../src/base64.js';
 import DelugeApi from '../../src/lib/deluge.js';
 
 describe('DelugeApi', () => {
+    /** @type {DelugeApi} */
     let instance;
 
     before(() => {
@@ -15,18 +15,19 @@ describe('DelugeApi', () => {
         });
     });
 
-    afterEach(() => {
-        chrome.flush();
-        fetchMock.reset();
-    });
-
     it('Login', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 result: true,
                 error: null,
-            },
+            }),
         });
 
         await instance.logIn();
@@ -34,9 +35,10 @@ describe('DelugeApi', () => {
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'auth.login',
             params: [
                 'testpassw0rd'
@@ -46,12 +48,18 @@ describe('DelugeApi', () => {
     });
 
     it('Login with HTTP Auth', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 result: true,
                 error: null,
-            },
+            }),
         });
 
         const authInstance = new DelugeApi({
@@ -70,9 +78,10 @@ describe('DelugeApi', () => {
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onAuthRequired.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'auth.login',
             params: [
                 'testpassw0rd'
@@ -82,12 +91,18 @@ describe('DelugeApi', () => {
     });
 
     it('Login fail', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 result: false,
                 error: 'fail',
-            },
+            }),
         });
 
         try {
@@ -99,9 +114,10 @@ describe('DelugeApi', () => {
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'auth.login',
             params: [
                 'testpassw0rd'
@@ -111,7 +127,10 @@ describe('DelugeApi', () => {
     });
 
     it('Logout', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
         });
 
@@ -120,9 +139,10 @@ describe('DelugeApi', () => {
         expect(chrome.webRequest.onHeadersReceived.removeListener.calledOnce).to.equal(true);
         expect(chrome.webRequest.onBeforeSendHeaders.removeListener.calledOnce).to.equal(true);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'auth.delete_session',
             params: [],
             id: 4
@@ -130,11 +150,17 @@ describe('DelugeApi', () => {
     });
 
     it('Add torrent', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 error: null,
-            },
+            }),
         });
 
         const torrentFile = await getTestTorrent();
@@ -142,9 +168,10 @@ describe('DelugeApi', () => {
 
         await instance.addTorrent(torrentFile);
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'core.add_torrent_file',
             params: [
                 'temp.torrent',
@@ -156,11 +183,17 @@ describe('DelugeApi', () => {
     });
 
     it('Add torrent with options', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 error: null,
-            },
+            }),
         });
 
         const torrentFile = await getTestTorrent();
@@ -171,9 +204,10 @@ describe('DelugeApi', () => {
             path: '/mnt/storage',
         });
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'core.add_torrent_file',
             params: [
                 'temp.torrent',
@@ -188,18 +222,25 @@ describe('DelugeApi', () => {
     });
 
     it('Add torrent url', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 error: null,
-            },
+            }),
         });
 
         await instance.addTorrentUrl('https://example.com/test.torrent');
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'core.add_torrent_magnet',
             params: [
                 'https://example.com/test.torrent',
@@ -210,11 +251,17 @@ describe('DelugeApi', () => {
     });
 
     it('Add torrent url fail', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 error: 'fail',
-            },
+            }),
         });
 
         try {
@@ -223,9 +270,10 @@ describe('DelugeApi', () => {
             expect(e).to.be.a('Error');
         }
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'core.add_torrent_magnet',
             params: [
                 'https://example.com/not_a_torrent_file',
@@ -236,20 +284,28 @@ describe('DelugeApi', () => {
     });
 
     it('Add torrent url with options', async () => {
-        fetchMock.postOnce('https://example.com:1234/json', {
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
             status: 200,
-            body: {
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
                 error: null,
-            },
+            }),
         });
+
         await instance.addTorrentUrl('https://example.com/test.torrent', {
             paused: true,
             path: '/mnt/storage',
         });
 
-        expect(fetchMock.calls().length).to.equal(1);
-        expect(fetchMock.lastOptions().method).to.equal('POST');
-        expect(JSON.parse(fetchMock.lastOptions().body)).to.deep.equal({
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/json');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(JSON.parse(fetchStub.firstCall.args[1].body)).to.deep.equal({
             method: 'core.add_torrent_magnet',
             params: [
                 'https://example.com/test.torrent',
