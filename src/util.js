@@ -55,6 +55,12 @@ export const clientList = [
         ]
     },
     {
+        id: 'synology',
+        name: 'Synology Download Station',
+        addressPlaceholder: 'http://127.0.0.1:5001/',
+        clientCapabilities: ['path'],
+    },
+    {
         id: 'tixati',
         name: 'Tixati',
         addressPlaceholder: 'http://127.0.0.1:8888/',

@@ -20,6 +20,7 @@ Supported clients:
 - Deluge<sup>1,2</sup>
 - Flood<sup>1,2</sup>
 - ruTorrent<sup>1,2,3,4</sup>
+- Synology Download Station<sup>1</sup>
 - Tixati
 - Transmission<sup>1,2</sup>
 - tTorrent
