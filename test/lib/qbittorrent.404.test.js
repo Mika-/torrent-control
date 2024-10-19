@@ -1,8 +1,8 @@
 import sinon from 'sinon';
 import {getTestTorrent} from '../helpers.js';
-import qBittorrentApi from '../../src/lib/qbittorrent.js';
+import qBittorrentApi, { VERSION_4_0_4 } from '../../src/lib/qbittorrent.js';
 
-describe('qBittorrentApi (<=4.0.4)', () => {
+describe('qBittorrentApi (3.2.0 - 4.0.4)', () => {
     /** @type {qBittorrentApi} */
     let instance;
 
@@ -11,7 +11,7 @@ describe('qBittorrentApi (<=4.0.4)', () => {
             username: 'testuser',
             password: 'testpassw0rd',
             hostname: 'https://example.com:1234/',
-            apiVersion: 1,
+            apiVersion: VERSION_4_0_4,
         });
     });
 

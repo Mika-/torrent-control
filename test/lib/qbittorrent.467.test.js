@@ -1,8 +1,8 @@
 import sinon from 'sinon';
 import {getTestTorrent} from '../helpers.js';
-import qBittorrentApi from '../../src/lib/qbittorrent.js';
+import qBittorrentApi, { VERSION_4_6_7 } from '../../src/lib/qbittorrent.js';
 
-describe('qBittorrentApi (5.0.0)', () => {
+describe('qBittorrentApi (4.1.0 - 4.6.7)', () => {
     /** @type {qBittorrentApi} */
     let instance;
 
@@ -11,6 +11,7 @@ describe('qBittorrentApi (5.0.0)', () => {
             username: 'testuser',
             password: 'testpassw0rd',
             hostname: 'https://example.com:1234/',
+            apiVersion: VERSION_4_6_7,
         });
     });
 
@@ -153,7 +154,7 @@ describe('qBittorrentApi (5.0.0)', () => {
         expect(fetchStub.firstCall.args[1].method).to.equal('POST');
         expect(fetchStub.firstCall.args[1].body).to.deep.equal({
             fileselect: torrentFile,
-            stopped: 'true',
+            paused: 'true',
             savepath: '/mnt/storage',
             category: 'Test',
             sequentialDownload: 'true',
@@ -222,7 +223,7 @@ describe('qBittorrentApi (5.0.0)', () => {
         expect(fetchStub.firstCall.args[1].method).to.equal('POST');
         expect(fetchStub.firstCall.args[1].body).to.deep.equal({
             urls: 'https://example.com/test.torrent',
-            stopped: 'true',
+            paused: 'true',
             savepath: '/mnt/storage',
             category: 'Test',
             sequentialDownload: 'true',

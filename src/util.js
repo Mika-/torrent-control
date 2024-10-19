@@ -130,8 +130,37 @@ export const clientList = [
         ]
     },
     {
+        id: 'qbittorrent_467',
+        name: 'qBittorrent (4.1.0 - 4.6.7)',
+        addressPlaceholder: 'http://127.0.0.1:8080/',
+        clientCapabilities: ['paused', 'label', 'path', 'rss'],
+        clientOptions: [
+            {
+                name: 'sequentialDownload',
+                description: chrome.i18n.getMessage('sequentialDownloadOption')
+            },
+            {
+                name: 'firstLastPiecePrio',
+                description: chrome.i18n.getMessage('firstLastPiecePriorityOption')
+            },
+            {
+                name: 'skip_checking',
+                description: chrome.i18n.getMessage('skipHashCheckOption')
+            },
+            {
+                name: 'contentLayout',
+                description: chrome.i18n.getMessage('contentLayoutOption'),
+                values: {
+                    '': chrome.i18n.getMessage('contentLayoutOriginalOption'),
+                    'Subfolder': chrome.i18n.getMessage('contentLayoutSubfolderOption'),
+                    'NoSubfolder': chrome.i18n.getMessage('contentLayoutNoSubfolderOption'),
+                },
+            },
+        ]
+    },
+    {
         id: 'qbittorrent_404',
-        name: 'qBittorrent (<=4.0.4)',
+        name: 'qBittorrent (3.2.0 - 4.0.4)',
         addressPlaceholder: 'http://127.0.0.1:8080/'
     }
 ];
@@ -167,6 +196,11 @@ export const getClient = (serverSettings) => {
             });
         case 'qbittorrent':
             return new qBittorrentApi(serverSettings);
+        case 'qbittorrent_467':
+            return new qBittorrentApi({
+                apiVersion: 2,
+                ...serverSettings
+            });
         case 'qbittorrent_404':
             return new qBittorrentApi({
                 apiVersion: 1,
