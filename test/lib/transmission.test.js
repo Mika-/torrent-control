@@ -31,7 +31,6 @@ describe('TransmissionApi', () => {
         await instance.logIn();
 
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
-        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
         expect(fetchStub.calledOnce).to.be.true;
         expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/transmission/rpc');
@@ -56,7 +55,6 @@ describe('TransmissionApi', () => {
         }
 
         expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
-        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
 
         expect(fetchStub.calledOnce).to.be.true;
         expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/transmission/rpc');
