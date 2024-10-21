@@ -32,7 +32,7 @@ export default class TransmissionApi extends BaseClient {
                 else if (response.status === 401)
                     throw new Error(chrome.i18n.getMessage('loginError'));
                 else if (response.status === 409 && response.headers.has('X-Transmission-Session-Id'))
-                    return this.logIn().then(() => resolve());
+                    return { result: 'success' };
                 else
                     throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
