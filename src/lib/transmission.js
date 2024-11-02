@@ -149,7 +149,7 @@ export default class TransmissionApi extends BaseClient {
         }
 
         this.addHeadersReceivedEventListener((details) => {
-            const sessionHeader = details.responseHeaders.find((header) => header.name === 'X-Transmission-Session-Id');
+            const sessionHeader = details.responseHeaders.find((header) => header.name.toLowerCase() === 'x-transmission-session-id');
 
             if (sessionHeader) {
                 this.session = sessionHeader.value;
