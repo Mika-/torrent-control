@@ -75,6 +75,10 @@
     "message": "Добавить торрент (Путь)",
     "description": "Context menu action"
   },
+  "addTorrentServerAction": {
+    "message": "Add torrent to server",
+    "description": "Context menu action"
+  },
   "addRssFeedAction": {
     "message": "Добавить RSS-канал",
     "description": "Context menu action"

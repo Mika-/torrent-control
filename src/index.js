@@ -257,6 +257,23 @@ const createContextMenu = () => {
                 });
             });
         }
+
+        if (options.servers.length > 1) {
+            chrome.contextMenus.create({
+                id: 'add-torrent-server',
+                title: chrome.i18n.getMessage('addTorrentServerAction'),
+                contexts: ['link'],
+            });
+
+            options.servers.forEach((server, i) => {
+                chrome.contextMenus.create({
+                    id: 'add-torrent-server-' + i.toString(),
+                    parentId: 'add-torrent-server',
+                    title: server.name,
+                    contexts: ['link'],
+                });
+            });
+        }
     } else if (client.clientCapabilities) {
         if (client.clientCapabilities.includes('label') && options.globals.labels.length) {
             chrome.contextMenus.create({
@@ -314,6 +331,7 @@ const registerHandler = () => {
         const currentServer = info.menuItemId.match(/^current-server-(\d+)$/);
         const labelId = info.menuItemId.match(/^add-torrent-label-(\d+)$/);
         const pathId = info.menuItemId.match(/^add-torrent-path-(\d+)$/);
+        const serverId = info.menuItemId.match(/^add-torrent-server-(\d+)$/);
 
         const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
 
@@ -343,6 +361,16 @@ const registerHandler = () => {
                 path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
                 ...clientOptions
             });
+        else if (serverId) {
+            const selectedServerId = parseInt(serverId[1], 10);
+            const selectedClientOptions = options.servers[selectedServerId].clientOptions || {};
+
+            addTorrent(info.linkUrl, tab.id, {
+                paused: options.globals.addPaused,
+                server: selectedServerId,
+                ...selectedClientOptions,
+            });
+        }
         else if (info.menuItemId === 'add-torrent-advanced')
             addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? tab.id : null);
         else if (currentServer)

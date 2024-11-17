@@ -75,6 +75,10 @@
     "message": "Lisää torrent polulla",
     "description": "Context menu action"
   },
+  "addTorrentServerAction": {
+    "message": "Lisää torrent palvelimelle",
+    "description": "Context menu action"
+  },
   "addRssFeedAction": {
     "message": "Lisää RSS-syöte",
     "description": "Context menu action"
