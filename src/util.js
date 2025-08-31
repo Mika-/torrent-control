@@ -3,6 +3,7 @@ import DelugeApi from './lib/deluge.js';
 import FloodApi from './lib/flood.js';
 import qBittorrentApi from './lib/qbittorrent.js';
 import ruTorrentApi from './lib/rutorrent.js';
+import SynologyApi from './lib/synology.js';
 import TixatiApi from './lib/tixati.js';
 import TransmissionApi from './lib/transmission.js';
 import tTorrentApi from './lib/ttorrent.js';
@@ -177,6 +178,8 @@ export const getClient = (serverSettings) => {
             return new FloodApi(serverSettings);
         case 'rutorrent':
             return new ruTorrentApi(serverSettings);
+        case 'synology':
+            return new SynologyApi(serverSettings);
         case 'tixati':
             return new TixatiApi(serverSettings);
         case 'transmission':

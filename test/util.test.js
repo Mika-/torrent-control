@@ -1,7 +1,9 @@
 import {
+    clientList,
     whitelist,
     isTorrentUrl,
     isMagnetUrl,
+    getClient,
     getHostFilter,
     getTorrentName,
     getMagnetUrlName,
@@ -14,6 +16,17 @@ describe('Test helpers', () => {
     beforeEach(() => {
         chrome.flush();
     });
+
+    for (const client of clientList) {
+        it(`Test load client instance ${client.id}`, () => {
+            const instance = getClient({
+                application: client.id,
+                hostname: 'https://example.com:1234/',
+            });
+
+            expect(instance).to.be.a('object');
+        })
+    }
 
     it('isTorrentUrl', () => {
         const validUrls = [
