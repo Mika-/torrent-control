@@ -143,12 +143,10 @@ export default class TransmissionApi extends BaseClient {
                 headers.append('X-Transmission-Session-Id', this.session);
             }
 
-            const {username, password, clientOptions} = this.settings;
+            const {clientOptions} = this.settings;
 
             if (clientOptions && clientOptions.authToken) {
                 headers.append('Authorization', clientOptions.authToken);
-            } else if (username && password) {
-                headers.append('Authorization', 'Basic ' + btoa(username + ":" + password));
             }
 
             fetch(this.rpcUrl, {
