@@ -92,7 +92,7 @@ const persistOptions = () => {
 
     let clientOptions = {};
     Array.from(document.querySelectorAll('*[id^="clientOptions"]')).forEach((element) => {
-        if (element.tagName.toLowerCase() === 'select') {
+        if (element.tagName.toLowerCase() === 'select' || element.type === 'text') {
             clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.value;
         } else {
             clientOptions[element.id.match(/\[(.+?)]$/)[1]] = element.checked;
@@ -355,48 +355,89 @@ document.querySelector('#application').addEventListener('change', (e) => {
         if (client.clientOptions) {
             const server = options.servers[options.globals.currentServer];
 
-            client.clientOptions.forEach((option) => {
-                let container = document.createElement('div');
+            const createFormRow = (input, labelText, labelBefore = false) => {
+                const container = document.createElement('div');
                 container.className = 'panel-formElements-item browser-style';
 
-                let input;
-                if (option.values) {
-                    input = document.createElement('select');
-                    input.className = 'browser-style';
-                    input.id = 'clientOptions[' + option.name + ']';
+                const label = document.createElement('label');
+                label.htmlFor = input.id;
+                label.textContent = labelText;
 
-                    for (const [value, description] of Object.entries(option.values)) {
-                        let optionEl = document.createElement('option');
-                        optionEl.value = value;
-                        optionEl.textContent = description;
-                        optionEl.selected = server.clientOptions[option.name] === value;
-                        input.appendChild(optionEl);
-                    }
+                if (labelBefore) {
+                    container.appendChild(label);
+                    container.appendChild(input);
                 } else {
-                    input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.id = 'clientOptions[' + option.name + ']';
-                    input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
-                }
-
-                input.addEventListener('input', () => {
-                    saveButton.removeAttribute('disabled');
-                }, { passive: true });
-
-                if (!option.values) {
                     container.appendChild(input);
+                    container.appendChild(label);
                 }
 
-                let label = document.createElement('label');
-                label.htmlFor = 'clientOptions[' + option.name + ']';
-                label.textContent = option.description;
-                container.appendChild(label);
+                return container;
+            };
 
-                if (option.values) {
-                    container.appendChild(input);
+            client.clientOptions.forEach((option) => {
+                const inputId = 'clientOptions[' + option.name + ']';
+
+                if (option.type === 'text' && option.toggle) {
+                    const toggleId = 'toggle_' + inputId;
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = toggleId;
+                    checkbox.checked = !!server.clientOptions[option.name];
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = inputId;
+                    input.value = server.clientOptions[option.name] || '';
+                    input.disabled = !checkbox.checked;
+
+                    checkbox.addEventListener('change', (e) => {
+                        input.disabled = !e.target.checked;
+                        if (!e.target.checked) {
+                            input.value = '';
+                            input.dispatchEvent(new Event('input'));
+                        }
+                        saveButton.removeAttribute('disabled');
+                    });
+                    
+                    input.addEventListener('input', () => {
+                        saveButton.removeAttribute('disabled');
+                    }, { passive: true });
+
+                    clientOptionsPanel.appendChild(createFormRow(checkbox, option.description, false));
+                    clientOptionsPanel.appendChild(createFormRow(input, option.inputLabel || option.description, true));
+
+                } else {
+                    let input;
+                    if (option.values) {
+                        input = document.createElement('select');
+                        input.className = 'browser-style';
+                        
+                        for (const [value, description] of Object.entries(option.values)) {
+                            let optionEl = document.createElement('option');
+                            optionEl.value = value;
+                            optionEl.textContent = description;
+                            optionEl.selected = server.clientOptions[option.name] === value;
+                            input.appendChild(optionEl);
+                        }
+                    } else {
+                        input = document.createElement('input');
+                        if (option.type) {
+                            input.type = option.type;
+                            input.value = server.clientOptions[option.name] || '';
+                        } else {
+                            input.type = 'checkbox';
+                            input.checked = server.application === client.id ? !!server.clientOptions[option.name] : false;
+                        }
+                    }
+                    input.id = inputId;
+
+                    input.addEventListener('input', () => {
+                        saveButton.removeAttribute('disabled');
+                    }, { passive: true });
+
+                    const labelBefore = !!option.values;
+                    clientOptionsPanel.appendChild(createFormRow(input, option.description, labelBefore));
                 }
-
-                clientOptionsPanel.appendChild(container);
             });
         }
     }

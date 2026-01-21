@@ -10,17 +10,33 @@ export default class TransmissionApi extends BaseClient {
         this.session = null;
     }
 
-    logIn() {
+    get rpcUrl() {
         const {hostname} = this.settings;
 
+        if (hostname.endsWith('/rpc') || hostname.endsWith('/rpc/'))
+            return hostname;
+
+        return hostname + 'transmission/rpc';
+    }
+
+    logIn() {
         this._attachListeners();
 
+        const rpcUrl = this.rpcUrl;
+
         return new Promise((resolve, reject) => {
-            fetch(hostname + 'transmission/rpc', {
+            const {clientOptions} = this.settings;
+            const headers = new Headers({
+                'Content-Type': 'application/json'
+            });
+
+            if (clientOptions && clientOptions.authToken) {
+                headers.append('Authorization', clientOptions.authToken);
+            }
+
+            fetch(rpcUrl, {
                 method: 'POST',
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                }),
+                headers: headers,
                 body: JSON.stringify({
                     method: 'session-get'
                 })
@@ -53,8 +69,6 @@ export default class TransmissionApi extends BaseClient {
     }
 
     addTorrent(torrent, options = {}) {
-        const {hostname} = this.settings;
-
         return new Promise((resolve, reject) => {
             base64Encode(torrent).then((base64torrent) => {
                 let request = {
@@ -80,8 +94,14 @@ export default class TransmissionApi extends BaseClient {
                 if (this.session) {
                     headers.append('X-Transmission-Session-Id', this.session);
                 }
+                
+                const {clientOptions} = this.settings;
+                
+                if (clientOptions && clientOptions.authToken) {
+                    headers.append('Authorization', clientOptions.authToken);
+                }
 
-                return fetch(hostname + 'transmission/rpc', {
+                return fetch(this.rpcUrl, {
                     method: 'POST',
                     headers: headers,
                     body: JSON.stringify(request)
@@ -98,8 +118,6 @@ export default class TransmissionApi extends BaseClient {
     }
 
     addTorrentUrl(url, options = {}) {
-        const {hostname} = this.settings;
-
         return new Promise((resolve, reject) => {
             let request = {
                 method: 'torrent-add',
@@ -125,7 +143,15 @@ export default class TransmissionApi extends BaseClient {
                 headers.append('X-Transmission-Session-Id', this.session);
             }
 
-            fetch(hostname + 'transmission/rpc', {
+            const {username, password, clientOptions} = this.settings;
+
+            if (clientOptions && clientOptions.authToken) {
+                headers.append('Authorization', clientOptions.authToken);
+            } else if (username && password) {
+                headers.append('Authorization', 'Basic ' + btoa(username + ":" + password));
+            }
+
+            fetch(this.rpcUrl, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(request)
