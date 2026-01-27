@@ -477,6 +477,7 @@ const registerHandler = () => {
                     ...clientOptions
                 });
             }
+            chrome.tabs.remove(details.tabId)
             return {cancel: true}
         },
         {urls: ['https://torrent-control.invalid/*']},
