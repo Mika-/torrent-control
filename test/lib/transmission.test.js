@@ -205,4 +205,31 @@ describe('TransmissionApi', () => {
             },
         });
     });
+
+    it('Custom RPC URL', async () => {
+        instance = new TransmissionApi({
+            username: 'testuser',
+            password: 'testpassw0rd',
+            hostname: 'https://example.com:1234/custom/rpc',
+        });
+
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
+                result: 'success',
+            }),
+        });
+
+        await instance.logIn();
+
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/custom/rpc');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+    });
 });

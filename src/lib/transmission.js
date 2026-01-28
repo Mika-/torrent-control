@@ -10,13 +10,20 @@ export default class TransmissionApi extends BaseClient {
         this.session = null;
     }
 
-    logIn() {
+    get rpcUrl() {
         const {hostname} = this.settings;
 
+        if (hostname.endsWith('/rpc') || hostname.endsWith('/rpc/'))
+            return hostname;
+
+        return hostname + 'transmission/rpc';
+    }
+
+    logIn() {
         this._attachListeners();
 
         return new Promise((resolve, reject) => {
-            fetch(hostname + 'transmission/rpc', {
+            fetch(this.rpcUrl, {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json'
@@ -53,9 +60,7 @@ export default class TransmissionApi extends BaseClient {
     }
 
     addTorrent(torrent, options = {}) {
-        const {hostname} = this.settings;
-
-        return new Promise((resolve, reject) => {
+                return new Promise((resolve, reject) => {
             base64Encode(torrent).then((base64torrent) => {
                 let request = {
                     method: 'torrent-add',
@@ -81,7 +86,7 @@ export default class TransmissionApi extends BaseClient {
                     headers.append('X-Transmission-Session-Id', this.session);
                 }
 
-                return fetch(hostname + 'transmission/rpc', {
+                return fetch(this.rpcUrl, {
                     method: 'POST',
                     headers: headers,
                     body: JSON.stringify(request)
@@ -98,8 +103,6 @@ export default class TransmissionApi extends BaseClient {
     }
 
     addTorrentUrl(url, options = {}) {
-        const {hostname} = this.settings;
-
         return new Promise((resolve, reject) => {
             let request = {
                 method: 'torrent-add',
@@ -125,7 +128,8 @@ export default class TransmissionApi extends BaseClient {
                 headers.append('X-Transmission-Session-Id', this.session);
             }
 
-            fetch(hostname + 'transmission/rpc', {
+
+            fetch(this.rpcUrl, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(request)
