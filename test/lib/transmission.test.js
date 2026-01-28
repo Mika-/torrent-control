@@ -205,4 +205,33 @@ describe('TransmissionApi', () => {
             },
         });
     });
+
+    it('Manual Auth Token', async () => {
+        instance = new TransmissionApi({
+            hostname: 'https://example.com:1234/',
+            clientOptions: {
+                authToken: 'Bearer my-secret-token'
+            }
+        });
+
+        const fetchStub= sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
+            json: () => Promise.resolve({
+                result: 'success',
+            }),
+        });
+
+        await instance.logIn();
+
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/transmission/rpc');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(fetchStub.firstCall.args[1].headers.get('Authorization')).to.equal('Bearer my-secret-token');
+    });
 });
