@@ -16,11 +16,18 @@ export default class TransmissionApi extends BaseClient {
         this._attachListeners();
 
         return new Promise((resolve, reject) => {
+            const {clientOptions} = this.settings;
+            const headers = new Headers({
+                'Content-Type': 'application/json'
+            });
+
+            if (clientOptions && clientOptions.authToken) {
+                headers.append('Authorization', clientOptions.authToken);
+            }
+
             fetch(hostname + 'transmission/rpc', {
                 method: 'POST',
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                }),
+                headers: headers,
                 body: JSON.stringify({
                     method: 'session-get'
                 })
@@ -80,6 +87,12 @@ export default class TransmissionApi extends BaseClient {
                 if (this.session) {
                     headers.append('X-Transmission-Session-Id', this.session);
                 }
+                
+                const {clientOptions} = this.settings;
+                
+                if (clientOptions && clientOptions.authToken) {
+                    headers.append('Authorization', clientOptions.authToken);
+                }
 
                 return fetch(hostname + 'transmission/rpc', {
                     method: 'POST',
@@ -123,6 +136,12 @@ export default class TransmissionApi extends BaseClient {
 
             if (this.session) {
                 headers.append('X-Transmission-Session-Id', this.session);
+            }
+
+            const {clientOptions} = this.settings;
+
+            if (clientOptions && clientOptions.authToken) {
+                headers.append('Authorization', clientOptions.authToken);
             }
 
             fetch(hostname + 'transmission/rpc', {

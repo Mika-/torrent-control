@@ -250,5 +250,13 @@
   "serverDefaultLabelOption": {
     "message": "Default label",
     "description": "Server default label option"
+  },
+  "authTokenOption": {
+    "message": "Use Custom Auth Key (required for some proxies)",
+    "description": "Auth token option"
+  },
+  "authTokenInputLabel": {
+    "message": "Token",
+    "description": "Auth token value label"
   }
 }

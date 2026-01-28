@@ -71,7 +71,16 @@ export const clientList = [
         id: 'transmission',
         name: 'Transmission',
         addressPlaceholder: 'http://127.0.0.1:9091/',
-        clientCapabilities: ['paused', 'label', 'path', 'httpAuth']
+        clientCapabilities: ['paused', 'label', 'path', 'httpAuth'],
+        clientOptions: [
+            {
+                name: 'authToken',
+                description: chrome.i18n.getMessage('authTokenOption'),
+                type: 'text',
+                toggle: true,
+                inputLabel: chrome.i18n.getMessage('authTokenInputLabel')
+            }
+        ]
     },
     {
         id: 'ttorrent',
