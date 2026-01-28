@@ -208,9 +208,7 @@ describe('TransmissionApi', () => {
 
     it('Manual Auth Token', async () => {
         instance = new TransmissionApi({
-            username: 'testuser',
-            password: 'testpassw0rd',
-            hostname: 'https://example.com:1234/transmission/rpc',
+            hostname: 'https://example.com:1234/',
             clientOptions: {
                 authToken: 'Bearer my-secret-token'
             }
