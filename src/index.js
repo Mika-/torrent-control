@@ -80,9 +80,9 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
                 connection.removeEventListeners();
 
                 if (networkErrors.includes(error.message))
-                    notification(chrome.i18n.getMessage('torrentAddError', 'Network error'));
+                    notification('❌ ' + chrome.i18n.getMessage('torrentAddError', 'Network error'));
                 else
-                    notification(error.message);
+                    notification('❌ ' + error.message);
             });
     } else {
         fetchTorrent(url, tabId)
@@ -97,9 +97,9 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
                 connection.removeEventListeners();
 
                 if (networkErrors.includes(error.message))
-                    notification(chrome.i18n.getMessage('torrentAddError', 'Network error'));
+                    notification('❌ ' + chrome.i18n.getMessage('torrentAddError', 'Network error'));
                 else
-                    notification(error.message);
+                    notification('❌ ' + error.message);
             });
     }
 }
@@ -142,7 +142,7 @@ const addRssFeed = (url) => {
             connection.logOut();
         }).catch((error) => {
             connection.removeEventListeners();
-            notification(error.message);
+            notification('❌ ' + error.message);
         });
 }
 
