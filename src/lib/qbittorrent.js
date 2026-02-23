@@ -34,11 +34,13 @@ export default class qBittorrentApi extends BaseClient {
             .then((response) => {
                 if (response.ok)
                     return response.text();
+                else if (response.status === 401)
+                    throw new Error(chrome.i18n.getMessage('loginError'));
                 else
                     throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
             })
             .then((text) => {
-                if (text === 'Ok.')
+                if (text === 'Ok.' || text === '')
                     resolve();
                 else if (text === 'Fails.')
                     throw new Error(chrome.i18n.getMessage('loginError'));
@@ -193,17 +195,17 @@ export default class qBittorrentApi extends BaseClient {
 
     _attachListeners() {
         const {hostname, httpAuth} = this.settings;
-        let sessionCookie = this.cookie;
 
         if (httpAuth) {
             this.addAuthRequiredListener(httpAuth.username, httpAuth.password);
         }
 
         this.addHeadersReceivedEventListener((details) => {
-            const cookie = this.getCookie(details.responseHeaders, 'SID');
+            const cookie = this.getCookie(details.responseHeaders, '(?:SID|QBT_SID_\\d+)');
 
-            if (cookie)
-                sessionCookie = cookie;
+            if (cookie) {
+                this.cookie = cookie;
+            }
 
             return {
                 responseHeaders: this.filterHeaders(details.responseHeaders, [
@@ -229,10 +231,10 @@ export default class qBittorrentApi extends BaseClient {
                 value: hostname
             });
 
-            if (sessionCookie) {
+            if (this.cookie) {
                 requestHeaders.push({
                     name: 'Cookie',
-                    value: sessionCookie
+                    value: this.cookie
                 });
             }
 

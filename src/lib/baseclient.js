@@ -131,10 +131,11 @@ export default class BaseClient {
             return header.name.toLowerCase() === 'set-cookie';
         });
 
-        const regex = new RegExp(key + '=(.+?);');
+        if (cookie) {
+            const regex = new RegExp(`(${key}=[^;]+)`);
 
-        if (cookie)
-            return cookie.value.match(regex)[0] || null;
+            return cookie.value.match(regex)?.[1] || null;
+        }
 
         return null;
     }

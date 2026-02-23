@@ -14,8 +14,8 @@ describe('qBittorrentApi (5.0.0)', () => {
         });
     });
 
-    it('Login', async () => {
-        const fetchStub= sinon.stub(global, 'fetch');
+    it('Login (<5.2)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
 
         fetchStub.resolves({
             ok: true,
@@ -32,10 +32,52 @@ describe('qBittorrentApi (5.0.0)', () => {
         expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/v2/auth/login');
         expect(fetchStub.firstCall.args[1].method).to.equal('POST');
         expect(fetchStub.firstCall.args[1].body.toString()).to.equal('username=testuser&password=testpassw0rd');
+
+        instance.listeners.onHeadersReceived({
+            responseHeaders: [
+                {
+                    name: 'set-cookie',
+                    value: 'SID=062elnAQzhtqWynll9vQGvYa1oKldhnr; HttpOnly; SameSite=Strict; path=/',
+                },
+            ],
+        });
+
+        expect(instance.cookie).to.equal('SID=062elnAQzhtqWynll9vQGvYa1oKldhnr');
+    });
+
+    it('Login', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 204,
+            text: () => Promise.resolve(''),
+        });
+
+        await instance.logIn();
+
+        expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
+
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/v2/auth/login');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(fetchStub.firstCall.args[1].body.toString()).to.equal('username=testuser&password=testpassw0rd');
+
+        instance.listeners.onHeadersReceived({
+            responseHeaders: [
+                {
+                    name: 'set-cookie',
+                    value: 'QBT_SID_8080=i4C0S3/xM9aJP5Q0duGWQ01QdJhoz0VN; HttpOnly; SameSite=Strict; expires=Mon, 23-Feb-2026 18:29:20 GMT; path=/',
+                },
+            ],
+        });
+
+        expect(instance.cookie).to.equal('QBT_SID_8080=i4C0S3/xM9aJP5Q0duGWQ01QdJhoz0VN');
     });
 
     it('Login with HTTP Auth', async () => {
-        const fetchStub= sinon.stub(global, 'fetch');
+        const fetchStub = sinon.stub(global, 'fetch');
 
         fetchStub.resolves({
             ok: true,
@@ -65,13 +107,37 @@ describe('qBittorrentApi (5.0.0)', () => {
         expect(fetchStub.firstCall.args[1].body.toString()).to.equal('username=testuser&password=testpassw0rd');
     });
 
-    it('Login fail', async () => {
-        const fetchStub= sinon.stub(global, 'fetch');
+    it('Login fail (<5.2)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
 
         fetchStub.resolves({
             ok: true,
             status: 200,
             text: () => Promise.resolve('Fails.'),
+        });
+
+        try {
+            await instance.logIn();
+        } catch (e) {
+            expect(e).to.be.a('Error');
+        }
+
+        expect(chrome.webRequest.onHeadersReceived.addListener.calledOnce).to.equal(true);
+        expect(chrome.webRequest.onBeforeSendHeaders.addListener.calledOnce).to.equal(true);
+
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/v2/auth/login');
+        expect(fetchStub.firstCall.args[1].method).to.equal('POST');
+        expect(fetchStub.firstCall.args[1].body.toString()).to.equal('username=testuser&password=testpassw0rd');
+    });
+
+    it('Login fail', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 401,
+            text: () => Promise.resolve('Unauthorized'),
         });
 
         try {
