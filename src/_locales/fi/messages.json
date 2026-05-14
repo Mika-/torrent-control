@@ -204,7 +204,8 @@
     "description": "Download location select"
   },
   "customDownloadDirectoryOption": {
-    "message": "Custom path"
+    "message": "Mukautettu polku",
+    "description": "Manual download path text input label"
   },
   "defaultOption": {
     "message": "Oletus",
