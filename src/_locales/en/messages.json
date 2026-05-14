@@ -203,6 +203,10 @@
     "message": "Download directory",
     "description": "Download directory select"
   },
+  "customDownloadDirectoryOption": {
+    "message": "Custom path",
+    "description": "Manual download path text input label"
+  },
   "defaultOption": {
     "message": "Default",
     "description": "Default option"

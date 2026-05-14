@@ -43,6 +43,7 @@ const selectServer = (serverId) => {
     const client = clientList.find((client) => client.id === serverOptions.application);
 
     const directorySelect = document.querySelector('#directories');
+    const directoryInput = document.querySelector('#directory-input');
 
     for (let i = directorySelect.options.length - 1; i >= 1; i--) {
         directorySelect.remove(i);
@@ -61,9 +62,14 @@ const selectServer = (serverId) => {
         if (serverOptions.defaultDirectory) {
             directorySelect.value = serverOptions.defaultDirectory;
         }
+
+        directoryInput.value = serverOptions.defaultDirectory || '';
+        directoryInput.disabled = false;
     } else {
         directorySelect.value = '';
         directorySelect.disabled = true;
+        directoryInput.value = '';
+        directoryInput.disabled = true;
     }
 
     const labelSelect = document.querySelector('#labels');
@@ -85,12 +91,15 @@ const selectServer = (serverId) => {
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#server').addEventListener('change', (e) => selectServer(~~e.currentTarget.value));
+document.querySelector('#directories').addEventListener('change', (e) => {
+    document.querySelector('#directory-input').value = e.currentTarget.value;
+});
 document.querySelector('#add-torrent').addEventListener('click', (e) => {
     e.preventDefault();
 
     const params = new URLSearchParams(window.location.search);
     const label = document.querySelector('#labels').value;
-    const path = document.querySelector('#directories').value;
+    const path = document.querySelector('#directory-input').value;
     const addPaused = document.querySelector('#addpaused').checked;
     const server = document.querySelector('#server').value;
 

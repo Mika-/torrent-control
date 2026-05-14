@@ -203,6 +203,9 @@
     "message": "Путь загрузки",
     "description": "Download location select"
   },
+  "customDownloadDirectoryOption": {
+    "message": "Custom path"
+  },
   "defaultOption": {
     "message": "По умолчанию",
     "description": "Default option"

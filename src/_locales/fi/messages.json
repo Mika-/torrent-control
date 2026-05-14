@@ -203,6 +203,9 @@
     "message": "Lataushakemisto",
     "description": "Download location select"
   },
+  "customDownloadDirectoryOption": {
+    "message": "Custom path"
+  },
   "defaultOption": {
     "message": "Oletus",
     "description": "Default option"
