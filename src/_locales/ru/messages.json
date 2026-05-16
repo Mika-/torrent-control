@@ -203,6 +203,10 @@
     "message": "Путь загрузки",
     "description": "Download location select"
   },
+  "customDownloadDirectoryOption": {
+    "message": "Произвольный путь",
+    "description": "Manual download path text input label"
+  },
   "defaultOption": {
     "message": "По умолчанию",
     "description": "Default option"

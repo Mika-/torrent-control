@@ -203,6 +203,10 @@
     "message": "Lataushakemisto",
     "description": "Download location select"
   },
+  "customDownloadDirectoryOption": {
+    "message": "Mukautettu polku",
+    "description": "Manual download path text input label"
+  },
   "defaultOption": {
     "message": "Oletus",
     "description": "Default option"
