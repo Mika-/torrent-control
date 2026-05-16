@@ -533,7 +533,7 @@ const addAdvancedDialog = (url, tabId = null) => {
         params.append('tabId', tabId);
     }
 
-    const height = 365;
+    const height = 370;
     const width = 500;
     const top = Math.round((screen.height / 2) - (height / 2));
     const left = Math.round((screen.width / 2) - (width / 2));
