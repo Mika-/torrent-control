@@ -27,6 +27,36 @@ describe('ruTorrentApi', () => {
         expect(chrome.webRequest.onErrorOccurred.addListener.calledOnce).to.equal(true);
     });
 
+    it('Login re-supplies credentials across redirects', async () => {
+        const authInstance = new ruTorrentApi({
+            username: 'testuser',
+            password: 'testpassw0rd',
+            hostname: 'https://example.com:1234/',
+            clientOptions: {
+                authType: 'httpAuth',
+                fast_resume: false,
+            },
+        });
+
+        await authInstance.logIn();
+
+        const onAuthRequired = chrome.webRequest.onAuthRequired.addListener.firstCall.args[0];
+
+        // Simulated first 401 challenge for a POST.
+        const first = onAuthRequired({ requestId: '42' });
+        expect(first.authCredentials.username).to.equal('testuser');
+
+        // ruTorrent v4 issues a 302 redirect after a successful POST; the
+        // browser follows the redirect with the same requestId and the server
+        // challenges again. We must keep supplying credentials.
+        const second = onAuthRequired({ requestId: '42' });
+        expect(second.authCredentials.username).to.equal('testuser');
+
+        // Cap retries to avoid an infinite loop when the credentials are wrong.
+        const third = onAuthRequired({ requestId: '42' });
+        expect(third).to.be.undefined;
+    });
+
     it('Login form', async () => {
         const authInstance = new ruTorrentApi({
             username: 'testuser',
