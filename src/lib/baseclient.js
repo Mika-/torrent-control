@@ -4,7 +4,7 @@ export default class BaseClient {
 
     constructor() {
         this.listeners = {};
-        this.pendingRequests = [];
+        this.pendingRequests = {};
     }
 
     logIn() {
@@ -50,11 +50,20 @@ export default class BaseClient {
     addAuthRequiredListener(username, password) {
         const { hostname } = this.settings;
 
+        // Some clients (eg. ruTorrent v4) redirect to a different URL after a
+        // POST that requires authentication. Browsers re-use the same requestId
+        // across redirects, so we must allow more than one credential prompt
+        // per requestId — but cap the number of attempts to avoid an infinite
+        // retry loop when the credentials are actually wrong.
+        const maxAuthAttempts = 2;
+
         this.listeners.onAuthRequired = (details) => {
-            if (this.pendingRequests.indexOf(details.requestId) !== -1)
+            const attempts = (this.pendingRequests[details.requestId] || 0) + 1;
+
+            if (attempts > maxAuthAttempts)
                 return;
 
-            this.pendingRequests.push(details.requestId);
+            this.pendingRequests[details.requestId] = attempts;
 
             return {
                 authCredentials: {
@@ -65,10 +74,7 @@ export default class BaseClient {
         };
 
         this.listeners.onAuthCompleted = (details) => {
-            let index = this.pendingRequests.indexOf(details.requestId);
-
-            if (index > -1)
-                this.pendingRequests.splice(index, 1);
+            delete this.pendingRequests[details.requestId];
         };
 
         chrome.webRequest.onAuthRequired.addListener(
