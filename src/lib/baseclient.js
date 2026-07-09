@@ -15,10 +15,17 @@ export default class BaseClient {
         return Promise.resolve();
     }
 
+    /**
+     * @param torrent {Blob}
+     * @returns {Promise<void>}
+     */
     addTorrent(torrent) {
         return Promise.resolve();
     }
-
+    /**
+     * @param url {string}
+     * @returns {Promise<void>}
+     */
     addTorrentUrl(url) {
         return Promise.resolve();
     }

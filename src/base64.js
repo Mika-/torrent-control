@@ -1,4 +1,8 @@
-export const base64Encode = (data) => {
+/**
+ * @param data {Blob}
+ * @returns {Promise<string>}
+ */
+export function base64Encode(data) {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.onerror = (error) => reject(error);

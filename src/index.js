@@ -52,7 +52,7 @@ loadOptions().then((newOptions) => {
 
 const isConfigured = () => options.servers[options.globals.currentServer].hostname !== '';
 
-const addTorrent = (url, tabId, torrentOptions = {}) => {
+function addTorrent(url, tabId, torrentOptions = {}) {
     const server = torrentOptions.server !== undefined ? torrentOptions.server : options.globals.currentServer;
     const serverSettings = options.servers[server];
 
@@ -104,7 +104,7 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
     }
 }
 
-export const fetchTorrent = (url, tabId) => {
+export function fetchTorrent(url, tabId) {
     return new Promise(async (resolve, reject) => {
         if (tabId === null || await tabExists(tabId) === false) {
             return reject(new Error(chrome.i18n.getMessage('sourceTabDestroyedError')));
@@ -132,7 +132,7 @@ export const fetchTorrent = (url, tabId) => {
     });
 }
 
-const addRssFeed = (url) => {
+function addRssFeed(url) {
     const serverSettings = options.servers[options.globals.currentServer];
     const connection = getClient(serverSettings);
 
@@ -147,7 +147,7 @@ const addRssFeed = (url) => {
         });
 }
 
-const createServerSelectionContextMenu = () => {
+function createServerSelectionContextMenu() {
     let context = ['browser_action'];
 
     if (options.globals.contextMenu)
@@ -180,7 +180,7 @@ const createServerSelectionContextMenu = () => {
     });
 }
 
-const createDefaultMenu = () => {
+function createDefaultMenu() {
     chrome.contextMenus.create({
         id: 'catch-urls',
         type: 'checkbox',
@@ -197,7 +197,7 @@ const createDefaultMenu = () => {
     });
 }
 
-const createContextMenu = () => {
+function createContextMenu() {
     const serverOptions = options.servers[options.globals.currentServer];
 
     chrome.contextMenus.create({
@@ -323,11 +323,11 @@ const createContextMenu = () => {
     }
 }
 
-const removeContextMenu = () => {
+function removeContextMenu() {
     chrome.contextMenus.removeAll();
 }
 
-const registerHandler = () => {
+function registerHandler() {
     chrome.contextMenus.onClicked.addListener((info, tab) => {
         const currentServer = info.menuItemId.match(/^current-server-(\d+)$/);
         const labelId = info.menuItemId.match(/^add-torrent-label-(\d+)$/);
@@ -526,7 +526,7 @@ const registerHandler = () => {
     );
 }
 
-const addAdvancedDialog = async (url, tabId = null) => {
+async function addAdvancedDialog(url, tabId = null) {
     let params = new URLSearchParams();
     params.append('url', url);
 
@@ -580,7 +580,7 @@ const addAdvancedDialog = async (url, tabId = null) => {
  * @param tabId {number}
  * @returns {Promise<boolean>}
  */
-const tabExists = (tabId) => {
+function tabExists(tabId) {
     return new Promise((resolve) => {
         chrome.tabs.get(tabId, (tab) => resolve(tab !== undefined));
     });
@@ -590,7 +590,7 @@ const tabExists = (tabId) => {
  * @param url {string}
  * @returns {Promise<Tab>}
  */
-const getOriginTab = (cookieStoreId, url) => {
+function getOriginTab(cookieStoreId, url) {
     return new Promise((resolve) => {
         chrome.tabs.query({
             url: url,
@@ -599,7 +599,7 @@ const getOriginTab = (cookieStoreId, url) => {
     });
 }
 
-export const notification = (message) => {
+export function notification(message) {
     if (options && !options.globals.enableNotifications) {
         return;
     }
@@ -612,17 +612,17 @@ export const notification = (message) => {
     }, (id) => setTimeout(() => chrome.notifications.clear(id), 5000));
 }
 
-const setCurrentServer = (id) => {
+function setCurrentServer(id) {
     options.globals.currentServer = id;
     saveOptions(options);
 }
 
-const toggleURLCatching = () => {
+function toggleURLCatching() {
     options.globals.catchUrls = !options.globals.catchUrls;
     saveOptions(options);
 }
 
-const toggleAddPaused = () => {
+function toggleAddPaused() {
     options.globals.addPaused = !options.globals.addPaused;
     saveOptions(options);
 }

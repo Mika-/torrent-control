@@ -76,7 +76,7 @@ const isLabelsSupported = (servers) => servers.some((server) => {
     return false;
 });
 
-const persistOptions = () => {
+function persistOptions() {
     options.globals.contextMenu = ~~document.querySelector('[name="contextmenu"]:checked').value;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
     options.globals.addPaused = document.querySelector('#addpaused').checked;
@@ -127,7 +127,7 @@ const persistOptions = () => {
     saveButton.setAttribute('disabled', 'true');
 }
 
-const restoreOptions = () => {
+function restoreOptions() {
     document.querySelectorAll('textarea, input, select:not(#server-list)').forEach((element) => {
         element.addEventListener('input', () => {
             saveButton.removeAttribute('disabled');
@@ -171,7 +171,7 @@ const restoreOptions = () => {
     saveButton.setAttribute('disabled', 'true');
 }
 
-const restoreServerList = () => {
+function restoreServerList() {
     const selectedServer = serverSelect.value || 0;
     serverSelect.innerHTML = '';
 
@@ -190,7 +190,7 @@ const restoreServerList = () => {
     serverSelect.value = selectedServer;
 }
 
-const restoreServer = (id) => {
+function restoreServer(id) {
     const server = options.servers[~~id];
     serverSelect.value = id;
     options.globals.currentServer = ~~id;
@@ -229,7 +229,7 @@ const restoreServer = (id) => {
         document.querySelector('#remove-server').setAttribute('disabled', 'true');
 }
 
-const addServer = () => {
+function addServer() {
     options.servers.push({
         name: 'New server',
         application: clientList[0].id,
@@ -244,7 +244,7 @@ const addServer = () => {
     persistOptions();
 }
 
-const removeServer = (id) => {
+function removeServer(id) {
     if (options.servers.length > 1)
         options.servers.splice(~~id, 1);
 
@@ -264,7 +264,7 @@ const getRegExps = () => {
         .map((regExpStr) => regExpFromString(regExpStr));
 }
 
-const validateUrl = (str) => {
+function validateUrl(str) {
     try {
         const url = new URL(str);
     } catch (e) {

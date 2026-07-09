@@ -166,7 +166,7 @@ export const clientList = [
     }
 ];
 
-export const getClient = (serverSettings) => {
+export function getClient(serverSettings) {
     switch(serverSettings.application) {
         case 'biglybt':
             return new TransmissionApi(serverSettings);
@@ -214,7 +214,7 @@ export const getClient = (serverSettings) => {
     return new Error('No client found');
 }
 
-export const loadOptions = () => {
+export function loadOptions() {
     const defaults = {
         globals: {
             currentServer: 0,
@@ -250,11 +250,11 @@ export const loadOptions = () => {
     });
 }
 
-export const saveOptions = (options) => {
+export function saveOptions(options) {
     return chrome.storage.local.set(options);
 }
 
-export const isMagnetUrl = (url) => {
+export function isMagnetUrl(url) {
     return !!url.match(/^magnet:/);
 }
 
@@ -278,18 +278,18 @@ export const whitelist = [
  * @param whitelist {RegExp[]}
  * @returns {boolean}
  */
-export const isTorrentUrl = (url, whitelist) => {
+export function isTorrentUrl(url, whitelist) {
     return whitelist.some((regExp) => !!url.match(regExp));
 }
 
-export const getMagnetUrlName = (url) => {
+export function getMagnetUrlName(url) {
     const match = url.match(/^magnet:(.+)$/);
     const params = new URLSearchParams(match ? match[1] : '');
 
     return (params.has('dn') ? params.get('dn') : false);
 }
 
-export const getTorrentName = (data) => {
+export function getTorrentName(data) {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.onerror = (error) => resolve(false);
@@ -316,7 +316,7 @@ export const getTorrentName = (data) => {
     });
 }
 
-const mergeObjects = (target, source) => {
+function mergeObjects(target, source) {
     const isObject = obj => obj && typeof obj === 'object';
 
     Object.keys(source).forEach((key) =>
@@ -329,7 +329,7 @@ const mergeObjects = (target, source) => {
  * @param regExpStr {string}
  * @returns {RegExp}
  */
-export const regExpFromString = (regExpStr) => {
+export function regExpFromString(regExpStr) {
     const parts = /\/(.*)\/(.*)/.exec(regExpStr);
 
     if (parts === null) {
@@ -343,7 +343,7 @@ export const regExpFromString = (regExpStr) => {
  * @param hostname {string}
  * @returns {string}
  */
-export const getHostFilter = (hostname) => {
+export function getHostFilter(hostname) {
     const url = new URL(hostname);
 
     return `${url.protocol}//${url.hostname}/*`;

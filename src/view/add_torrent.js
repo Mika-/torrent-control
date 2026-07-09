@@ -5,7 +5,7 @@ import {
 
 var options;
 
-const restoreOptions = () => {
+function restoreOptions() {
     const params = new URLSearchParams(window.location.search);
     document.querySelector('#url').value = params.get('url');
 
@@ -36,7 +36,7 @@ const restoreOptions = () => {
     });
 }
 
-const selectServer = (serverId) => {
+function selectServer(serverId) {
     document.querySelector('#server').value = serverId;
 
     const serverOptions = options.servers[serverId];
