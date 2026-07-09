@@ -112,10 +112,13 @@ export default class qBittorrentApi extends BaseClient {
                 body: form
             })
             .then((response) => {
-                if (response.ok)
+                if (response.ok) {
                     resolve();
-                else
+                } else if (response.status === 409) {
+                    throw new Error(chrome.i18n.getMessage('torrentAddError', 'Already exists'));
+                } else {
                     throw new Error(chrome.i18n.getMessage('torrentAddError'));
+                }
             })
             .catch((error) => reject(error));
         });
@@ -162,10 +165,13 @@ export default class qBittorrentApi extends BaseClient {
                 body: form
             })
             .then((response) => {
-                if (response.ok)
+                if (response.ok) {
                     resolve();
-                else
+                } else if (response.status === 409) {
+                    throw new Error(chrome.i18n.getMessage('torrentAddError', 'Already exists'));
+                } else {
                     throw new Error(chrome.i18n.getMessage('torrentAddError'));
+                }
             })
             .catch((error) => reject(error));
         });
