@@ -526,7 +526,7 @@ const registerHandler = () => {
     );
 }
 
-const addAdvancedDialog = (url, tabId = null) => {
+const addAdvancedDialog = async (url, tabId = null) => {
     let params = new URLSearchParams();
     params.append('url', url);
 
@@ -536,8 +536,31 @@ const addAdvancedDialog = (url, tabId = null) => {
 
     const height = 370;
     const width = 500;
-    const top = Math.round((screen.height / 2) - (height / 2));
-    const left = Math.round((screen.width / 2) - (width / 2));
+
+    // Center on the display the user is currently using, not the primary
+    // display. In the background page `screen` always refers to the primary
+    // monitor, which breaks centering on multi-monitor setups. Use the bounds
+    // of the currently focused browser window instead.
+    let top = Math.round((screen.height / 2) - (height / 2));
+    let left = Math.round((screen.width / 2) - (width / 2));
+
+    const refWindow = await new Promise((resolve) =>
+        chrome.windows.getLastFocused((win) => resolve(win))
+    ).catch(() => undefined);
+
+    if (refWindow &&
+        Number.isFinite(refWindow.left) && Number.isFinite(refWindow.top) &&
+        Number.isFinite(refWindow.width) && Number.isFinite(refWindow.height)) {
+        top = Math.round(refWindow.top + (refWindow.height - height) / 2);
+        left = Math.round(refWindow.left + (refWindow.width - width) / 2);
+
+        // Clamp so the dialog stays within the focused window's display area,
+        // even when that window sits near a display edge.
+        const maxLeft = refWindow.left + refWindow.width - width;
+        const maxTop = refWindow.top + refWindow.height - height;
+        left = Math.round(Math.min(Math.max(left, refWindow.left), Math.max(refWindow.left, maxLeft)));
+        top = Math.round(Math.min(Math.max(top, refWindow.top), Math.max(refWindow.top, maxTop)));
+    }
 
     chrome.windows.create({
         url: 'view/add_torrent.html?' + params.toString(),
