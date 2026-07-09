@@ -101,7 +101,7 @@ export default class ruTorrentApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
-            form.append('torrent_file[]', torrent, 'temp.torrent');
+            form.append('torrent_file[]', torrent, options.filename || 'temp.torrent');
 
             if (options.paused)
                 form.append('torrents_start_stopped', options.paused.toString());

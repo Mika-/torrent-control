@@ -28,7 +28,7 @@ export default class TixatiApi extends BaseClient {
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
-            form.append('metafile', torrent, 'temp.torrent');
+            form.append('metafile', torrent, options.filename || 'temp.torrent');
             form.append('addmetafile', 'Add');
             form.append('noautostart', options.paused ? 1 : 0);
 

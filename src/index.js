@@ -86,8 +86,8 @@ const addTorrent = (url, tabId, torrentOptions = {}) => {
             });
     } else {
         fetchTorrent(url, tabId)
-            .then(({torrent, torrentName}) => connection.logIn()
-                .then(() => connection.addTorrent(torrent, addTorrentOptions)
+            .then(({torrent, torrentName, filename}) => connection.logIn()
+                .then(() => connection.addTorrent(torrent, {...addTorrentOptions, filename: filename})
                     .then(() => {
                         notification(chrome.i18n.getMessage('torrentAddedNotification') + (torrentName ? ' ' + torrentName : ''));
                         connection.logOut();
@@ -126,6 +126,7 @@ export const fetchTorrent = (url, tabId) => {
             getTorrentName(response.content).then((name) => resolve({
                 torrent: response.content,
                 torrentName: name,
+                filename: response.filename || null,
             }));
         })
     });

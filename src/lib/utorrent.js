@@ -52,13 +52,13 @@ export default class uTorrentApi extends BaseClient {
         return Promise.resolve();
     }
 
-    addTorrent(torrent) {
+    addTorrent(torrent, options = {}) {
         const {hostname} = this.settings;
         const token = this.token;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
-            form.append('torrent_file', torrent, 'temp.torrent');
+            form.append('torrent_file', torrent, options.filename || 'temp.torrent');
 
             fetch(hostname + '?token=' + token + '&action=add-file', {
                 method: 'POST',

@@ -20,14 +20,16 @@ describe('Main tests', () => {
             ok: true,
             status: 200,
             statusText: 'OK',
+            filename: 'ubuntu-20.04-desktop-amd64.torrent',
             content: testTorrent,
         });
 
-        const responseData = await fetchTorrent('https://example.com/test.torrent', 2);
+        const responseData = await fetchTorrent('https://example.com/ubuntu-20.04-desktop-amd64.torrent', 2);
 
         expect(responseData).to.deep.equal({
             torrent: testTorrent,
             torrentName: 'ubuntu-20.04-desktop-amd64.iso',
+            filename: 'ubuntu-20.04-desktop-amd64.torrent',
         })
 
         expect(chrome.tabs.get.calledOnce).to.equal(true);

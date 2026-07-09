@@ -36,7 +36,7 @@ export default class VuzeWebUIApi extends BaseClient {
             
             let form = new FormData();
             form.append('upfile_1', empty_file, '');
-            form.append('upfile_0', torrent, 'temp.torrent');
+            form.append('upfile_0', torrent, options.filename || 'temp.torrent');
 
             fetch(hostname + 'index.tmpl?d=u&local=1', {
                 method: 'POST',

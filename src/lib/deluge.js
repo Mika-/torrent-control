@@ -93,7 +93,7 @@ export default class DelugeApi extends BaseClient {
                     body: JSON.stringify({
                         method: 'core.add_torrent_file',
                         params: [
-                            'temp.torrent',
+                            options.filename || 'temp.torrent',
                             base64torrent,
                             opts
                         ],

@@ -76,9 +76,9 @@ export default class qBittorrentApi extends BaseClient {
             let form = new FormData();
 
             if (apiVersion === VERSION_4_0_4) {
-                form.append('torrents', torrent, 'temp.torrent');
+                form.append('torrents', torrent, options.filename || 'temp.torrent');
             } else {
-                form.append('fileselect', torrent, 'temp.torrent');
+                form.append('fileselect', torrent, options.filename || 'temp.torrent');
 
                 if (options.paused) {
                     if (apiVersion === VERSION_4_6_7) {
