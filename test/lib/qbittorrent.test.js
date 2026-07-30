@@ -315,4 +315,61 @@ describe('qBittorrentApi (5.0.0)', () => {
             path: '',
         });
     });
+
+    it('RSS enabled state (fetching enabled)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({rss_processing_enabled: true}),
+        });
+
+        const enabled = await instance.isRssEnabled();
+
+        expect(fetchStub.calledOnce).to.be.true;
+        expect(fetchStub.firstCall.args[0]).to.equal('https://example.com:1234/api/v2/app/preferences');
+        expect(enabled).to.be.true;
+    });
+
+    it('RSS enabled state (fetching disabled)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({rss_processing_enabled: false}),
+        });
+
+        const enabled = await instance.isRssEnabled();
+
+        expect(enabled).to.be.false;
+    });
+
+    it('RSS enabled state (missing preference defaults to enabled)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({}),
+        });
+
+        const enabled = await instance.isRssEnabled();
+
+        expect(enabled).to.be.true;
+    });
+
+    it('RSS enabled state (unreachable preferences defaults to enabled)', async () => {
+        const fetchStub = sinon.stub(global, 'fetch');
+
+        fetchStub.resolves({
+            ok: false,
+            status: 403,
+        });
+
+        const enabled = await instance.isRssEnabled();
+
+        expect(enabled).to.be.true;
+    });
 });
