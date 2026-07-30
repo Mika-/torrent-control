@@ -199,6 +199,22 @@ export default class qBittorrentApi extends BaseClient {
         });
     }
 
+    async isRssEnabled() {
+        const {hostname, apiVersion} = this.settings;
+        const prefsPath = apiVersion === VERSION_4_0_4 ? 'query/preferences' : 'api/v2/app/preferences';
+
+        const response = await fetch(hostname + prefsPath);
+
+        // If we can't reach the server or read prefs, don't hide the item.
+        if (!response.ok)
+            return true;
+
+        const prefs = await response.json().catch(() => ({}));
+
+        // Only hide when qBittorrent explicitly reports RSS fetching as disabled.
+        return prefs.rss_processing_enabled !== false;
+    }
+
     _attachListeners() {
         const {hostname, httpAuth} = this.settings;
 
