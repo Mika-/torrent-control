@@ -3,6 +3,7 @@ import {
     whitelist,
     loadOptions,
     saveOptions,
+    getClient,
     regExpFromString,
 } from '../util.js';
 
@@ -76,7 +77,40 @@ const isLabelsSupported = (servers) => servers.some((server) => {
     return false;
 });
 
-function persistOptions() {
+/**
+ * Query whether RSS fetching is enabled on the given server, so the context
+ * menu can later decide whether to show the "Add RSS feed" item without
+ * contacting the client. Returns undefined when the concept doesn't apply
+ * (client has no RSS support or no way to check), and true when the check
+ * couldn't be performed (offline, bad credentials) so the item isn't hidden
+ * on a transient failure.
+ *
+ * @param {object} server
+ * @returns {Promise<boolean|undefined>}
+ */
+async function readRssEnabled(server) {
+    const client = clientList.find((client) => client.id === server.application);
+
+    if (!client || !client.clientCapabilities || !client.clientCapabilities.includes('rss'))
+        return undefined;
+
+    const connection = getClient(server);
+
+    if (typeof connection.isRssEnabled !== 'function')
+        return undefined;
+
+    try {
+        await connection.logIn();
+        return await connection.isRssEnabled();
+    } catch (e) {
+        return true;
+    } finally {
+        if (typeof connection.logOut === 'function')
+            connection.logOut();
+    }
+}
+
+async function persistOptions() {
     options.globals.contextMenu = ~~document.querySelector('[name="contextmenu"]:checked').value;
     options.globals.catchUrls = document.querySelector('#catchurls').checked;
     options.globals.addPaused = document.querySelector('#addpaused').checked;
@@ -109,7 +143,7 @@ function persistOptions() {
         };
     }
 
-    options.servers[~~serverSelect.value] = {
+    const server = {
         name: document.querySelector('#name').value,
         application: document.querySelector('#application').value,
         hostname: document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/'),
@@ -121,6 +155,13 @@ function persistOptions() {
         defaultLabel: document.querySelector('#defaultLabel').value || null,
         defaultDirectory: document.querySelector('#defaultDirectory').value || null,
     };
+
+    // Refresh the cached RSS state only here, when settings are saved.
+    const rssEnabled = await readRssEnabled(server);
+    if (typeof rssEnabled === 'boolean')
+        server.rssEnabled = rssEnabled;
+
+    options.servers[~~serverSelect.value] = server;
 
     saveOptions(options);
 
@@ -306,13 +347,13 @@ document.querySelector('#remove-server').addEventListener('click', (e) => {
     removeServer(serverSelect.value);
     restoreServerList();
 });
-document.querySelector('#save-options').addEventListener('click', (e) => {
+document.querySelector('#save-options').addEventListener('click', async (e) => {
     e.preventDefault();
 
     const hostname = document.querySelector('#hostname').value.replace(/\s+/, '').replace(/\/?$/, '/');
 
     if (validateUrl(hostname)) {
-        persistOptions();
+        await persistOptions();
         restoreServerList();
     } else {
         alert('Server address is invalid');
