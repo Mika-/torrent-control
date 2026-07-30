@@ -307,7 +307,10 @@ function createContextMenu() {
         }
     }
 
-    if (client.clientCapabilities && client.clientCapabilities.includes('rss')) {
+    // `rssEnabled` is cached on the server config when settings are saved
+    // (see options.js). We only hide the item when the client explicitly
+    // reported RSS as disabled, so the menu never contacts the client here.
+    if (client.clientCapabilities && client.clientCapabilities.includes('rss') && serverOptions.rssEnabled !== false) {
         if (options.globals.contextMenu === 1) {
             chrome.contextMenus.create({
                 contexts: ['link'],
