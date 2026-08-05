@@ -238,6 +238,7 @@ export function loadOptions() {
                 httpAuth: null,
                 defaultLabel: null,
                 defaultDirectory: null,
+                routeUrls: [],
             }
         ]
     };
@@ -280,6 +281,83 @@ export const whitelist = [
  */
 export function isTorrentUrl(url, whitelist) {
     return whitelist.some((regExp) => !!url.match(regExp));
+}
+
+/**
+ * Turns a hostname pattern into a RegExp anchored to the whole hostname.
+ *
+ * `*` matches a single label, and a leading `*.` also matches the bare domain,
+ * so `*.example.com` covers `example.com`, `tracker.example.com` and
+ * `a.b.example.com`.
+ *
+ * @param pattern {string}
+ * @returns {RegExp}
+ */
+function hostPatternToRegExp(pattern) {
+    let prefix = '';
+    let source = pattern;
+
+    if (source.startsWith('*.')) {
+        prefix = '(?:.+\\.)?';
+        source = source.slice(2);
+    }
+
+    const escaped = source
+        .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+        .replace(/\*/g, '[^.]+');
+
+    return new RegExp('^' + prefix + escaped + '$', 'i');
+}
+
+/**
+ * Tests a URL against a single routing pattern.
+ *
+ * A pattern delimited by slashes (`/^https:\/\/example\.com\/dl/i`) is treated
+ * as a regular expression and tested against the whole URL. Anything else is a
+ * hostname pattern and is tested against the URL's hostname only.
+ *
+ * @param url {string}
+ * @param pattern {string}
+ * @returns {boolean}
+ */
+export function matchesRoutePattern(url, pattern) {
+    const trimmed = pattern.trim();
+
+    if (trimmed.length === 0)
+        return false;
+
+    try {
+        if (/^\/.*\/[a-z]*$/.test(trimmed))
+            return regExpFromString(trimmed).test(url);
+
+        // Accept a pasted address as shorthand for its hostname
+        const host = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)
+            ? new URL(trimmed).hostname
+            : trimmed.replace(/\/$/, '');
+
+        // Magnet links have no hostname, so hostname patterns never match them
+        const hostname = new URL(url).hostname;
+
+        return hostname !== '' && hostPatternToRegExp(host).test(hostname);
+    } catch (e) {
+        // An unparseable pattern or URL must not break adding the torrent
+        return false;
+    }
+}
+
+/**
+ * Finds the first server configured to handle a URL.
+ *
+ * @param url {string}
+ * @param servers {object[]}
+ * @returns {number|null} index into `servers`, or null when nothing matches
+ */
+export function getServerForUrl(url, servers) {
+    const index = servers.findIndex((server) =>
+        (server.routeUrls || []).some((pattern) => matchesRoutePattern(url, pattern))
+    );
+
+    return index !== -1 ? index : null;
 }
 
 export function getMagnetUrlName(url) {

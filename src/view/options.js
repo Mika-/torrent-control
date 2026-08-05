@@ -1,6 +1,7 @@
 import {
     clientList,
     whitelist,
+    getServerForUrl,
     loadOptions,
     saveOptions,
     regExpFromString,
@@ -120,6 +121,7 @@ function persistOptions() {
         httpAuth: httpAuth,
         defaultLabel: document.querySelector('#defaultLabel').value || null,
         defaultDirectory: document.querySelector('#defaultDirectory').value || null,
+        routeUrls: getRouteUrls(),
     };
 
     saveOptions(options);
@@ -137,6 +139,7 @@ function restoreOptions() {
     document.querySelector('#matchregexp').placeholder = '/^https:\\/\\/example\\.com\\/torrent\\/\\d+\\/download\\/$/'.replace(/\\n/g, '\n');
     document.querySelector('#labels').placeholder = 'Label\nAnother label'.replace(/\\n/g, '\n');
     document.querySelector('#directories').placeholder = '/home/user/downloads\n/data/incomplete'.replace(/\\n/g, '\n');
+    document.querySelector('#routeurls').placeholder = 'tracker.example.com\n*.another-tracker.org\n/^https:\\/\\/example\\.com\\/dl\\//'.replace(/\\n/g, '\n');
 
     document.querySelectorAll('[data-i18n]').forEach((element) => {
         element.textContent = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
@@ -206,6 +209,7 @@ function restoreServer(id) {
     document.querySelector('#directories').value = server.directories.join('\n');
     document.querySelector('#defaultLabel').value = server.defaultLabel || '';
     document.querySelector('#defaultDirectory').value = server.defaultDirectory || '';
+    document.querySelector('#routeurls').value = (server.routeUrls || []).join('\n');
 
     if (server.httpAuth) {
         document.querySelector('#httpAuth').checked = true;
@@ -256,6 +260,13 @@ function removeServer(id) {
     persistOptions();
 }
 
+const getRouteUrls = () => {
+    const routeUrls = document.querySelector('#routeurls').value.split(/\n/g) || [];
+    return routeUrls
+        .map((pattern) => pattern.trim())
+        .filter((pattern) => pattern.length);
+}
+
 const getRegExps = () => {
     const matchRegExp = document.querySelector('#matchregexp').value.split(/\n/g) || [];
     return matchRegExp
@@ -297,8 +308,19 @@ document.querySelector('#test-regexp').addEventListener('click', (e) => {
     const regExps = getRegExps().concat(whitelist);
     const matchingRegExp = regExps.find((regExp) => regExp.exec(testUrl) !== null) || null;
 
-    document.querySelector('#test-regexp-result').textContent = matchingRegExp ?
-        chrome.i18n.getMessage('testSuccessText', matchingRegExp.toString()) : chrome.i18n.getMessage('testFailText');
+    let result = [matchingRegExp ?
+        chrome.i18n.getMessage('testSuccessText', matchingRegExp.toString()) : chrome.i18n.getMessage('testFailText')];
+
+    // Test against the routing patterns currently shown in the form rather than
+    // the saved ones, so unsaved edits can be checked too
+    const testServers = options.servers.map((server, id) =>
+        id === ~~serverSelect.value ? {...server, routeUrls: getRouteUrls()} : server);
+    const routedServer = getServerForUrl(testUrl, testServers);
+
+    if (routedServer !== null)
+        result.push(chrome.i18n.getMessage('testRouteText', testServers[routedServer].name));
+
+    document.querySelector('#test-regexp-result').textContent = result.join(' ');
 });
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector('#remove-server').addEventListener('click', (e) => {

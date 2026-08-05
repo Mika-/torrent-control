@@ -4,6 +4,7 @@ import {
     loadOptions,
     saveOptions,
     getClient,
+    getServerForUrl,
     isTorrentUrl,
     isMagnetUrl,
     getHostFilter,
@@ -52,14 +53,36 @@ loadOptions().then((newOptions) => {
 
 const isConfigured = () => options.servers[options.globals.currentServer].hostname !== '';
 
+/**
+ * Resolves which server an URL should be added to.
+ *
+ * An explicitly chosen server always wins, otherwise the URL is matched against
+ * every server's routing patterns, falling back to the current server.
+ *
+ * @param url {string}
+ * @param torrentOptions {object}
+ * @returns {number}
+ */
+function resolveServer(url, torrentOptions) {
+    if (torrentOptions.server !== undefined)
+        return torrentOptions.server;
+
+    const routedServer = getServerForUrl(url, options.servers);
+
+    return routedServer !== null ? routedServer : options.globals.currentServer;
+}
+
 function addTorrent(url, tabId, torrentOptions = {}) {
-    const server = torrentOptions.server !== undefined ? torrentOptions.server : options.globals.currentServer;
+    const server = resolveServer(url, torrentOptions);
     const serverSettings = options.servers[server];
 
+    // Client options come from the resolved server, so routing a torrent
+    // elsewhere carries that server's settings rather than the current one's
     const addTorrentOptions = {
         paused: false,
         path: serverSettings.defaultDirectory || null,
         label: serverSettings.defaultLabel || null,
+        ...(serverSettings.clientOptions || {}),
         ...torrentOptions,
     };
 
@@ -334,8 +357,6 @@ function registerHandler() {
         const pathId = info.menuItemId.match(/^add-torrent-path-(\d+)$/);
         const serverId = info.menuItemId.match(/^add-torrent-server-(\d+)$/);
 
-        const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
-
         if (info.menuItemId === 'catch-urls')
             toggleURLCatching();
         if (info.menuItemId === 'add-paused')
@@ -343,35 +364,31 @@ function registerHandler() {
         else if (info.menuItemId === 'add-torrent')
             addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
-                ...clientOptions
             });
         else if (info.menuItemId === 'add-torrent-paused')
             addTorrent(info.linkUrl, tab.id, {
                 paused: true,
-                ...clientOptions
             });
         else if (labelId)
+            // The label and path submenus are built from the current server, so
+            // pin the destination instead of letting a routing rule move the
+            // torrent to a server where that label or path does not exist
             addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
+                server: options.globals.currentServer,
                 label: options.globals.labels[~~labelId[1]],
-                ...clientOptions
             });
         else if (pathId)
             addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
+                server: options.globals.currentServer,
                 path: options.servers[options.globals.currentServer].directories[~~pathId[1]],
-                ...clientOptions
             });
-        else if (serverId) {
-            const selectedServerId = parseInt(serverId[1], 10);
-            const selectedClientOptions = options.servers[selectedServerId].clientOptions || {};
-
+        else if (serverId)
             addTorrent(info.linkUrl, tab.id, {
                 paused: options.globals.addPaused,
-                server: selectedServerId,
-                ...selectedClientOptions,
+                server: parseInt(serverId[1], 10),
             });
-        }
         else if (info.menuItemId === 'add-torrent-advanced')
             addAdvancedDialog(info.linkUrl, !isMagnetUrl(info.linkUrl) ? tab.id : null);
         else if (currentServer)
@@ -472,10 +489,8 @@ function registerHandler() {
             if (options.globals.addAdvanced) {
                 addAdvancedDialog(magnetUri);
             } else {
-                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
                 addTorrent(magnetUri, null, {
                     paused: options.globals.addPaused,
-                    ...clientOptions
                 });
             }
             return {cancel: true}
@@ -496,11 +511,8 @@ function registerHandler() {
                 if (options.globals.addAdvanced) {
                     addAdvancedDialog(details.url, tabId);
                 } else {
-                    const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
-
                     addTorrent(details.url, tabId, {
                         paused: options.globals.addPaused,
-                        ...clientOptions
                     });
                 }
                 return {cancel: true};
@@ -515,12 +527,7 @@ function registerHandler() {
     chrome.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             if (request.type === 'addTorrent') {
-                const clientOptions = options.servers[options.globals.currentServer].clientOptions || {};
-
-                addTorrent(request.url, request.tabId, {
-                    ...clientOptions,
-                    ...request.options
-                });
+                addTorrent(request.url, request.tabId, request.options);
             }
         }
     );

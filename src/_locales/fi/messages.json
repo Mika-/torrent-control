@@ -59,6 +59,10 @@
     "message": "Ei osumia",
     "description": "Test fail text"
   },
+  "testRouteText": {
+    "message": "Ohjataan palvelimelle: $1",
+    "description": "Test route text"
+  },
   "addTorrentAction": {
     "message": "Lisää torrent",
     "description": "Context menu action"
@@ -134,6 +138,10 @@
   "serverDirectoriesOption": {
     "message": "Lataushakemistot",
     "description": "Server directories option"
+  },
+  "serverRouteUrlsOption": {
+    "message": "Ohjaa nämä seurantapalvelimet tänne (verkkotunnus tai /säännöllinen lauseke/ riviä kohden)",
+    "description": "Server routing patterns option"
   },
   "torrentAddedNotification": {
     "message": "Torrentti lisätty",
