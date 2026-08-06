@@ -1,0 +1,2 @@
+export type Features = Record<string, boolean>;
+//# sourceMappingURL=Features.d.ts.map

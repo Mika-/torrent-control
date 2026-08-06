@@ -1,0 +1,84 @@
+{
+  "name": "sinon-chrome",
+  "version": "3.0.1",
+  "description": "Mock of chrome extensions API for unit testing under nodejs",
+  "homepage": "https://github.com/acvetkov/sinon-chrome",
+  "author": {
+    "name": "Aleksey Tsvetkov",
+    "email": "aleksey.dmitrich@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Aleksey Tsvetkov",
+      "email": "aleksey.dmitrich@gmail.com",
+      "url": "https://github.com/acvetkov"
+    },
+    {
+      "name": "Vitaly Potapov",
+      "email": "noginsk@rambler.ru",
+      "url": "https://github.com/vitalets"
+    },
+    {
+      "name": "Sokratis Vidros",
+      "email": "sokratis.vidros@gmail.com",
+      "url": "https://github.com/SokratisVidros"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/acvetkov/sinon-chrome.git"
+  },
+  "bugs": {
+    "url": "https://github.com/acvetkov/sinon-chrome/issues"
+  },
+  "keywords": [
+    "chrome",
+    "firefox",
+    "extensions",
+    "apps",
+    "test",
+    "tdd",
+    "webextensions",
+    "chrome api",
+    "sinon"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf ./out/",
+    "lint": "eslint ./src ./test",
+    "test": "mocha --recursive --compilers js:babel-register --require ./test/setup.js",
+    "test-navigate": "mocha --compilers js:babel-register examples/navigate.test.js",
+    "test-events": "mocha --compilers js:babel-register examples/events.test.js",
+    "test-then": "mocha --compilers js:babel-register examples/then-chrome.test.js",
+    "transpile": "babel ./src --out-dir ./out",
+    "build": "npm run clean && npm run transpile && webpack && cp -R ./src/config out/config",
+    "predeploy": "npm run clean && npm run lint && npm test && npm run build && npm run copy2out",
+    "bundle": "webpack",
+    "bundle-dev": "webpack --watch --progress",
+    "copy2out": "cp ./readme.md ./out/readme.md && cp ./package.json ./out/package.json && cp -R ./dist out/bundle"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.16.3",
+    "sinon": "^7.2.3",
+    "urijs": "^1.18.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "eslint": "^3.7.1",
+    "eslint-plugin-import": "^2.0.0",
+    "json-loader": "^0.5.4",
+    "mocha": "^3.1.0",
+    "mocha-lcov-reporter": "^1.2.0",
+    "mocha-tldr-reporter": "^1.0.0",
+    "webpack": "^1.13.2"
+  }
+}
