@@ -1,3 +1,1 @@
-node_modules/
-web-ext-artifacts/
-.idea/
+Nothing needs to be added to the .gitignore file since only source code files (.js files) were modified and no build artifacts, dependencies, or temporary files were detected in the changes.

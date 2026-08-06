@@ -43,6 +43,7 @@ async function listener(request) {
 
     try {
         const response = await fetch(request.url, {
+            credentials: 'include',
             headers: new Headers({
                 'accept': 'application/x-bittorrent,application/octet-stream,*/*',
             }),

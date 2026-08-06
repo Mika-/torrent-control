@@ -271,6 +271,9 @@ export const whitelist = [
     /\/dl\/.+?\/\?jackett_apikey=[a-z0-9]{32}&path=/, // Jackett
     /\/download\.php\?id=[a-z0-9]{40}&f=.+?&key=/, // Xbtit
     /\/torrents\/download\/\d+/, // UNIT3D
+    
+    // c411.org
+    /^https?:\/\/(?:www\.)?c411\.org\/torrents\/\d+/,
 ];
 
 /**

@@ -1,0 +1,17 @@
+export default class Protocol {
+    static OKAY: string;
+    static FAIL: string;
+    static STAT: string;
+    static STA2: string;
+    static LIST: string;
+    static DENT: string;
+    static RECV: string;
+    static DATA: string;
+    static DONE: string;
+    static SEND: string;
+    static QUIT: string;
+    static decodeLength(length: string): number;
+    static encodeLength(length: number): string;
+    static encodeData(data: Buffer | string): Buffer;
+}
+//# sourceMappingURL=protocol.d.ts.map
