@@ -1,0 +1,136 @@
+import BaseClient from './baseclient.js';
+
+export default class uTorrentApi extends BaseClient {
+
+    constructor(serverSettings) {
+        super();
+
+        this.settings = serverSettings;
+        this.cookie = null;
+        this.token = null;
+    }
+
+    logIn() {
+        const {hostname} = this.settings;
+
+        this._attachListeners();
+
+        return new Promise((resolve, reject) => {
+            fetch(hostname + 'token.html', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then((response) => {
+                if (response.ok)
+                    return response.text()
+                else if (response.status === 401)
+                    throw new Error(chrome.i18n.getMessage('loginError'));
+                else
+                    throw new Error(chrome.i18n.getMessage('apiError', response.status.toString() + ': ' + response.statusText));
+            })
+            .then((html) => {
+                const token = html.match(/<div.+?>(.+?)<\/div>/);
+
+                if (token && token[1]) {
+                    this.token = token[1];
+                    resolve();
+                }
+                else {
+                    throw new Error(chrome.i18n.getMessage('apiError', html));
+                }
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
+    logOut() {
+        this.removeEventListeners();
+
+        this.cookie = null;
+        this.token = null;
+
+        return Promise.resolve();
+    }
+
+    addTorrent(torrent, options = {}) {
+        const {hostname} = this.settings;
+        const token = this.token;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('torrent_file', torrent, options.filename || 'temp.torrent');
+
+            fetch(hostname + '?token=' + token + '&action=add-file', {
+                method: 'POST',
+                credentials: 'include',
+                body: form
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                if (!json.error)
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('torrentAddError'));
+            }).catch((error) => reject(error));
+        });
+    }
+
+    addTorrentUrl(url) {
+        const {hostname} = this.settings;
+        const token = this.token;
+
+        return new Promise((resolve, reject) => {
+            fetch(hostname + '?token=' + token + '&action=add-url&s=' + encodeURIComponent(url), {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                if (!json.error)
+                    resolve();
+                else
+                    throw new Error(chrome.i18n.getMessage('torrentAddError'));
+            })
+            .catch((error) => reject(error));
+        });
+    }
+
+    _attachListeners() {
+        const {hostname, username, password} = this.settings;
+        let sessionCookie = this.cookie;
+
+        if (username !== '' || password !== '')
+            this.addAuthRequiredListener(username, password);
+
+        this.addHeadersReceivedEventListener((details) => {
+            const cookie = this.getCookie(details.responseHeaders, 'GUID');
+
+            if (cookie)
+                sessionCookie = cookie;
+
+            return {
+                responseHeaders: this.filterHeaders(details.responseHeaders, [
+                    'set-cookie',
+                ])
+            };
+        });
+
+        this.addBeforeSendHeadersEventListener((details) => {
+            let requestHeaders = this.filterHeaders(details.requestHeaders, [
+                'cookie',
+            ]);
+
+            if (sessionCookie) {
+                requestHeaders.push({
+                    name: 'Cookie',
+                    value: sessionCookie
+                });
+            }
+
+            return {
+                requestHeaders: requestHeaders
+            };
+        });
+    }
+
+}

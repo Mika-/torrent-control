@@ -1,0 +1,258 @@
+{
+  "addonConfigurationTitle": {
+    "message": "Addon configuration",
+    "description": "Addon configuration"
+  },
+  "contextMenuOption": {
+    "message": "Context menu",
+    "description": "Context menu"
+  },
+  "contextMenuDefaultOption": {
+    "message": "Default",
+    "description": "Context menu default"
+  },
+  "contextMenuSimpleOption": {
+    "message": "Simple",
+    "description": "Context menu simple"
+  },
+  "contextMenuHiddenOption": {
+    "message": "Hidden",
+    "description": "Context menu hidden"
+  },
+  "catchUrlsOption": {
+    "message": "Catch torrent URLs",
+    "description": "Catch torrent URLs"
+  },
+  "addAdvancedOption": {
+    "message": "Add via advanced dialog",
+    "description": "Add torrents via advanced dialog"
+  },
+  "enableNotificationsOption": {
+    "message": "Show notifications",
+    "description": "Enable notifications option"
+  },
+  "addPausedOption": {
+    "message": "Add torrents as paused",
+    "description": "Add as paused by default"
+  },
+  "torrentLabelsOption": {
+    "message": "Labels",
+    "description": "Label list option"
+  },
+  "regexpMatchLabelsOption": {
+    "message": "Custom URL matching regular expressions",
+    "description": "Matching regexp option"
+  },
+  "testUrlOption": {
+    "message": "Test URL",
+    "description": "Test url label"
+  },
+  "testAction": {
+    "message": "Test",
+    "description": "Test action"
+  },
+  "testSuccessText": {
+    "message": "Matched by: $1",
+    "description": "Test fail text"
+  },
+  "testFailText": {
+    "message": "No matches found",
+    "description": "Test fail text"
+  },
+  "addTorrentAction": {
+    "message": "Add torrent",
+    "description": "Context menu action"
+  },
+  "addTorrentPausedAction": {
+    "message": "Add torrent (Paused)",
+    "description": "Context menu action"
+  },
+  "addTorrentLabelAction": {
+    "message": "Add torrent with label",
+    "description": "Context menu action"
+  },
+  "addTorrentPathAction": {
+    "message": "Add torrent with path",
+    "description": "Context menu action"
+  },
+  "addTorrentServerAction": {
+    "message": "Add torrent to server",
+    "description": "Context menu action"
+  },
+  "addRssFeedAction": {
+    "message": "Add RSS feed",
+    "description": "Context menu action"
+  },
+  "advancedModifier": {
+    "message": "Advanced",
+    "description": "Advanced modifier"
+  },
+  "saveAction": {
+    "message": "Save",
+    "description": "Save action"
+  },
+  "removeAction": {
+    "message": "Remove server",
+    "description": "Remove action"
+  },
+  "addServerAction": {
+    "message": "Add a new server",
+    "description": "Add server action"
+  },
+  "serverConfigurationTitle": {
+    "message": "Server configuration",
+    "description": "Server configuration title"
+  },
+  "bittorrentClientOption": {
+    "message": "Bittorrent client",
+    "description": "Bittorrent client option"
+  },
+  "serverSelect": {
+    "message": "Current server",
+    "description": "Server select"
+  },
+  "serverNameOption": {
+    "message": "Server name",
+    "description": "Server name option"
+  },
+  "serverAddressOption": {
+    "message": "Server address",
+    "description": "Server address option"
+  },
+  "usernameOption": {
+    "message": "Username",
+    "description": "Username option"
+  },
+  "passwordOption": {
+    "message": "Password",
+    "description": "Password option"
+  },
+  "httpAuthOption": {
+    "message": "Use additional HTTP authentication",
+    "description": "HTTP auth option"
+  },
+  "serverDirectoriesOption": {
+    "message": "Download directories",
+    "description": "Server directories option"
+  },
+  "torrentAddedNotification": {
+    "message": "Torrent added",
+    "description": "Torrent added notification."
+  },
+  "rssFeedAddedNotification": {
+    "message": "RSS feed added",
+    "description": "RSS feed added notification."
+  },
+  "loginError": {
+    "message": "Failed to login",
+    "description": "Login error."
+  },
+  "apiError": {
+    "message": "Unknown response. ($1)",
+    "description": "Unknown response."
+  },
+  "rssFeedAddError": {
+    "message": "Failed to add RSS feed. $1",
+    "description": "Add error."
+  },
+  "torrentAddError": {
+    "message": "Failed to add torrent. $1",
+    "description": "Add error."
+  },
+  "torrentFetchError": {
+    "message": "Failed to fetch torrent. ($1)",
+    "description": "Fetch error."
+  },
+  "torrentParseError": {
+    "message": "Failed to read torrent. ($1)",
+    "description": "Parse error."
+  },
+  "torrentLabelAddError": {
+    "message": "Failed to add label for torrent.",
+    "description": "Add error."
+  },
+  "sourceTabDestroyedError": {
+    "message": "Source tab no longer exists.",
+    "description": "Tab destroyed error."
+  },
+  "sequentialDownloadOption": {
+    "message": "Sequential download",
+    "description": "Client option"
+  },
+  "firstLastPiecePriorityOption": {
+    "message": "Prioritize first and last piece",
+    "description": "Client option"
+  },
+  "skipHashCheckOption": {
+    "message": "Skip hash check",
+    "description": "Client option"
+  },
+  "addTorrentTitle": {
+    "message": "Add torrent",
+    "description": "Add torrent"
+  },
+  "torrentUrl": {
+    "message": "Torrent url",
+    "description": "Torrent url"
+  },
+  "labelSelect": {
+    "message": "Label",
+    "description": "Label select"
+  },
+  "downloadDirectorySelect": {
+    "message": "Download directory",
+    "description": "Download directory select"
+  },
+  "customDownloadDirectoryOption": {
+    "message": "Custom path",
+    "description": "Manual download path text input label"
+  },
+  "defaultOption": {
+    "message": "Default",
+    "description": "Default option"
+  },
+  "noneOption": {
+    "message": "None",
+    "description": "None option"
+  },
+  "addAsPausedOption": {
+    "message": "Add as paused",
+    "description": "Add as paused"
+  },
+  "authTypeOption": {
+    "message": "Authentication type",
+    "description": "Authentication type option"
+  },
+  "authTypeHttpAuthOption": {
+    "message": "HTTP Auth",
+    "description": "HTTP Auth option"
+  },
+  "authTypeLoginFormOption": {
+    "message": "Login form",
+    "description": "Login form option"
+  },
+  "contentLayoutOption": {
+    "message": "Content layout",
+    "description": "Content layout option"
+  },
+  "contentLayoutOriginalOption": {
+    "message": "Original",
+    "description": "Content layout original option"
+  },
+  "contentLayoutSubfolderOption": {
+    "message": "Create subfolder",
+    "description": "Content layout subfolder option"
+  },
+  "contentLayoutNoSubfolderOption": {
+    "message": "Don't create subfolder",
+    "description": "Content layout no subfolder option"
+  },
+  "serverDefaultDirectoryOption": {
+    "message": "Default directory",
+    "description": "Server default directory option"
+  },
+  "serverDefaultLabelOption": {
+    "message": "Default label",
+    "description": "Server default label option"
+  }
+}
