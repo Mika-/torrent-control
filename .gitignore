@@ -1,21 +1,8 @@
 ```
 # Build artifacts
 dist/
-build/
+*.js
 
-# Logs and temp files
-*.log
-*.tmp
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-
-# Web extension artifacts
-web-ext-artifacts/
+# Archives
+*.zip
 ```

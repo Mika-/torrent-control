@@ -224,14 +224,17 @@ export function loadOptions() {
             catchUrls: true,
             enableNotifications: true,
             labels: [],
-            matchRegExp: []
+            // Pré-remplir avec le regex c411.org par défaut
+            matchRegExp: [
+                '/https?:\\/\\/(?:www\\.)?c411\\.org\\/torrents\\/[a-z0-9]+/'
+            ]
         },
         servers: [
             {
-                name: 'Default',
-                application: clientList[0].id,
-                hostname: '',
-                username: '',
+                name: 'ruTorrent Seedbox',
+                application: 'rutorrent',
+                hostname: 'https://moodle.myseedbox.site/rutorrent/',
+                username: 'gmeinga_4612',
                 password: '',
                 directories: [],
                 clientOptions: {},
@@ -272,8 +275,8 @@ export const whitelist = [
     /\/download\.php\?id=[a-z0-9]{40}&f=.+?&key=/, // Xbtit
     /\/torrents\/download\/\d+/, // UNIT3D
     
-    // c411.org
-    /^https?:\/\/(?:www\.)?c411\.org\/torrents\/\d+/,
+    // c411.org - supporte URLs avec ID numérique ou infohash
+    /https?:\/\/(?:www\.)?c411\.org\/torrents\/[a-z0-9]+/,
 ];
 
 /**
