@@ -1,1 +1,21 @@
-Nothing needs to be added to the .gitignore file since there are no build artifacts, dependencies, or temporary files in the provided changes. The current .gitignore already contains appropriate rules for log files.
+```
+# Build artifacts
+web-ext-artifacts/
+*.zip
+
+# Dependencies
+node_modules/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+```
