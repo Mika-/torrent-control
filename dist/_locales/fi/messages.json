@@ -1,0 +1,258 @@
+{
+  "addonConfigurationTitle": {
+    "message": "Lisäosan asetukset",
+    "description": "Addon configuration"
+  },
+  "contextMenuOption": {
+    "message": "Kontekstivalikko",
+    "description": "Context menu"
+  },
+  "contextMenuDefaultOption": {
+    "message": "Oletus",
+    "description": "Context menu default"
+  },
+  "contextMenuSimpleOption": {
+    "message": "Yksinkertainen",
+    "description": "Context menu simple"
+  },
+  "contextMenuHiddenOption": {
+    "message": "Piilotettu",
+    "description": "Context menu hidden"
+  },
+  "catchUrlsOption": {
+    "message": "Kaappaa torrent osoitteet",
+    "description": "Catch torrent URLs"
+  },
+  "addAdvancedOption": {
+    "message": "Lisää kehittyneellä dialogilla",
+    "description": "Add torrents via advanced dialog"
+  },
+  "enableNotificationsOption": {
+    "message": "Näytä ilmoitukset",
+    "description": "Enable notifications option"
+  },
+  "addPausedOption": {
+    "message": "Lisää torrentit keskeytettynä",
+    "description": "Add as paused by default"
+  },
+  "torrentLabelsOption": {
+    "message": "Tunnisteet",
+    "description": "Label list option"
+  },
+  "regexpMatchLabelsOption": {
+    "message": "Käyttäjän määrittelemät URL kaappaimet",
+    "description": "Matching regexp option"
+  },
+  "testUrlOption": {
+    "message": "Testaa URL",
+    "description": "Test url label"
+  },
+  "testAction": {
+    "message": "Testaa",
+    "description": "Test action"
+  },
+  "testSuccessText": {
+    "message": "Löytyi kaappaimella: $1",
+    "description": "Test fail text"
+  },
+  "testFailText": {
+    "message": "Ei osumia",
+    "description": "Test fail text"
+  },
+  "addTorrentAction": {
+    "message": "Lisää torrent",
+    "description": "Context menu action"
+  },
+  "addTorrentPausedAction": {
+    "message": "Lisää torrent (Keskeytettynä)",
+    "description": "Context menu action"
+  },
+  "addTorrentLabelAction": {
+    "message": "Lisää torrent tunnisteella",
+    "description": "Context menu action"
+  },
+  "addTorrentPathAction": {
+    "message": "Lisää torrent polulla",
+    "description": "Context menu action"
+  },
+  "addTorrentServerAction": {
+    "message": "Lisää torrent palvelimelle",
+    "description": "Context menu action"
+  },
+  "addRssFeedAction": {
+    "message": "Lisää RSS-syöte",
+    "description": "Context menu action"
+  },
+  "advancedModifier": {
+    "message": "Edistynyt",
+    "description": "Advanced modifier"
+  },
+  "saveAction": {
+    "message": "Tallenna",
+    "description": "Save action"
+  },
+  "removeAction": {
+    "message": "Poista palvelin",
+    "description": "Remove action"
+  },
+  "addServerAction": {
+    "message": "Lisää uusi palvelin",
+    "description": "Add server action"
+  },
+  "serverConfigurationTitle": {
+    "message": "Palvelimen asetukset",
+    "description": "Server configuration title"
+  },
+  "bittorrentClientOption": {
+    "message": "Bittorrent-sovellus",
+    "description": "Bittorrent client option"
+  },
+  "serverSelect": {
+    "message": "Nykyinen palvelin",
+    "description": "Server select"
+  },
+  "serverNameOption": {
+    "message": "Palvelimen nimi",
+    "description": "Server name option"
+  },
+  "serverAddressOption": {
+    "message": "Palvelimen osoite",
+    "description": "Server address option"
+  },
+  "usernameOption": {
+    "message": "Käyttäjätunnus",
+    "description": "Username option"
+  },
+  "passwordOption": {
+    "message": "Salasana",
+    "description": "Password option"
+  },
+  "httpAuthOption": {
+    "message": "Käytä HTTP tunnistautumista",
+    "description": "HTTP auth option"
+  },
+  "serverDirectoriesOption": {
+    "message": "Lataushakemistot",
+    "description": "Server directories option"
+  },
+  "torrentAddedNotification": {
+    "message": "Torrentti lisätty",
+    "description": "Torrent added notification."
+  },
+  "rssFeedAddedNotification": {
+    "message": "RSS-syöte lisätty",
+    "description": "Rss feed added notification."
+  },
+  "loginError": {
+    "message": "Sisäänkirjautuminen epäonnistui",
+    "description": "Login error."
+  },
+  "apiError": {
+    "message": "Tuntematon vastaus. ($1)",
+    "description": "Unknown response."
+  },
+  "rssFeedAddError": {
+    "message": "RSS-syötteen lisäys epäonnistui. $1",
+    "description": "Add error."
+  },
+  "torrentAddError": {
+    "message": "Torrentin lisäys epäonnistui. $1",
+    "description": "Add error."
+  },
+  "torrentFetchError": {
+    "message": "Torrentin hakeminen epäonnistui. ($1)",
+    "description": "Fetch error."
+  },
+  "torrentParseError": {
+    "message": "Torrentin lukeminen epäonnistui. ($1)",
+    "description": "Parse error."
+  },
+  "torrentLabelAddError": {
+    "message": "Kategorian asetus epäonnistui.",
+    "description": "Add error."
+  },
+  "sourceTabDestroyedError": {
+    "message": "Lähde välilehteä ei enää löytynyt.",
+    "description": "Tab destroyed error."
+  },
+  "sequentialDownloadOption": {
+    "message": "Lataa järjestyksessä",
+    "description": "Client option"
+  },
+  "firstLastPiecePriorityOption": {
+    "message": "Lataa ensin ensimmäinen ja viimeinen osa",
+    "description": "Client option"
+  },
+  "skipHashCheckOption": {
+    "message": "Ohita tarkistelaskenta",
+    "description": "Client option"
+  },
+  "addTorrentTitle": {
+    "message": "Lisää torrentti",
+    "description": "Add torrent"
+  },
+  "torrentUrl": {
+    "message": "Torrentin url",
+    "description": "Torrent url"
+  },
+  "labelSelect": {
+    "message": "Tunniste",
+    "description": "Label select"
+  },
+  "downloadDirectorySelect": {
+    "message": "Lataushakemisto",
+    "description": "Download location select"
+  },
+  "customDownloadDirectoryOption": {
+    "message": "Mukautettu polku",
+    "description": "Manual download path text input label"
+  },
+  "defaultOption": {
+    "message": "Oletus",
+    "description": "Default option"
+  },
+  "noneOption": {
+    "message": "Ei valittu",
+    "description": "None option"
+  },
+  "addAsPausedOption": {
+    "message": "Lisää keskeytettynä",
+    "description": "Add as paused"
+  },
+  "authTypeOption": {
+    "message": "Kirjautumistapa",
+    "description": "Authentication type option"
+  },
+  "authTypeHttpAuthOption": {
+    "message": "HTTP Autentikaatio",
+    "description": "HTTP Auth option"
+  },
+  "authTypeLoginFormOption": {
+    "message": "Lomake",
+    "description": "Login form option"
+  },
+  "contentLayoutOption": {
+    "message": "Sisällön ulkoasu",
+    "description": "Content layout option"
+  },
+  "contentLayoutOriginalOption": {
+    "message": "Alkuperäinen",
+    "description": "Content layout original option"
+  },
+  "contentLayoutSubfolderOption": {
+    "message": "Luo alikansio",
+    "description": "Content layout subfolder option"
+  },
+  "contentLayoutNoSubfolderOption": {
+    "message": "Älä luo alikansiota",
+    "description": "Content layout no subfolder option"
+  },
+  "serverDefaultDirectoryOption": {
+    "message": "Oletushakemisto",
+    "description": "Server default directory option"
+  },
+  "serverDefaultLabelOption": {
+    "message": "Oletustunniste",
+    "description": "Server default label option"
+  }
+}

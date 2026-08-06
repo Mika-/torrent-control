@@ -42,88 +42,102 @@ async function listener(request) {
     }
 
     try {
-        // Special handling for c411.org - extract info hash from URL and use API
-        const c411Match = request.url.match(/^https?:\/\/(?:www\.)?c411\.org\/torrents\/(\d+)$/);
+        // Special handling for c411.org - use API to get torrent file
+        const c411Match = request.url.match(/^https?:\/\/(?:www\.)?c411\.org\/torrents\/([a-fA-F0-9]{40}|\d+)$/);
         if (c411Match) {
-            const torrentId = c411Match[1];
+            const torrentIdentifier = c411Match[1];
             
-            // Fetch the page to get the info hash
-            const pageResponse = await fetch(request.url, {
-                credentials: 'include',
-                headers: new Headers({
-                    'accept': 'text/html,application/xhtml+xml',
-                }),
-            });
+            // Check if identifier is already an infohash (40 hex chars) or numeric ID
+            const isInfoHash = /^[a-fA-F0-9]{40}$/.test(torrentIdentifier);
             
-            if (!pageResponse.ok) {
-                return {
-                    ok: false,
-                    status: pageResponse.status,
-                    statusText: pageResponse.statusText,
-                    filename: null,
-                    content: null,
-                };
-            }
+            let infoHash = torrentIdentifier;
             
-            const html = await pageResponse.text();
-            
-            // Extract info hash from the page using multiple patterns
-            // Look for data-info-hash attribute, JSON data, or API URLs
-            const infoHashMatch = html.match(/data-info-hash="([a-fA-F0-9]{40})"/) ||
-                                  html.match(/infoHash["']?\s*[:=]\s*["']([a-fA-F0-9]{40})["']/) ||
-                                  html.match(/\/api\/torrents\/([a-fA-F0-9]{40})\/download/) ||
-                                  html.match(/"infoHash":"([a-fA-F0-9]{40})"/);
-            
-            if (infoHashMatch && infoHashMatch[1]) {
-                const infoHash = infoHashMatch[1];
-                const downloadUrl = `https://c411.org/api/torrents/${infoHash}/download`;
-                
-                const response = await fetch(downloadUrl, {
+            // If it's a numeric ID, fetch the API to get the infoHash
+            if (!isInfoHash) {
+                const apiResponse = await fetch(`https://c411.org/api/torrents/${torrentIdentifier}`, {
                     credentials: 'include',
                     headers: new Headers({
-                        'accept': 'application/x-bittorrent,application/octet-stream,*/*',
+                        'accept': 'application/json',
                     }),
                 });
                 
-                if (!response.ok) {
+                if (!apiResponse.ok) {
                     return {
                         ok: false,
-                        status: response.status,
-                        statusText: response.statusText,
+                        status: apiResponse.status,
+                        statusText: apiResponse.statusText,
                         filename: null,
                         content: null,
                     };
                 }
                 
-                const contentDisposition = response.headers.get('content-disposition');
-                let filename = parseFilenameFromContentDisposition(contentDisposition);
+                const data = await apiResponse.json();
+                infoHash = data.infoHash;
                 
-                // If no filename from header, try to get title from HTML
-                if (!filename) {
-                    const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/);
-                    if (titleMatch) {
-                        filename = `${titleMatch[1].trim()}.torrent`;
-                    } else {
-                        filename = `torrent-${infoHash.substring(0, 8)}.torrent`;
-                    }
+                if (!infoHash) {
+                    return {
+                        ok: false,
+                        status: 500,
+                        statusText: 'Could not get infoHash from API',
+                        filename: data.name ? `${data.name}.torrent` : null,
+                        content: null,
+                    };
                 }
-                
+            }
+            
+            // Download the torrent file using the API
+            const downloadUrl = `https://c411.org/api/torrents/${infoHash}/download`;
+            const response = await fetch(downloadUrl, {
+                credentials: 'include',
+                headers: new Headers({
+                    'accept': 'application/x-bittorrent,application/octet-stream,*/*',
+                }),
+            });
+            
+            if (!response.ok) {
                 return {
-                    ok: response.ok,
+                    ok: false,
                     status: response.status,
                     statusText: response.statusText,
-                    filename: filename,
-                    content: await response.blob(),
+                    filename: null,
+                    content: null,
                 };
             }
             
-            // If we couldn't find infoHash, return error
+            // Get filename from Content-Disposition header or generate from infoHash
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = parseFilenameFromContentDisposition(contentDisposition);
+            
+            if (!filename) {
+                // Try to get the name from the API
+                try {
+                    const metaResponse = await fetch(`https://c411.org/api/torrents/${infoHash}`, {
+                        credentials: 'include',
+                        headers: new Headers({
+                            'accept': 'application/json',
+                        }),
+                    });
+                    if (metaResponse.ok) {
+                        const metaData = await metaResponse.json();
+                        if (metaData.name) {
+                            filename = `${metaData.name}.torrent`;
+                        }
+                    }
+                } catch (e) {
+                    // Ignore errors when trying to get metadata
+                }
+                
+                if (!filename) {
+                    filename = `torrent-${infoHash.substring(0, 8)}.torrent`;
+                }
+            }
+            
             return {
-                ok: false,
-                status: 500,
-                statusText: 'Could not extract info hash from page',
-                filename: null,
-                content: null,
+                ok: response.ok,
+                status: response.status,
+                statusText: response.statusText,
+                filename: filename,
+                content: await response.blob(),
             };
         }
 

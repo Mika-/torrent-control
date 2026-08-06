@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<section class="panel">
+
+    <div class="panel-section panel-section-header">
+        <span class="text-section-header" data-i18n="addonConfigurationTitle"></span>
+    </div>
+
+    <div class="panel-section panel-section-formElements">
+        <div class="panel-formElements-item browser-style">
+            <label data-i18n="contextMenuOption"></label>
+
+            <input type="radio" name="contextmenu" value="1" id="contextmenuDefault">
+            <label data-i18n="contextMenuDefaultOption" for="contextmenuDefault"></label>
+
+            <input type="radio" name="contextmenu" value="2" id="contextmenuSimple">
+            <label data-i18n="contextMenuSimpleOption" for="contextmenuSimple"></label>
+
+            <input type="radio" name="contextmenu" value="0" id="contextmenuHidden">
+            <label data-i18n="contextMenuHiddenOption" for="contextmenuHidden"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="addpaused" />
+            <label for="addpaused" data-i18n="addPausedOption"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="addadvanced" />
+            <label for="addadvanced" data-i18n="addAdvancedOption"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="enablenotifications" />
+            <label for="enablenotifications" data-i18n="enableNotificationsOption"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="catchurls" />
+            <label for="catchurls" data-i18n="catchUrlsOption"></label>
+        </div>
+
+        <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="matchregexp">
+            <label for="matchregexp" data-i18n="regexpMatchLabelsOption"></label>
+            <textarea id="matchregexp" rows="2" class="browser-style" style="width:100%"></textarea>
+
+            <div class="panel-formElements-item browser-style">
+                <label for="test-regexp-url" data-i18n="testUrlOption"></label>
+                <input type="url" id="test-regexp-url">
+                <button type="button" id="test-regexp" class="browser-style" data-i18n="testAction"></button>
+                <span id="test-regexp-result" style="margin-left:16px"></span>
+            </div>
+        </div>
+
+        <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="labels">
+            <label for="labels" data-i18n="torrentLabelsOption"></label>
+            <textarea id="labels" class="browser-style" style="width:100%"></textarea>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-section panel-section-header">
+        <span class="text-section-header" data-i18n="serverConfigurationTitle"></span>
+    </div>
+
+    <div class="panel-section panel-section-formElements">
+        <div class="panel-formElements-item browser-style">
+            <label for="server-list" data-i18n="serverSelect"></label>
+            <select id="server-list" class="browser-style"></select>
+        </div>
+    </div>
+
+    <div class="panel-section-separator"></div>
+
+    <div class="panel-section panel-section-formElements">
+
+        <div class="panel-formElements-item browser-style">
+            <label for="name" data-i18n="serverNameOption"></label>
+            <input type="text" id="name" />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="application" data-i18n="bittorrentClientOption"></label>
+            <select id="application" class="browser-style">
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="hostname" data-i18n="serverAddressOption"></label>
+            <input type="text" id="hostname" />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="username" data-i18n="usernameOption"></label>
+            <input type="text" id="username" />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="password" data-i18n="passwordOption"></label>
+            <input type="password" id="password" />
+        </div>
+
+        <div class="panel-section panel-section-formElements" data-panel="httpAuth">
+            <div class="panel-formElements-item browser-style">
+                <input type="checkbox" id="httpAuth" />
+                <label for="httpAuth" data-i18n="httpAuthOption"></label>
+            </div>
+
+            <div class="panel-formElements-item browser-style">
+                <label for="httpAuthUsername" data-i18n="usernameOption"></label>
+                <input type="text" id="httpAuthUsername" />
+            </div>
+            <div class="panel-formElements-item browser-style">
+                <label for="httpAuthPassword" data-i18n="passwordOption"></label>
+                <input type="password" id="httpAuthPassword" />
+            </div>
+        </div>
+
+        <div class="panel-section-formElements" data-panel="clientOptions"></div>
+
+        <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="directories">
+            <label for="directories" data-i18n="serverDirectoriesOption"></label>
+            <textarea id="directories" rows="5" class="browser-style" style="width:100%"></textarea>
+        </div>
+
+        <div class="panel-formElements-item browser-style" data-panel="defaultDirectory">
+            <label for="defaultDirectory" data-i18n="serverDefaultDirectoryOption"></label>
+            <select id="defaultDirectory" class="browser-style">
+                <option data-i18n="noneOption" value=""></option>
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style" data-panel="defaultLabel">
+            <label for="defaultDirectory" data-i18n="serverDefaultLabelOption"></label>
+            <select id="defaultLabel" class="browser-style">
+                <option data-i18n="noneOption" value=""></option>
+            </select>
+        </div>
+    </div>
+
+</section>
+
+<div class="panel-formElements-item">
+    <button id="save-options" class="browser-style default disabled" data-i18n="saveAction" style="margin:0 16px 0 16px"></button>
+    <button id="remove-server" class="browser-style disabled" data-i18n="removeAction" style="margin:0 16px 0 auto"></button>
+</div>
+
+<script type="module" src="options.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="chrome://browser/content/extension.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<section id="options-section" class="panel">
+
+    <div class="panel-section panel-section-header">
+        <span class="text-section-header" data-i18n="addTorrentTitle"></span>
+    </div>
+
+    <div class="panel-section panel-section-formElements">
+        <div class="panel-formElements-item browser-style">
+            <label for="url" data-i18n="torrentUrl"></label>
+            <input id="url" type="text" disabled />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="server" data-i18n="serverNameOption"></label>
+            <select id="server" class="browser-style">
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="directories" data-i18n="downloadDirectorySelect"></label>
+            <select id="directories" class="browser-style">
+                <option data-i18n="defaultOption" value=""></option>
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="directory-input" data-i18n="customDownloadDirectoryOption"></label>
+            <input id="directory-input" type="text" class="browser-style" />
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <label for="labels" data-i18n="labelSelect"></label>
+            <select id="labels" class="browser-style">
+                <option data-i18n="noneOption" value=""></option>
+            </select>
+        </div>
+
+        <div class="panel-formElements-item browser-style">
+            <input type="checkbox" id="addpaused" />
+            <label for="addpaused" data-i18n="addAsPausedOption"></label>
+        </div>
+    </div>
+
+</section>
+
+<div class="panel-formElements-item">
+    <button id="add-torrent" class="browser-style default" data-i18n="addTorrentAction" style="margin: 0 16px 0 auto"></button>
+</div>
+
+<script type="module" src="add_torrent.js"></script>
+</body>
+</html>

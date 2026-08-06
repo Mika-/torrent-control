@@ -1,10 +1,7 @@
 ```
 # Build artifacts
-web-ext-artifacts/
-*.zip
-
-# Dependencies
-node_modules/
+dist/
+build/
 
 # Logs and temp files
 *.log
@@ -18,4 +15,7 @@ node_modules/
 # Editors
 .vscode/
 .idea/
+
+# Web extension artifacts
+web-ext-artifacts/
 ```
