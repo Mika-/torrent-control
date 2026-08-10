@@ -120,6 +120,7 @@ function persistOptions() {
         httpAuth: httpAuth,
         defaultLabel: document.querySelector('#defaultLabel').value || null,
         defaultDirectory: document.querySelector('#defaultDirectory').value || null,
+        c411ApiKey: document.querySelector('#c411-api-key')?.value?.trim() || '',
     };
 
     saveOptions(options);
@@ -206,6 +207,10 @@ function restoreServer(id) {
     document.querySelector('#directories').value = server.directories.join('\n');
     document.querySelector('#defaultLabel').value = server.defaultLabel || '';
     document.querySelector('#defaultDirectory').value = server.defaultDirectory || '';
+    const c411ApiKeyInput = document.querySelector('#c411-api-key');
+    if (c411ApiKeyInput) {
+        c411ApiKeyInput.value = server.c411ApiKey || '';
+    }
 
     if (server.httpAuth) {
         document.querySelector('#httpAuth').checked = true;
@@ -347,6 +352,14 @@ document.querySelector('#application').addEventListener('change', (e) => {
             document.querySelector('#username').setAttribute('disabled', 'true');
         else
             document.querySelector('#username').removeAttribute('disabled');
+
+        // Show/hide C411 API key field for c411rutorrent client
+        const c411ApiKeyContainer = document.querySelector('[data-panel="c411-api-key"]');
+        if (client.id === 'c411rutorrent') {
+            if (c411ApiKeyContainer) c411ApiKeyContainer.style.display = 'flex';
+        } else {
+            if (c411ApiKeyContainer) c411ApiKeyContainer.style.display = 'none';
+        }
 
         let clientOptionsPanel = document.querySelector('[data-panel="clientOptions"]');
         Array.from(clientOptionsPanel.childNodes).forEach((element) =>
