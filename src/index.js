@@ -6,6 +6,7 @@ import {
     getClient,
     isTorrentUrl,
     isMagnetUrl,
+    isC411Url,
     getHostFilter,
     getTorrentName,
     getMagnetUrlName,
@@ -68,7 +69,23 @@ function addTorrent(url, tabId, torrentOptions = {}) {
         'NetworkError when attempting to fetch resource.',
     ];
 
-    if (isMagnetUrl(url)) {
+    // C411 URL handling - use addTorrentFromC411 method
+    if (isC411Url(url)) {
+        connection.logIn()
+            .then(() => connection.addTorrentFromC411(url, addTorrentOptions)
+                .then(() => {
+                    notification(chrome.i18n.getMessage('torrentAddedNotification'));
+                    connection.logOut();
+                })
+            ).catch((error) => {
+                connection.removeEventListeners();
+
+                if (networkErrors.includes(error.message))
+                    notification('❌ ' + chrome.i18n.getMessage('torrentAddError', 'Network error'));
+                else
+                    notification('❌ ' + error.message);
+            });
+    } else if (isMagnetUrl(url)) {
         connection.logIn()
             .then(() => connection.addTorrentUrl(url, addTorrentOptions)
                 .then(() => {

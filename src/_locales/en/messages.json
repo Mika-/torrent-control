@@ -254,5 +254,9 @@
   "serverDefaultLabelOption": {
     "message": "Default label",
     "description": "Server default label option"
+  },
+  "c411ApiKeyOption": {
+    "message": "C411 API Key",
+    "description": "C411.org API key option for downloading torrents"
   }
 }

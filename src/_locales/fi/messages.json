@@ -254,5 +254,9 @@
   "serverDefaultLabelOption": {
     "message": "Oletustunniste",
     "description": "Server default label option"
+  },
+  "c411ApiKeyOption": {
+    "message": "C411 API-avain",
+    "description": "C411.org API-avain torrenttien lataamiseen"
   }
 }
