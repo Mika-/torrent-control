@@ -73,6 +73,17 @@ export const clientList = [
             {
                 name: 'fast_resume',
                 description: chrome.i18n.getMessage('skipHashCheckOption')
+            },
+            {
+                name: 'c411ApiKey',
+                description: 'Clé API C411.org (obligatoire)',
+                type: 'text'
+            },
+            {
+                name: 'c411SessionCookie',
+                description: 'Cookie de session C411 (optionnel, pour téléchargements authentifiés)',
+                type: 'text',
+                placeholder: '__Host-c411_session=xxx; __csrf=yyy'
             }
         ]
     },
@@ -251,10 +262,10 @@ export function loadOptions() {
         },
         servers: [
             {
-                name: 'ruTorrent Seedbox',
-                application: 'rutorrent',
-                hostname: 'https://moodle.myseedbox.site/rutorrent/',
-                username: 'gmeinga_4612',
+                name: 'Default',
+                application: 'biglybt',
+                hostname: '',
+                username: '',
                 password: '',
                 directories: [],
                 clientOptions: {},
@@ -359,16 +370,38 @@ function mergeObjects(target, source) {
 
 /**
  * @param regExpStr {string}
- * @returns {RegExp}
+ * @returns {RegExp|null} Returns null if invalid regex
  */
 export function regExpFromString(regExpStr) {
-    const parts = /\/(.*)\/(.*)/.exec(regExpStr);
+    const parts = /^\/(.*)\/([gimsuy]*)$/.exec(regExpStr);
 
     if (parts === null) {
-        return new RegExp(regExpStr);
+        // Not a /pattern/flags format, try to create regex directly
+        try {
+            return new RegExp(regExpStr);
+        } catch (e) {
+            console.warn('Invalid regex:', regExpStr, e);
+            return null;
+        }
     }
 
-    return new RegExp(parts[1], parts[2]);
+    // Validate flags - only allow valid JavaScript regex flags
+    const validFlags = 'gimsuy';
+    let flags = '';
+    for (const flag of parts[2]) {
+        if (validFlags.includes(flag)) {
+            flags += flag;
+        } else {
+            console.warn('Invalid regex flag:', flag, 'in', regExpStr);
+        }
+    }
+
+    try {
+        return new RegExp(parts[1], flags);
+    } catch (e) {
+        console.warn('Invalid regex pattern:', parts[1], e);
+        return null;
+    }
 }
 
 /**

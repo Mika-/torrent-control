@@ -271,7 +271,8 @@ const getRegExps = () => {
     return matchRegExp
         .map((regExpStr) => regExpStr.trim())
         .filter((regExpStr) => regExpStr.length)
-        .map((regExpStr) => regExpFromString(regExpStr));
+        .map((regExpStr) => regExpFromString(regExpStr))
+        .filter((regExp) => regExp !== null); // Filter out invalid regexes
 }
 
 function validateUrl(str) {
