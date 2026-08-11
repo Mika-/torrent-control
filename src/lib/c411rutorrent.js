@@ -182,7 +182,18 @@ export default class C411RuTorrentApi extends BaseClient {
 
                 console.log('[C411+ruTorrent] Appel API filemanager vers:', apiUrl);
 
-                const uploadResponse = await fetch(apiUrl, {
+                // Construire l'URL avec authentification intégrée
+                // Format: https://user:pass@hostname/path
+                const {username, password} = this.settings;
+                const baseUrl = hostname.replace(/\/$/, '');
+                const urlObj = new URL(baseUrl);
+                urlObj.username = encodeURIComponent(username);
+                urlObj.password = encodeURIComponent(password);
+                const uploadUrl = `${urlObj.toString()}/php/addtorrent.php?json=1`;
+
+                console.log('[C411+ruTorrent] Upload vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
+
+                const uploadResponse = await fetch(uploadUrl, {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Basic ' + btoa(`${username}:${password}`)
@@ -211,9 +222,17 @@ export default class C411RuTorrentApi extends BaseClient {
     }
 
     addTorrentToRuTorrent(torrent, options = {}) {
-        // Méthode dépréciée - utilise maintenant le dossier watch
-        return this._writeTorrentToWatch(torrent, options);
-    }
+        const {hostname, username, password} = this.settings;
+
+        return new Promise((resolve, reject) => {
+            let form = new FormData();
+            form.append('torrent_file[]', torrent, options.filename || 'temp.torrent');
+
+            if (options.paused)
+                form.append('torrents_start_stopped', options.paused.toString());
+
+            if (options.path)
+                form.append('dir_edit', options.path);
 
     /**
      * Écrit un fichier .torrent dans le dossier watch de ruTorrent
@@ -232,40 +251,23 @@ export default class C411RuTorrentApi extends BaseClient {
 
         console.log('[C411+ruTorrent] Écriture dans le dossier watch:', fullPath);
 
-        return new Promise((resolve, reject) => {
-            // Convertir le Blob/File en ArrayBuffer puis en Base64
-            torrent.arrayBuffer()
-                .then(arrayBuffer => {
-                    const base64Data = this._arrayBufferToBase64(arrayBuffer);
+            // Construire l'URL avec authentification intégrée
+            const baseUrl = hostname.replace(/\/$/, '');
+            const urlObj = new URL(baseUrl);
+            urlObj.username = encodeURIComponent(username);
+            urlObj.password = encodeURIComponent(password);
+            const uploadUrl = `${urlObj.toString()}/php/addtorrent.php?json=1`;
 
-                    // Préparer les données pour l'API filemanager de ruTorrent
-                    const formData = new FormData();
-                    formData.append('mode', 'write');
-                    formData.append('path', fullPath);
-                    formData.append('content', base64Data);
+            console.log('[C411+ruTorrent] Upload (addTorrentToRuTorrent) vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
 
-                    // URL de l'API filemanager
-                    const apiUrl = `${baseUrl}/plugins/filemanager/action.php`;
-
-                    console.log('[C411+ruTorrent] Appel API filemanager vers:', apiUrl);
-
-                    return fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Basic ' + btoa(`${username}:${password}`)
-                        },
-                        credentials: 'include',
-                        body: formData
-                    });
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(errorText => {
-                            console.error('[C411+ruTorrent] Échec de l\'écriture (Status', response.status, '):', errorText);
-                            throw new Error(`Échec de l'upload vers le dossier watch: ${response.status}`);
-                        });
-                    }
-                    console.log('[C411+ruTorrent] Torrent écrit avec succès dans le dossier watch.');
+            fetch(uploadUrl, {
+                method: 'POST',
+                credentials: 'include',
+                body: form
+            })
+            .then(this.parseJsonResponse)
+            .then((json) => {
+                if (json.result && json.result === 'Success')
                     resolve();
                 })
                 .catch(error => reject(error));
