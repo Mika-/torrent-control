@@ -37,7 +37,8 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
-                    c411ApiKey: ''
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
                 }
             ]
         });
@@ -70,6 +71,8 @@ describe('Test options', () => {
                     },
                     defaultLabel: null,
                     defaultDirectory: null,
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
                 }
             ]
         };
@@ -110,7 +113,8 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
-                    c411ApiKey: 'test-api-key'
+                    c411ApiKey: 'test-api-key',
+                    c411SessionCookie: ''
                 }
             ]
         };
@@ -135,7 +139,8 @@ describe('Test options', () => {
                 addPaused: true,
                 catchUrls: false,
                 enableNotifications: true,
-                labels: []
+                labels: [],
+                matchRegExp: []
             },
             servers: [
                 {
@@ -182,7 +187,8 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
-                    c411ApiKey: ''
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
                 }
             ]
         });
