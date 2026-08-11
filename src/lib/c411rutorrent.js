@@ -172,7 +172,18 @@ export default class C411RuTorrentApi extends BaseClient {
                 if (options.fast_resume)
                     form.append('fast_resume', '1');
 
-                const uploadResponse = await fetch(hostname + 'php/addtorrent.php?json=1', {
+                // Construire l'URL avec authentification intégrée
+                // Format: https://user:pass@hostname/path
+                const {username, password} = this.settings;
+                const baseUrl = hostname.replace(/\/$/, '');
+                const urlObj = new URL(baseUrl);
+                urlObj.username = encodeURIComponent(username);
+                urlObj.password = encodeURIComponent(password);
+                const uploadUrl = `${urlObj.toString()}/php/addtorrent.php?json=1`;
+
+                console.log('[C411+ruTorrent] Upload vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
+
+                const uploadResponse = await fetch(uploadUrl, {
                     method: 'POST',
                     credentials: 'include',
                     body: form
@@ -197,7 +208,7 @@ export default class C411RuTorrentApi extends BaseClient {
     }
 
     addTorrentToRuTorrent(torrent, options = {}) {
-        const {hostname} = this.settings;
+        const {hostname, username, password} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -215,7 +226,16 @@ export default class C411RuTorrentApi extends BaseClient {
             if (options.fast_resume)
                 form.append('fast_resume', '1');
 
-            fetch(hostname + 'php/addtorrent.php?json=1', {
+            // Construire l'URL avec authentification intégrée
+            const baseUrl = hostname.replace(/\/$/, '');
+            const urlObj = new URL(baseUrl);
+            urlObj.username = encodeURIComponent(username);
+            urlObj.password = encodeURIComponent(password);
+            const uploadUrl = `${urlObj.toString()}/php/addtorrent.php?json=1`;
+
+            console.log('[C411+ruTorrent] Upload (addTorrentToRuTorrent) vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
+
+            fetch(uploadUrl, {
                 method: 'POST',
                 credentials: 'include',
                 body: form
@@ -232,7 +252,7 @@ export default class C411RuTorrentApi extends BaseClient {
     }
 
     addTorrentUrl(url, options = {}) {
-        const {hostname} = this.settings;
+        const {hostname, username, password} = this.settings;
 
         let params = new URLSearchParams();
         params.append('json', '1');
@@ -250,8 +270,17 @@ export default class C411RuTorrentApi extends BaseClient {
         if (options.fast_resume)
             params.append('fast_resume', '1');
 
+        // Construire l'URL avec authentification intégrée
+        const baseUrl = hostname.replace(/\/$/, '');
+        const urlObj = new URL(baseUrl);
+        urlObj.username = encodeURIComponent(username);
+        urlObj.password = encodeURIComponent(password);
+        const uploadUrl = `${urlObj.toString()}/php/addtorrent.php?` + params.toString();
+
+        console.log('[C411+ruTorrent] Add URL vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
+
         return new Promise((resolve, reject) => {
-            fetch(hostname + 'php/addtorrent.php?' + params.toString(), {
+            fetch(uploadUrl, {
                 method: 'GET',
                 credentials: 'include'
             })
@@ -267,7 +296,7 @@ export default class C411RuTorrentApi extends BaseClient {
     }
 
     addRssFeed(url) {
-        const {hostname} = this.settings;
+        const {hostname, username, password} = this.settings;
 
         return new Promise((resolve, reject) => {
             let form = new FormData();
@@ -275,7 +304,16 @@ export default class C411RuTorrentApi extends BaseClient {
             form.append('url', url);
             form.append('label', '');
 
-            fetch(hostname + 'plugins/rss/action.php', {
+            // Construire l'URL avec authentification intégrée
+            const baseUrl = hostname.replace(/\/$/, '');
+            const urlObj = new URL(baseUrl);
+            urlObj.username = encodeURIComponent(username);
+            urlObj.password = encodeURIComponent(password);
+            const uploadUrl = `${urlObj.toString()}/plugins/rss/action.php`;
+
+            console.log('[C411+ruTorrent] RSS Feed vers:', uploadUrl.replace(/:[^:@]*@/, ':***@'));
+
+            fetch(uploadUrl, {
                 method: 'POST',
                 credentials: 'include',
                 body: form
