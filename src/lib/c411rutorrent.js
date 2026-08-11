@@ -103,51 +103,62 @@ export default class C411RuTorrentApi extends BaseClient {
      * @returns {Promise<void>}
      */
     addTorrentFromC411(c411Url, options = {}) {
-        const {hostname, c411ApiKey} = this.settings;
+        const {hostname, c411ApiKey, c411SessionCookie} = this.settings;
 
         return new Promise(async (resolve, reject) => {
             try {
-                // Extract torrent ID from C411 URL
+                // Extract torrent infohash from C411 URL
                 const match = c411Url.match(/https?:\/\/(?:www\.)?c411\.org\/torrents\/([a-z0-9]+)/i);
                 if (!match) {
                     throw new Error('Invalid C411 URL format');
                 }
-                const torrentId = match[1];
+                const infohash = match[1];
 
-                // Build C411 API URL to get torrent details with enclosure URL
-                // C411 RSS/API endpoint: https://c411.org/rss.php?key=YOUR_API_KEY
-                // Or directly construct the torrent download URL
+                // C411 API download endpoint: /api/torrents/{infohash}/download
+                const downloadUrl = `https://c411.org/api/torrents/${infohash}/download`;
+
+                console.log('Downloading torrent from C411 API:', downloadUrl);
+
+                // Build headers with API key and optional session cookie
+                const fetchHeaders = {
+                    'Accept': 'application/x-bittorrent,application/octet-stream',
+                    'X-API-Key': c411ApiKey,
+                };
                 
-                // First, try to get the torrent file directly
-                // C411 torrent download URL pattern: https://c411.org/download.php?id=TORRENT_ID
-                // But we need to use the API key for authentication
-                
-                // Construct the download URL with API key
-                const downloadUrl = `https://c411.org/download.php?id=${torrentId}&key=${c411ApiKey}`;
-
-                // Fetch the .torrent file from C411
-                const torrentResponse = await fetch(downloadUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/x-bittorrent,application/octet-stream',
-                    },
-                });
-
-                if (!torrentResponse.ok) {
-                    throw new Error(`Failed to download torrent from C411: ${torrentResponse.status} ${torrentResponse.statusText}`);
+                // Add session cookie if provided (for authenticated downloads)
+                if (c411SessionCookie) {
+                    fetchHeaders['Cookie'] = c411SessionCookie;
                 }
 
-                // Check content type
+                // Fetch the .torrent file from C411 API
+                const torrentResponse = await fetch(downloadUrl, {
+                    method: 'GET',
+                    headers: fetchHeaders,
+                });
+
+                // Check if the response is HTML (error page) instead of torrent file
                 const contentType = torrentResponse.headers.get('content-type');
+                
+                if (!torrentResponse.ok) {
+                    // Try to get error details from response
+                    const errorText = await torrentResponse.text();
+                    console.error('C411 error response:', errorText);
+                    throw new Error(`Failed to download torrent from C411: ${torrentResponse.status} ${torrentResponse.statusText}. Vérifie que ta clé API est correcte.`);
+                }
+
                 if (contentType && !contentType.match(/(application\/x-bittorrent|application\/octet-stream)/gi)) {
                     console.warn('Unexpected content type:', contentType);
+                    // If we got HTML instead of a torrent, it's likely an auth error
+                    if (contentType.includes('text/html')) {
+                        throw new Error('C411 returned HTML instead of torrent file. Vérifie ta clé API et l\'URL du torrent.');
+                    }
                 }
 
                 const torrentBlob = await torrentResponse.blob();
 
                 // Upload the .torrent file to ruTorrent
                 let form = new FormData();
-                form.append('torrent_file[]', torrentBlob, `${torrentId}.torrent`);
+                form.append('torrent_file[]', torrentBlob, `${infohash}.torrent`);
 
                 if (options.paused)
                     form.append('torrents_start_stopped', options.paused.toString());

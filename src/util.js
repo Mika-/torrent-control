@@ -247,10 +247,7 @@ export function loadOptions() {
             catchUrls: true,
             enableNotifications: true,
             labels: [],
-            // Pré-remplir avec le regex c411.org par défaut
-            matchRegExp: [
-                '/https?:\\/\\/(?:www\\.)?c411\\.org\\/torrents\\/[a-z0-9]+/'
-            ]
+            matchRegExp: []
         },
         servers: [
             {
@@ -265,6 +262,7 @@ export function loadOptions() {
                 defaultLabel: null,
                 defaultDirectory: null,
                 c411ApiKey: '',
+                c411SessionCookie: '',
             }
         ]
     };
