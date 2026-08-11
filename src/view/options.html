@@ -129,6 +129,24 @@
 
         <div class="panel-section-formElements" data-panel="clientOptions"></div>
 
+        <div class="panel-formElements-item browser-style" data-panel="c411-api-key" style="display:none;">
+            <label for="c411-api-key" data-i18n="c411ApiKeyOption"></label>
+            <input type="password" id="c411-api-key" placeholder="Your C411.org API key" />
+            <p class="help-text" style="margin-top:0.5em;font-size:0.85em;color:var(--text-muted);">
+                Récupère ta clé API sur https://c411.org/rss.php (elle apparaît dans l'URL). 
+                Si le téléchargement échoue avec une erreur 401/404, tu dois aussi fournir ton cookie de session.
+            </p>
+        </div>
+
+        <div class="panel-formElements-item browser-style" data-panel="c411-session-cookie" style="display:none;">
+            <label for="c411-session-cookie" data-i18n="c411SessionCookieOption"></label>
+            <input type="password" id="c411-session-cookie" placeholder="__Host-c411_session=..." />
+            <p class="help-text" style="margin-top:0.5em;font-size:0.85em;color:var(--text-muted);">
+                Optionnel: Cookie de session C411 pour les comptes nécessitant une authentification.
+                Ouvre les outils développeur (F12) → Application → Cookies → c411.org → copie la valeur de "__Host-c411_session".
+            </p>
+        </div>
+
         <div class="panel-formElements-item browser-style" style="align-items:flex-start;flex-direction:column" data-panel="directories">
             <label for="directories" data-i18n="serverDirectoriesOption"></label>
             <textarea id="directories" rows="5" class="browser-style" style="width:100%"></textarea>

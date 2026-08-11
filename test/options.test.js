@@ -37,6 +37,8 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
                 }
             ]
         });
@@ -69,6 +71,50 @@ describe('Test options', () => {
                     },
                     defaultLabel: null,
                     defaultDirectory: null,
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
+                }
+            ]
+        };
+
+        expect(chrome.storage.local.set.notCalled).to.equal(true);
+        saveOptions(modifiedOptions);
+        expect(chrome.storage.local.set.calledOnce).to.equal(true);
+
+        chrome.storage.local.get.withArgs(['globals', 'servers']).yields(modifiedOptions);
+
+        expect(chrome.storage.local.get.notCalled).to.equal(true);
+        const loadedOptions = await loadOptions();
+        expect(chrome.storage.local.get.calledOnce).to.equal(true);
+        expect(loadedOptions).to.deep.equal(modifiedOptions);
+    });
+
+    it('Save and load custom options with c411ApiKey', async () => {
+        const modifiedOptions = {
+            globals: {
+                addAdvanced: false,
+                currentServer: 0,
+                addPaused: true,
+                contextMenu: 0,
+                catchUrls: false,
+                enableNotifications: true,
+                labels: [],
+                matchRegExp: []
+            },
+            servers: [
+                {
+                    name: 'My client',
+                    application: 'c411rutorrent',
+                    hostname: 'https://127.0.0.1/',
+                    username: '',
+                    password: '',
+                    directories: [],
+                    clientOptions: {},
+                    httpAuth: null,
+                    defaultLabel: null,
+                    defaultDirectory: null,
+                    c411ApiKey: 'test-api-key',
+                    c411SessionCookie: ''
                 }
             ]
         };
@@ -93,7 +139,8 @@ describe('Test options', () => {
                 addPaused: true,
                 catchUrls: false,
                 enableNotifications: true,
-                labels: []
+                labels: [],
+                matchRegExp: []
             },
             servers: [
                 {
@@ -140,6 +187,8 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
+                    c411ApiKey: '',
+                    c411SessionCookie: ''
                 }
             ]
         });

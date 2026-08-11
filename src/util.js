@@ -3,6 +3,7 @@ import DelugeApi from './lib/deluge.js';
 import FloodApi from './lib/flood.js';
 import qBittorrentApi from './lib/qbittorrent.js';
 import ruTorrentApi from './lib/rutorrent.js';
+import C411RuTorrentApi from './lib/c411rutorrent.js';
 import SynologyApi from './lib/synology.js';
 import TixatiApi from './lib/tixati.js';
 import TransmissionApi from './lib/transmission.js';
@@ -39,6 +40,26 @@ export const clientList = [
         id: 'rutorrent',
         name: 'ruTorrent',
         addressPlaceholder: 'http://127.0.0.1:80/',
+        clientCapabilities: ['paused', 'label', 'path', 'rss', 'httpAuth'],
+        clientOptions: [
+            {
+                name: 'authType',
+                description: chrome.i18n.getMessage('authTypeOption'),
+                values: {
+                    'httpAuth': chrome.i18n.getMessage('authTypeHttpAuthOption'),
+                    'loginForm': chrome.i18n.getMessage('authTypeLoginFormOption'),
+                }
+            },
+            {
+                name: 'fast_resume',
+                description: chrome.i18n.getMessage('skipHashCheckOption')
+            }
+        ]
+    },
+    {
+        id: 'c411rutorrent',
+        name: 'C411 + ruTorrent',
+        addressPlaceholder: 'https://moodle.myseedbox.site/rutorrent/',
         clientCapabilities: ['paused', 'label', 'path', 'rss', 'httpAuth'],
         clientOptions: [
             {
@@ -178,6 +199,8 @@ export function getClient(serverSettings) {
             return new FloodApi(serverSettings);
         case 'rutorrent':
             return new ruTorrentApi(serverSettings);
+        case 'c411rutorrent':
+            return new C411RuTorrentApi(serverSettings);
         case 'synology':
             return new SynologyApi(serverSettings);
         case 'tixati':
@@ -224,10 +247,7 @@ export function loadOptions() {
             catchUrls: true,
             enableNotifications: true,
             labels: [],
-            // Pré-remplir avec le regex c411.org par défaut
-            matchRegExp: [
-                '/https?:\\/\\/(?:www\\.)?c411\\.org\\/torrents\\/[a-z0-9]+/'
-            ]
+            matchRegExp: []
         },
         servers: [
             {
@@ -241,6 +261,8 @@ export function loadOptions() {
                 httpAuth: null,
                 defaultLabel: null,
                 defaultDirectory: null,
+                c411ApiKey: '',
+                c411SessionCookie: '',
             }
         ]
     };
@@ -259,6 +281,10 @@ export function saveOptions(options) {
 
 export function isMagnetUrl(url) {
     return !!url.match(/^magnet:/);
+}
+
+export function isC411Url(url) {
+    return !!url.match(/^https?:\/\/(?:www\.)?c411\.org\/torrents\/[a-z0-9]+/i);
 }
 
 /**

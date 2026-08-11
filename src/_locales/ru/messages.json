@@ -246,5 +246,9 @@
   "contentLayoutNoSubfolderOption": {
     "message": "Не создавать подпапку",
     "description": "Content layout no subfolder option"
+  },
+  "c411ApiKeyOption": {
+    "message": "Ключ API C411",
+    "description": "Ключ API C411.org для загрузки торрентов"
   }
 }
