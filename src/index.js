@@ -307,7 +307,7 @@ function createContextMenu() {
         }
     }
 
-    if (client.clientCapabilities && client.clientCapabilities.includes('rss')) {
+    if (client.clientCapabilities && client.clientCapabilities.includes('rss') && options.globals.enableRssFeeds) {
         if (options.globals.contextMenu === 1) {
             chrome.contextMenus.create({
                 contexts: ['link'],

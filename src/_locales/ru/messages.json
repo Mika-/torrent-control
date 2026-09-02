@@ -31,6 +31,10 @@
     "message": "Показывать уведомления",
     "description": "Enable notifications option"
   },
+  "enableRssFeedsOption": {
+    "message": "Показывать действие RSS-канала",
+    "description": "Enable RSS feed action option"
+  },
   "addPausedOption": {
     "message": "Ставить на паузу при добавлении торрентов",
     "description": "Add as paused by default"

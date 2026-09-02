@@ -31,6 +31,10 @@
     "message": "Show notifications",
     "description": "Enable notifications option"
   },
+  "enableRssFeedsOption": {
+    "message": "Show RSS feed action",
+    "description": "Enable RSS feed action option"
+  },
   "addPausedOption": {
     "message": "Add torrents as paused",
     "description": "Add as paused by default"

@@ -82,6 +82,7 @@ function persistOptions() {
     options.globals.addPaused = document.querySelector('#addpaused').checked;
     options.globals.addAdvanced = document.querySelector('#addadvanced').checked;
     options.globals.enableNotifications = document.querySelector('#enablenotifications').checked;
+    options.globals.enableRssFeeds = document.querySelector('#enablerssfeeds').checked;
 
     options.globals.matchRegExp = getRegExps().map((regExp) => regExp.toString());
 
@@ -157,6 +158,7 @@ function restoreOptions() {
         document.querySelector('#addpaused').checked = options.globals.addPaused;
         document.querySelector('#addadvanced').checked = options.globals.addAdvanced;
         document.querySelector('#enablenotifications').checked = options.globals.enableNotifications;
+        document.querySelector('#enablerssfeeds').checked = options.globals.enableRssFeeds;
 
         document.querySelector('#matchregexp').value = options.globals.matchRegExp.join('\n');
         document.querySelector('#matchregexp').disabled = options.globals.catchUrls === false;

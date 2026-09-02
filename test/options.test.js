@@ -22,6 +22,7 @@ describe('Test options', () => {
                 contextMenu: 1,
                 catchUrls: true,
                 enableNotifications: true,
+                enableRssFeeds: true,
                 labels: [],
                 matchRegExp: []
             },
@@ -51,6 +52,7 @@ describe('Test options', () => {
                 contextMenu: 0,
                 catchUrls: false,
                 enableNotifications: true,
+                enableRssFeeds: true,
                 labels: [],
                 matchRegExp: []
             },
@@ -93,6 +95,7 @@ describe('Test options', () => {
                 addPaused: true,
                 catchUrls: false,
                 enableNotifications: true,
+                enableRssFeeds: true,
                 labels: []
             },
             servers: [
@@ -125,6 +128,7 @@ describe('Test options', () => {
                 contextMenu: 1,
                 catchUrls: false,
                 enableNotifications: true,
+                enableRssFeeds: true,
                 labels: [],
                 matchRegExp: [],
             },

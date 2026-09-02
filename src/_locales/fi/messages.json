@@ -31,6 +31,10 @@
     "message": "Näytä ilmoitukset",
     "description": "Enable notifications option"
   },
+  "enableRssFeedsOption": {
+    "message": "Näytä RSS-syötteen toiminnot",
+    "description": "Enable RSS feed action option"
+  },
   "addPausedOption": {
     "message": "Lisää torrentit keskeytettynä",
     "description": "Add as paused by default"

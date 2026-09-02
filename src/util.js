@@ -223,6 +223,7 @@ export function loadOptions() {
             contextMenu: 1,
             catchUrls: true,
             enableNotifications: true,
+            enableRssFeeds: true,
             labels: [],
             matchRegExp: []
         },
