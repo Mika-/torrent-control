@@ -1,5 +1,6 @@
 import {
     clientList,
+    getServerForUrl,
     loadOptions,
 } from '../util.js';
 
@@ -32,7 +33,9 @@ function restoreOptions() {
             document.querySelector('#labels').appendChild(element);
         });
 
-        selectServer(options.globals.currentServer);
+        const routedServer = getServerForUrl(params.get('url'), options.servers);
+
+        selectServer(routedServer !== null ? routedServer : options.globals.currentServer);
     });
 }
 

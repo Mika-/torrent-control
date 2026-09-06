@@ -63,6 +63,10 @@
     "message": "No matches found",
     "description": "Test fail text"
   },
+  "testRouteText": {
+    "message": "Routed to: $1",
+    "description": "Test route text"
+  },
   "addTorrentAction": {
     "message": "Add torrent",
     "description": "Context menu action"
@@ -138,6 +142,10 @@
   "serverDirectoriesOption": {
     "message": "Download directories",
     "description": "Server directories option"
+  },
+  "serverRouteUrlsOption": {
+    "message": "Send these trackers here (domain or /regexp/ per line)",
+    "description": "Server routing patterns option"
   },
   "torrentAddedNotification": {
     "message": "Torrent added",

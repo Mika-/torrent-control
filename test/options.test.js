@@ -38,6 +38,7 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
+                    routeUrls: [],
                 }
             ]
         });
@@ -71,6 +72,7 @@ describe('Test options', () => {
                     },
                     defaultLabel: null,
                     defaultDirectory: null,
+                    routeUrls: [],
                 }
             ]
         };
@@ -144,6 +146,7 @@ describe('Test options', () => {
                     httpAuth: null,
                     defaultLabel: null,
                     defaultDirectory: null,
+                    routeUrls: [],
                 }
             ]
         });

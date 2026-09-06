@@ -63,6 +63,10 @@
     "message": "Совпадений не найдено",
     "description": "Test fail text"
   },
+  "testRouteText": {
+    "message": "Направляется на: $1",
+    "description": "Test route text"
+  },
   "addTorrentAction": {
     "message": "Добавить торрент",
     "description": "Context menu action"
@@ -138,6 +142,10 @@
   "serverDirectoriesOption": {
     "message": "Пути загрузки на сервере",
     "description": "Server directories option"
+  },
+  "serverRouteUrlsOption": {
+    "message": "Направлять эти трекеры сюда (домен или /регулярное выражение/ в строке)",
+    "description": "Server routing patterns option"
   },
   "torrentAddedNotification": {
     "message": "Добавлен торрент:",
